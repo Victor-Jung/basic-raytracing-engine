@@ -16,7 +16,7 @@ int nbLine(FILE* f) {
 	return line;
 }
 
-void showStruct(sParam param) {
+void showStruct(sParam param) { //affiche les données pour le débogage
 	printf("Name: %s\n", param.image.name);
 	printf("Height: %d\n", param.image.height);
 	printf("Width: %d\n", param.image.width);
@@ -52,23 +52,22 @@ int loadFromFile(sParam *param) {
 	fscanf(f, "%s", line);
 	for(int i = 0; i < sizeFile; i++) {
 		fscanf(f, "%s", line);
-		if (!strcmp(line, "Name:")) {
+		if (!strcmp(line, "Name:")) {  //on enregistre le nom
 			i++;
 			fscanf(f, "%s", line);
 			param->image.name = _strdup(line);
 		}
-		else if (!strcmp(line, "Height:")) {
+		else if (!strcmp(line, "Height:")) {  //on enregistre la hauteur en pixels
 			i++;
 			fscanf(f, "%s", line);
-			param->image.height = atoi(line);
+			param->image.height = atoi(line);  
 		}
-		else if (!strcmp(line, "Width:")) {
+		else if (!strcmp(line, "Width:")) {  //on enregistre la largeur en pixel
 			i++;
 			fscanf(f, "%s", line);
 			param->image.width = atoi(line);
 		}
-		else if (!strcmp(line, "Background-color:")) {
-			i++;
+		else if (!strcmp(line, "Background-color:")) {  //on enregistre la couleur de fond
 			for (int j = 0; j < 3; j++) {
 				fscanf(f, "%s", line);
 				i++;
@@ -89,17 +88,17 @@ int loadFromFile(sParam *param) {
 				}
 			}
 		}
-		else if (!strcmp(line, "Brightness:")) {
+		else if (!strcmp(line, "Brightness:")) {  //on enregistre le facteur de luminosité
 			i++;
 			fscanf(f, "%s", line);
 			param->light.lightFactor = atof(line);
 		}
-		else if (!strcmp(line, "Numberofobjects:")) {
+		else if (!strcmp(line, "Numberofobjects:")) {  //on enregistre le nombre d'objets
 			i++;
 			fscanf(f, "%s", line);
 			param->nbObjects = atoi(line);
 			param->object = (sObject*)malloc(param->nbObjects*sizeof(sObject));
-			for (int j = 0; j < param->nbObjects; j++) {
+			for (int j = 0; j < param->nbObjects; j++) {  //tant qu'il reste des objets à traiter...
 				fscanf(f, "%s", line);
 				i++;
 				char buffer[2];
@@ -115,7 +114,7 @@ int loadFromFile(sParam *param) {
 				i++;
 				fscanf(f, "%s", line);
 				i++;
-				for (int k = 0; k < 3; k++) {
+				for (int k = 0; k < 3; k++) {  //on récupère les puissances de x, y et z
 					fscanf(f, "%s", line);
 					i++;
 					if (k > 0) {
@@ -159,13 +158,13 @@ int loadFromFile(sParam *param) {
 				}
 				fscanf(f, "%s", line);
 				i++;
-				if (!strcmp(line, "Numberofpeaks:")) {
+				if (!strcmp(line, "Numberofpeaks:")) {  //...le nombre de sommets
 					fscanf(f, "%s", line);
 					i++;
 					int nbPeaks = atoi(line);
 					param->object[j].peak = (sPos*)malloc(nbPeaks * sizeof(sPos));
 					param->object[j].nbPeaks = nbPeaks;
-					for (int k = 0; k < nbPeaks; k++) {
+					for (int k = 0; k < nbPeaks; k++) {  //...et leurs coordonnées
 						fscanf(f, "%s", line);
 						i++;
 						fscanf(f, "%s", line);
