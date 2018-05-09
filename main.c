@@ -3,7 +3,6 @@
 #include<stdlib.h>
 #include<string.h>
 #include "bmp.h"
-#include "file.h"
 #include "structure.h"
 
 int main() {
