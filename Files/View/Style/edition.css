@@ -44,3 +44,14 @@ section > table > thead th {
     background-image: url("grille.png");
     background-size: contain;
 }
+
+#fixed th {
+    border-right: 1px solid black;
+}
+
+.fiche {
+    margin: auto;
+    border: 1px solid gray;
+    padding: 0.4em;
+    width: 20em;
+}
