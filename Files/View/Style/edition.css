@@ -1,0 +1,46 @@
+fieldset {
+    padding: 1em 0;
+    margin: 1em 0;
+}
+
+legend {
+    margin-left: 2em;
+    font-weight: bold;
+    font-size: large;
+}
+
+table {
+    width: 90%;
+    margin: auto;
+}
+td {
+    width: 40%;
+}
+
+section > table > thead th {
+    font-size: x-large;
+}
+
+#animation {
+    background-color: lightgray;
+}
+
+#shapeSelection {
+    border-collapse: collapse;
+}
+#shapeSelection table {
+    border-collapse: separate;
+}
+#shapeSelection > tbody > tr > td {
+    padding: 1em;
+    border: 1px solid gray;
+}
+
+#grid {
+    margin: auto;
+    height: 25em;
+    width: 25em;
+    background-position: center;
+    background-image: url("grille.png");
+    background-size: contain;
+}

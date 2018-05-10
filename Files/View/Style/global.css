@@ -1,0 +1,27 @@
+body {
+    text-align: center;
+}
+
+menu {
+    width: 50%;
+    margin: auto;
+    margin-bottom: 2em;
+    border: 1px solid black;
+    background-color: whitesmoke;
+}
+
+section {
+    width: 70%;
+    padding: 3em 0;
+    margin: auto;
+    border: 1px solid black;
+    background-color: whitesmoke;
+}
+
+#top {
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    z-index: 10;
+}
+
