@@ -1,6 +1,5 @@
 #pragma once
 #include "bmp.h"
-#include <stdio.h>
 
 typedef struct sFormula_ sFormula;
 struct sFormula_ {
@@ -34,19 +33,14 @@ struct sPlanEquation_ {
 	double d;
 };
 
-typedef struct sFace_ sFace;
-struct sFace_ {
-	int nbPeaks;
-	sPos *peak;
-	sPlanEqua planEqua;
-};
-
 typedef struct sObject_ sObject;
 struct sObject_ {
-	sColor color;
 	sFormula formula;
+	sParamEqua paramEqua;
 	int nbFaces;
-	sFace *face;
+	sPlanEqua *planEqua;
+	int nbPeaks;
+	sPos *peak;
 };
 
 typedef struct sImage_ sImage;
@@ -60,7 +54,6 @@ struct sImage_ {
 typedef struct sLight_ sLight;
 struct sLight_ {
 	float lightFactor;
-	sParamEqua paramEqua;
 };
 
 typedef struct sParam_ sParam;
@@ -72,9 +65,5 @@ struct sParam_ {
 
 	sLight light;
 };
-
-int nbLine(FILE *f);
-
-void showStruct(sParam param);
 
 int loadFromFile(sParam *param);

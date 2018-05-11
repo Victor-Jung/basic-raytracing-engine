@@ -28,10 +28,6 @@ void showStruct(sParam param) {
 	printf("Light Factor: %f\n", param.light.lightFactor);
 	for (int i = 0; i < param.nbObjects; i++) {
 		printf("Object %d:\n", i + 1);
-		printf("	Color:\n");
-		printf("	r: %d\n", param.object[i].color.r);
-		printf("	g: %d\n", param.object[i].color.g);
-		printf("	b: %d\n", param.object[i].color.b);
 		printf("	Formula:\n");
 		for (int j = 0; j < param.object[i].formula.nbX; j++) {
 			printf("		x^%d: %f\n", j + 1, param.object[i].formula.x[j]);
@@ -43,24 +39,24 @@ void showStruct(sParam param) {
 			printf("		z^%d: %f\n", j + 1, param.object[i].formula.z[j]);
 		}
 		printf("	Parametric Equation:\n");
-		printf("		A%d: %f\n", i, param.light.paramEqua.x[0]);
-		printf("		a%d: %f\n", i, param.light.paramEqua.x[1]);
-		printf("		B%d: %f\n", i, param.light.paramEqua.y[0]);
-		printf("		b%d: %f\n", i, param.light.paramEqua.y[1]);
-		printf("		C%d: %f\n", i, param.light.paramEqua.z[0]);
-		printf("		c%d: %f\n", i, param.light.paramEqua.z[1]);
+		printf("		A%d: %f\n", i, param.object[i].paramEqua.x[0]);
+		printf("		a%d: %f\n", i, param.object[i].paramEqua.x[1]);
+		printf("		B%d: %f\n", i, param.object[i].paramEqua.y[0]);
+		printf("		b%d: %f\n", i, param.object[i].paramEqua.y[1]);
+		printf("		C%d: %f\n", i, param.object[i].paramEqua.z[0]);
+		printf("		c%d: %f\n", i, param.object[i].paramEqua.z[1]);
 		for (int j = 1; j <= param.object[i].nbFaces; j++) {
 			printf("	Plan Equation %d:\n", j);
-			printf("		a%d: %f\n", j, param.object[i].face[j - 1].planEqua.a);
-			printf("		b%d: %f\n", j, param.object[i].face[j - 1].planEqua.b);
-			printf("		c%d: %f\n", j, param.object[i].face[j - 1].planEqua.c);
-			printf("		d%d: %f\n", j, param.object[i].face[j - 1].planEqua.d);
-			printf("	Peaks(%d):\n", param.object[i].face[j - 1].nbPeaks);
-			for (int k = 0; k < param.object[i].face[j - 1].nbPeaks; k++) {
-				printf("		x%d: %f\n", j + 1, param.object[i].face[j - 1].peak[k].x);
-				printf("		y%d: %f\n", j + 1, param.object[i].face[j - 1].peak[k].y);
-				printf("		z%d: %f\n", j + 1, param.object[i].face[j - 1].peak[k].z);
-			}
+			printf("		a%d: %f\n", j, param.object[i].planEqua[j - 1].a);
+			printf("		b%d: %f\n", j, param.object[i].planEqua[j - 1].b);
+			printf("		c%d: %f\n", j, param.object[i].planEqua[j - 1].c);
+			printf("		d%d: %f\n", j, param.object[i].planEqua[j - 1].d);
+		}
+		printf("	Peaks:\n");
+		for (int j = 0; j < param.object[i].nbPeaks; j++) {
+			printf("		x%d: %f\n", j + 1, param.object[i].peak[j].x);
+			printf("		y%d: %f\n", j + 1, param.object[i].peak[j].y);
+			printf("		z%d: %f\n", j + 1, param.object[i].peak[j].z);
 		}
 	}
 
@@ -115,39 +111,6 @@ int loadFromFile(sParam *param) {
 			fscanf(f, "%s", line);
 			param->light.lightFactor = atof(line);
 		}
-		else if (!strcmp(line, "ParametricEquation:")) {
-			fscanf(f, "%s", line);
-			i++;
-			fscanf(f, "%s", line);
-			i++;
-			for (int l = 0; l < 2; l++) {
-				fscanf(f, "%s", line);
-				i++;
-				param->light.paramEqua.x[l] = atof(line);
-				fscanf(f, "%s", line);
-				i++;
-			}
-			fscanf(f, "%s", line);
-			i++;
-			for (int l = 0; l < 2; l++) {
-				fscanf(f, "%s", line);
-				i++;
-				param->light.paramEqua.y[l] = atof(line);
-				fscanf(f, "%s", line);
-				i++;
-			}
-			fscanf(f, "%s", line);
-			i++;
-			for (int l = 0; l < 2; l++) {
-				fscanf(f, "%s", line);
-				i++;
-				param->light.paramEqua.z[l] = atof(line);
-				if (l != 1) {
-					fscanf(f, "%s", line);
-					i++;
-				}
-			}
-		}
 		else if (!strcmp(line, "Numberofobjects:")) {
 			i++;
 			fscanf(f, "%s", line);
@@ -167,33 +130,6 @@ int loadFromFile(sParam *param) {
 				}
 				fscanf(f, "%s", line);
 				i++;
-				if (strcmp(line, "Color:")) {
-					return 0;
-				}
-				fscanf(f, "%s", line);
-				i++;
-				for (int k = 0; k < 3; k++) {
-					if (!strcmp(line, "r:")) {
-						fscanf(f, "%s", line);
-						i++;
-						param->object[j].color.r = atoi(line);
-					}
-					if (!strcmp(line, "g:")) {
-						fscanf(f, "%s", line);
-						i++;
-						param->object[j].color.g = atoi(line);
-					}
-					if (!strcmp(line, "b:")) {
-						fscanf(f, "%s", line);
-						i++;
-						param->object[j].color.b = atoi(line);
-					}
-					fscanf(f, "%s", line);
-					i++;
-					if (strcmp(line, "r:") && strcmp(line, "g:") && strcmp(line, "b:") && strcmp(line, "Formula:")) {
-						return 0;
-					}
-				}
 				fscanf(f, "%s", line);
 				i++;
 				for (int k = 0; k < 3; k++) {
@@ -240,11 +176,42 @@ int loadFromFile(sParam *param) {
 				}
 				fscanf(f, "%s", line);
 				i++;
+				if (!strcmp(line, "ParametricEquation:")) {
+					fscanf(f, "%s", line);
+					i++;
+					fscanf(f, "%s", line);
+					i++;
+					for (int l = 0; l < 2; l++) {
+						fscanf(f, "%s", line);
+						i++;
+						param->object[j].paramEqua.x[l] = atof(line);
+						fscanf(f, "%s", line);
+						i++;
+					}
+					fscanf(f, "%s", line);
+					i++;
+					for (int l = 0; l < 2; l++) {
+						fscanf(f, "%s", line);
+						i++;
+						param->object[j].paramEqua.y[l] = atof(line);
+						fscanf(f, "%s", line);
+						i++;
+					}
+					fscanf(f, "%s", line);
+					i++;
+					for (int l = 0; l < 2; l++) {
+						fscanf(f, "%s", line);
+						i++;
+						param->object[j].paramEqua.z[l] = atof(line);
+						fscanf(f, "%s", line);
+						i++;
+					}
+				}
 				if (!strcmp(line, "NumberOfFaces:")) {
 					fscanf(f, "%s", line);
 					i++;
 					param->object[j].nbFaces = atoi(line);
-					param->object[j].face = (sFace*)malloc(param->object[j].nbFaces * sizeof(sFace));
+					param->object[j].planEqua = (sPlanEqua*)malloc(param->object[j].nbFaces * sizeof(sPlanEqua));
 					for (int l = 0; l < param->object[j].nbFaces; l++) {
 						fscanf(f, "%s", line);
 						i++;
@@ -259,49 +226,49 @@ int loadFromFile(sParam *param) {
 							i++;
 							fscanf(f, "%s", line);
 							i++;
-							param->object[j].face[l].planEqua.a = atof(line);
+							param->object[j].planEqua[l].a = atof(line);
 							fscanf(f, "%s", line);
 							i++;
 							fscanf(f, "%s", line);
 							i++;
-							param->object[j].face[l].planEqua.b = atof(line);
+							param->object[j].planEqua[l].b = atof(line);
 							fscanf(f, "%s", line);
 							i++;
 							fscanf(f, "%s", line);
 							i++;
-							param->object[j].face[l].planEqua.c = atof(line);
+							param->object[j].planEqua[l].c = atof(line);
 							fscanf(f, "%s", line);
 							i++;
 							fscanf(f, "%s", line);
 							i++;
-							param->object[j].face[l].planEqua.d = atof(line);
+							param->object[j].planEqua[l].d = atof(line);
 						}
+					}
+				}
+				fscanf(f, "%s", line);
+				i++;
+				if (!strcmp(line, "Numberofpeaks:")) {
+					fscanf(f, "%s", line);
+					i++;
+					int nbPeaks = atoi(line);
+					param->object[j].peak = (sPos*)malloc(nbPeaks * sizeof(sPos));
+					param->object[j].nbPeaks = nbPeaks;
+					for (int k = 0; k < nbPeaks; k++) {
 						fscanf(f, "%s", line);
 						i++;
-						if (!strcmp(line, "Numberofpeaks:")) {
-							fscanf(f, "%s", line);
-							i++;
-							int nbPeaks = atoi(line);
-							param->object[j].face[l].peak = (sPos*)malloc(nbPeaks * sizeof(sPos));
-							param->object[j].face[l].nbPeaks = nbPeaks;
-							for (int k = 0; k < nbPeaks; k++) {
-								fscanf(f, "%s", line);
-								i++;
-								fscanf(f, "%s", line);
-								i++;
-								param->object[j].face[l].peak[k].x = atof(line);
-								fscanf(f, "%s", line);
-								i++;
-								fscanf(f, "%s", line);
-								i++;
-								param->object[j].face[l].peak[k].y = atof(line);
-								fscanf(f, "%s", line);
-								i++;
-								fscanf(f, "%s", line);
-								i++;
-								param->object[j].face[l].peak[k].z = atof(line);
-							}
-						}
+						fscanf(f, "%s", line);
+						i++;
+						param->object[j].peak[k].x = atof(line);
+						fscanf(f, "%s", line);
+						i++;
+						fscanf(f, "%s", line);
+						i++;
+						param->object[j].peak[k].y = atof(line);
+						fscanf(f, "%s", line);
+						i++;
+						fscanf(f, "%s", line);
+						i++;
+						param->object[j].peak[k].z = atof(line);
 					}
 				}
 			}

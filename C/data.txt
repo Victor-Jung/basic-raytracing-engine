@@ -14,9 +14,32 @@ Background-color:
 	255
 Brightness:
 1
+ParametricEquation:
+	x:
+		A:
+		2
+		a:
+		-3
+	y:
+		B:
+		1
+		b:
+		-1
+	z:
+		C:
+		-1
+		c:
+		6
 Numberofobjects:
-2
+1
 Object1:
+	Color:
+		r:
+		255
+		g:
+		255
+		b:
+		255
 	Formula:
 		Powersofx:
 		4
@@ -40,201 +63,51 @@ Object1:
 			1
 			2:
 			2
-	ParametricEquation:
-		x:
-			A:
-			1.1
-			a:
-			1.2
-		y:
-			B:
-			1.3
-			b:
-			1.4
-		z:
-			C:
-			1.5
-			c:
-			1.6
 	NumberOfFaces:
-	6
-		Face1:
-			a1:
-			1.1
-			b1:
-			1.2
-			c1:
-			1.3
-			d1:
-			1.4
-		Face2:
-			a1:
-			1.1
-			b1:
-			1.3
-			c1:
-			1.3
-			d1:
-			1.4
-		Face3:
-			a1:
-			1.1
-			b1:
-			1.2
-			c1:
-			1.3
-			d1:
-			1.4
-		Face4:
-			a1:
-			1.1
-			b1:
-			1.2
-			c1:
-			1.3
-			d1:
-			1.4
-		Face5:
-			a1:
-			1.1
-			b1:
-			1.2
-			c1:
-			1.3
-			d1:
-			1.4
-		Face6:
-			a1:
-			1.1
-			b1:
-			1.2
-			c1:
-			1.3
-			d1:
-			1.4
-	Numberofpeaks:
 	2
-		x1:
-		0
-		y1:
-		0
-		z1:
-		0
-		x2:
-		1
-		y2:
-		1
-		z2:
-		1
-Object2:
-	Formula:
-		Powersofx:
-		2
-			1:
-			1
-			2:
-			5
-		Powersofy:
-		2
-			1:
-			1
-			2:
-			7.5
-		Powersofz:
-		2
-			1:
-			1
-			2:
-			2
-	ParametricEquation:
-		x:
-			A:
-			1.1
-			a:
-			1.2
-		y:
-			B:
-			1.3
-			b:
-			1.4
-		z:
-			C:
-			1.5
-			c:
-			1.6
-	NumberOfFaces:
-	6
 		Face1:
 			a1:
-			1.1
+			-1
 			b1:
-			1.2
+			-1
 			c1:
-			1.3
+			1
 			d1:
-			1.4
+			0
+			Numberofpeaks:
+			2
+			x1:
+			0
+			y1:
+			0
+			z1:
+			0
+			x2:
+			1
+			y2:
+			1
+			z2:
+			1
 		Face2:
 			a1:
-			1.1
+			1
 			b1:
-			1.2
-			c1:
-			1.3
-			d1:
-			1.4
-		Face3:
-			a1:
 			1.1
-			b1:
-			1.2
 			c1:
-			1.3
-			d1:
-			1.4
-		Face4:
-			a1:
-			1.1
-			b1:
 			1.2
-			c1:
-			1.3
 			d1:
-			1.4
-		Face5:
-			a1:
-			1.1
-			b1:
-			1.2
-			c1:
 			1.3
-			d1:
-			1.4
-		Face6:
-			a1:
-			1.1
-			b1:
-			1.2
-			c1:
-			1.3
-			d1:
-			1.4
-	Numberofpeaks:
-	3
-		x1:
-		0
-		y1:
-		0
-		z1:
-		0
-		x2:
-		1
-		y2:
-		1
-		z2:
-		1
-		x3:
-		1
-		y3:
-		5.2
-		z3:
-		1
+			Numberofpeaks:
+			2
+			x1:
+			0
+			y1:
+			0
+			z1:
+			0
+			x2:
+			1
+			y2:
+			1
+			z2:
+			1

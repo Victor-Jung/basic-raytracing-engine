@@ -2,8 +2,10 @@
 #include <stdbool.h>
 #include "structure.h"
 
-int* listingTimes(sParam param);
+int compare(void const *a, void const *b);
 
-sPos doesCollide();
+void showTab(double *t);
 
-bool isInside();
+double* listingTimes(sParam param, double *t);
+
+void* doesCollide(sParam param, double *t);

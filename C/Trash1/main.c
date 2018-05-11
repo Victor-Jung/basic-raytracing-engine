@@ -2,10 +2,18 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include "mainFunctions.h"
+#include "bmp.h"
+#include "file.h"
+#include "structure.h"
 
 int main() {
-	
+	sParam param;
+	printf("%d\n", loadFromFile(&param));
+	showStruct(param);
+	system("pause");
+	return 0;
+}
+
 /*int i, j;
 unsigned int height = 800, width = 800;
 image* I = newBMP(width, height);
@@ -30,16 +38,3 @@ setcolor(I, 75, 24, p);
 setcolor(I, 215, 127, p);
 saveBMP(I, "test.bmp");
 deleteBMP(I);*/
-
-	sParam param;
-	double *t = NULL;
-	if (!loadFromFile(&param)) {
-		return 0;
-	}
-	showStruct(param);
-	t = listingTimes(param, t);
-	doesCollide(param, t);
-	system("pause");
-	return 1;
-}
-
