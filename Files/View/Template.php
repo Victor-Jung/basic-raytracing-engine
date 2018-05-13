@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title><?= htmlspecialchars($page['pageName']) ?></title>
+        <title><?= htmlspecialchars($template['pageName']) ?></title>
         <link href="View/Style/global.css" rel="stylesheet">
         <link href="View/Style/edition.css" rel="stylesheet">
         <link href="View/Style/geometry.css" rel="stylesheet">
@@ -15,7 +15,7 @@
 
         <menu>
             <span>
-                <?php if ($page['actual'] != 'edit') { ?>
+                <?php if ($template['actual'] != 'edit') { ?>
                     <li>
                         <a href="index.php?action=edit">Créer une image</a>
                     </li>
@@ -23,12 +23,12 @@
                 <li>
                     Ajouter des options
                     <ul>
-                        <?php if ($page['script'] != 'formula') { ?>
+                        <?php if ($template['script'] != 'formula') { ?>
                             <li>
                                 <a href="index.php?action=add">Formes géométriques</a>
                             </li>
                         <?php }
-                        if ($page['script'] != 'texture') { ?>
+                        if ($template['script'] != 'texture') { ?>
                             <li>
                                 <a href="index.php?action=add">Textures</a>
                             </li>
@@ -41,9 +41,9 @@
                     Notification
                     <ul>
                         <li>
-                            <?php if (isset($page['listWarning'])) {
+                            <?php if (isset($template['listWarning'])) {
                                 echo 'Champs incorrects ou manquants :';
-                                foreach($page['listWarning'] as $message) {
+                                foreach($template['listWarning'] as $message) {
                                     echo '<br>- '.htmlspecialchars($message);
                                 }
                             }
@@ -58,7 +58,7 @@
             
 
         <section>
-            <?= $template['section'] ?>
+            <?= $template['content'] ?>
             <a href="#" id="top"><button><h4>Haut de page</h4></button></a>
         </section>
     </body>

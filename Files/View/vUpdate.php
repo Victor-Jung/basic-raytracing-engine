@@ -30,7 +30,7 @@ ob_start(); ?>
 
         <?= $page['fieldset'] ?>
     </fieldset>
-<?php $template['section'] = ob_get_clean();
+<?php $template['content'] = ob_get_clean();
 
 
 require('View/Template.php');
