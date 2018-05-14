@@ -25,8 +25,8 @@ int nbLine(FILE* f) {
 
 void showStruct(sParam param) {
 	printf("Name: %s\n", param.image.name);
-	printf("Height: %f\n", param.image.height);
-	printf("Width: %f\n", param.image.width);
+	printf("Height: %d\n", param.image.height);
+	printf("Width: %d\n", param.image.width);
 	printf("Background-r: %d\n", param.image.background.r);
 	printf("Background-g: %d\n", param.image.background.g);
 	printf("Background-b: %d\n", param.image.background.b);

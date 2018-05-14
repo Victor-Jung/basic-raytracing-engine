@@ -2,16 +2,16 @@
 Name:
 test
 Height:
-1024
+512
 Width:
-1024
+512
 Background-color:
 	r:
 	255
 	g:
-	0
+	50
 	b:
-	0
+	255
 Brightness:
 1
 LightPosition:
@@ -29,15 +29,15 @@ ViewerPosition:
 	z:
 	2
 Numberofobjects:
-2
+1
 Object1:
 	Color:
 		r:
 		0
 		g:
-		255
-		b:
 		0
+		b:
+		255
 	Formula:
 		Powersofx:
 		4
@@ -98,65 +98,3 @@ Object1:
 			4
 			z4:
 			1
-Object2:
-	Color:
-		r:
-		0
-		g:
-		0
-		b:
-		255
-	Formula:
-		Powersofx:
-		4
-			1:
-			1
-			2:
-			0
-			3:
-			0
-			4:
-			1
-		Powersofy:
-		2
-			1:
-			1
-			2:
-			1
-		Powersofz:
-		2
-			1:
-			1
-			2:
-			2
-	NumberOfFaces:
-	1
-		Face1:
-			a2:
-			1
-			b2:
-			1
-			c2:
-			0
-			d2:
-			-5
-			Numberofpeaks:
-			3
-			x1:
-			2
-			y1:
-			3
-			z1:
-			4
-			x2:
-			3
-			y2:
-			2
-			z2:
-			3
-			x3:
-			1
-			y3:
-			4
-			z3:
-			2

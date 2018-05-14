@@ -52,8 +52,8 @@ struct sObject_ {
 typedef struct sImage_ sImage;
 struct sImage_ {
 	char *name;
-	double width;
-	double height;
+	unsigned double width;
+	unsigned double height;
 	sColor background;
 };
 

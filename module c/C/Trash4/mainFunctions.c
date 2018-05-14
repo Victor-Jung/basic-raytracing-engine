@@ -1,13 +1,11 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include "mainFunctions.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <stdbool.h>
-#include <string.h>
 #include "structure.h"
 #define PI 3,1415926535
-#define MORE
+#define LESS
 
 int compare(double const *a, double const *b) {
 	if (floor(*a) > floor(*b)) {
@@ -49,7 +47,19 @@ double* listingTimes(sParam param, double *t) {
 	for (int i = 0; i < param.nbObjects; i++) {
 		nbT += param.object[i].nbFaces;
 	}
-	t = (double*)malloc((nbT + 1) * sizeof(double));
+	if (t == NULL) {
+		t = (double*)malloc((nbT + 1) * sizeof(double));
+	}
+	else {
+		double *tmp = (double*)realloc( t, (nbT + 1) * sizeof(double));
+		if (tmp != NULL) {
+			t = tmp;
+		}
+		else {
+			free(tmp);
+			return NULL;
+		}
+	}	
 	int cpt = 1;
 	t[0] = nbT;
 	for (int i = 0; i < param.nbObjects; i++) {
@@ -84,7 +94,7 @@ sPos* intersectLight(sParam param, double t) {
 	double x = param.light.paramEqua.x[0] * t + param.light.paramEqua.x[1];
 	double y = param.light.paramEqua.y[0] * t + param.light.paramEqua.y[1];
 	double z = param.light.paramEqua.z[0] * t + param.light.paramEqua.z[1];
-	sPos *pos = (sPos*)malloc(sizeof(sPos));
+	sPos *pos=(sPos*)malloc(sizeof(sPos));
 	pos->x = x;
 	pos->y = y;
 	pos->z = z;
@@ -123,8 +133,8 @@ void* doesCollide(sParam param, double *t) {
 					}
 				}
 				theta /= 2 * PI;  //precision environ egale a 2.6646.10^-15
-				//printf("%.16f\n", theta);
-				if (theta > 1.047197551196 && theta < 1.047197551197) {  //1.0471975511965976
+				printf("%.16f\n", theta);
+				if (theta == 1.0471975511965976) {  //1.0471975511965976
 					return pos;
 				}
 				theta = 0;
@@ -139,44 +149,18 @@ void* doesCollide(sParam param, double *t) {
 
 int createImage(sPos posLight, sParam param) {
 	sColor color;
-	sFile* I = newBMP(param.image.width, param.image.height);
-	for (int w = 1; w <= param.image.width; w++) {
-		for (int h = 1; h <= param.image.height; h++) {
-			double *t = NULL;
-			equaParamLight(&param, w, h);
-			t = listingTimes(param, t);
-			//showTab(t);
-			sPos *posPointObjet = NULL;
-			sColor p;
-			if ((posPointObjet = doesCollide(param, t))) {
-				int cpt = -1;
-				for (int i = 0; i < param.nbObjects; i++) {
-					for (int j = 0; j < param.object[i].nbFaces; j++) {
-						if (((param.object[i].face[j].planEqua.a * posPointObjet->x)+ (param.object[i].face[j].planEqua.b * posPointObjet->y)+ (param.object[i].face[j].planEqua.c * posPointObjet->z)) == -param.object[i].face[j].planEqua.d) {
-							cpt = i;
-						}
+	for (int w = 0; w < param.image.width; w++) {
+		for (int h = 0; h < param.image.height; h++) {
+			for (int i = 0; i < param.nbObjects; i++) {
+				for (int j = 0; j < param.object[i].nbFaces; j++) {
+					if (((posLight.x * param.object[i].face[j].planEqua.a) + (posLight.y* param.object[i].face[j].planEqua.b) + (posLight.z* param.object[i].face[j].planEqua.c)) == -(param.object[i].face[j].planEqua.d)) {
+						
 					}
 				}
-				p.r = param.object[cpt].color.r;
-				p.g = param.object[cpt].color.g;
-				p.b = param.object[cpt].color.b;
-				setcolor(I, w-1, h-1, p);
 			}
-			else {
-				p.r = param.image.background.r;
-				p.g = param.image.background.g;
-				p.b = param.image.background.b;
-				setcolor(I, w-1, h-1, p);
-			}
-			free(t);
 		}
 	}
-	char name[50];
-	strcpy(name, param.image.name);
-	strcat(name, ".bmp");
-	saveBMP(I, name);
-	deleteBMP(I);
-	return 1;
+
 }
 
 #endif // MORE

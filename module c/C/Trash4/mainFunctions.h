@@ -9,5 +9,3 @@ double* listingTimes(sParam param, double *t);
 void* doesCollide(sParam param, double *t);
 
 void equaParamLight(sParam *param, double X, double Y);
-
-int createImage(sPos posLight, sParam param);

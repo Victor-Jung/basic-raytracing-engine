@@ -31,13 +31,24 @@ int main() {
 	deleteBMP(I);
 	return 0;*/
 	sParam param;
+	double *t = NULL;
 	if (!loadFromFile(&param)) {
 		return 0;
 	}
 	showStruct(param);
-	if (createImage(param.lightSource, param)) {
+	double X = 200, Y = 100;
+	equaParamLight(&param, X, Y);
+	t = listingTimes(param, t);
+	showTab(t);
+	if (doesCollide(param, t) == false) {
+		system("pause");
+		freeAll(&param);
+		return 0;
+	}
+	else {
+		system("pause");
+		freeAll(&param);
 		return 1;
 	}
-	return 0;
 }
 
