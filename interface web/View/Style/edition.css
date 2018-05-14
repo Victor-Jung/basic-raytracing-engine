@@ -1,0 +1,87 @@
+fieldset {
+    padding: 1em 0;
+    margin: 1em 0;
+}
+
+legend {
+    margin-left: 2em;
+    font-weight: bold;
+    font-size: large;
+}
+
+table {
+    width: 90%;
+    margin: auto;
+}
+td {
+    width: 40%;
+}
+
+section > table > thead th {
+    font-size: x-large;
+}
+
+#typeFile table {
+    display: none;
+}
+#typeFile #video:checked ~ table {
+    margin-top: 1em;
+    display: inline-block;
+}
+
+#shapeSelection {
+    border-collapse: collapse;
+}
+#shapeSelection table {
+    border-collapse: separate;
+}
+#shapeSelection > tbody > tr > td, .listSelection {
+    padding: 1em;
+    border: 1px solid gray;
+}
+#shapeSelection > tbody > tr:nth-child(2) > td {
+    padding-top: 0;
+    padding-bottom: 0; 
+}
+#shapeSelection div, #fixed .listSelection {
+    overflow-y: scroll;
+}
+#shapeSelection h3 {
+    margin: 1em 0;
+}
+
+
+#gridFillable, #gridFixed {
+    border: 2px solid black;
+    width: 25em;
+    margin: auto;
+
+}
+#gridFillable {
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(100, 100, 100, 0.3), rgba(0, 0, 0, 0.3)), url("grille.png");
+    background-position: center;
+}
+
+#xPos, #yPos, #zPos,
+#xRot, #yRot, #zRot, 
+#bright, #growth, #dimZ {
+    width: 60px;
+}
+
+#fixed>tbody>tr>th {
+    border-right: 1px solid black;
+    width: 20%;
+}
+#fixed table {
+    width: 95%;
+}
+#fixed td {
+    width: auto;
+}
+
+.fiche {
+    margin: auto;
+    border: 1px solid gray;
+    padding: 0.4em;
+    width: 20em;
+}
