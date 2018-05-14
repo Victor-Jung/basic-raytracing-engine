@@ -215,9 +215,9 @@ ob_start(); ?>
                             <optgroup label="Formes simples">
                                 <option>Surface</option>
                                 <option>Sphère</option>
+                                <option>Pavé</option>
                             </optgroup>
                             <optgroup label="Formes avancées" disabled>
-                                <option>Pavé</option>
                                 <option>Pyramide</option><!--peut préciser nb de faces-->
                             </optgroup>
                             <optgroup label="Formes complexes" disabled>
@@ -253,26 +253,11 @@ ob_start(); ?>
                                     </tr>
                                     <tr>
                                         <td colspan="2">
-                                            réfléchir à implémentation
-                                            <!--
-                                            <label title="Entrez une valeur entre 0 et < ?= htmlspecialchars($_SESSION['editDataFile']['dimX']) ?>">
-                                                <input type="number" id="xPos" name="xPos" 
-                                                value="< ?= htmlspecialchars($figure['pos']['xAxis']) ?>" 
-                                                step="< ?= STEP_AXIS ?>" min="0" max="< ?= htmlspecialchars($_SESSION['editDataFile']['dimX']) ?>" required>
-                                            </label>
-                                            -
-                                            <label title="Entrez une valeur entre 0 et < ?= htmlspecialchars($_SESSION['editDataFile']['dimY']) ?>">
-                                                <input type="number" id="yPos" name="yPos" 
-                                                value="< ?= htmlspecialchars($figure['pos']['yAxis']) ?>" 
-                                                step="< ?= STEP_AXIS ?>" min="0" max="< ?= htmlspecialchars($_SESSION['editDataFile']['dimY']) ?>" required>
-                                            </label>
-                                            -
-                                            <label title="Entrez une valeur entre 0 et < ?= htmlspecialchars($_SESSION['editDataFile']['dimZ']) ?>">
-                                                <input type="number" id="zPos" name="zPos" 
-                                                value="< ?= htmlspecialchars($figure['pos']['zAxis']) ?>" 
-                                                step="< ?= STEP_AXIS ?>" min="0" max="< ?= htmlspecialchars($_SESSION['editDataFile']['dimZ']) ?>" required>
-                                            </label>
-                                            -->
+                                            ->faire switch
+                                            si plan : x y
+                                            si pavé : x y z
+                                            si sphère : r
+                                            si pyramide : ??
                                         </td>
                                     </tr>
                                     <tr><td colspan="2"><br></td></tr>
