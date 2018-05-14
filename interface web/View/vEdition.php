@@ -213,10 +213,11 @@ ob_start(); ?>
                         Choisissez une forme :<br>
                         <select>
                             <optgroup label="Formes simples">
+                                <option>Surface</option>
                                 <option>Sphère</option>
-                                <option>Cube</option>
                             </optgroup>
                             <optgroup label="Formes avancées" disabled>
+                                <option>Pavé</option>
                                 <option>Pyramide</option><!--peut préciser nb de faces-->
                             </optgroup>
                             <optgroup label="Formes complexes" disabled>
@@ -247,6 +248,33 @@ ob_start(); ?>
                                     <h3>Forme <?= htmlspecialchars($figure['id'].' : '.ucfirst($figure['name'])) ?></h3>
                                 </label>
                                 <table>
+                                    <tr>
+                                        <th colspan="2">Dimensions (X-Y-Z) :</th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <!--
+                                            <label title="Entrez une valeur entre 0 et < ?= htmlspecialchars($_SESSION['editDataFile']['dimX']) ?>">
+                                                <input type="number" id="xPos" name="xPos" 
+                                                value="< ?= htmlspecialchars($figure['pos']['xAxis']) ?>" 
+                                                step="< ?= STEP_AXIS ?>" min="0" max="< ?= htmlspecialchars($_SESSION['editDataFile']['dimX']) ?>" required>
+                                            </label>
+                                            -
+                                            <label title="Entrez une valeur entre 0 et < ?= htmlspecialchars($_SESSION['editDataFile']['dimY']) ?>">
+                                                <input type="number" id="yPos" name="yPos" 
+                                                value="< ?= htmlspecialchars($figure['pos']['yAxis']) ?>" 
+                                                step="< ?= STEP_AXIS ?>" min="0" max="< ?= htmlspecialchars($_SESSION['editDataFile']['dimY']) ?>" required>
+                                            </label>
+                                            -
+                                            <label title="Entrez une valeur entre 0 et < ?= htmlspecialchars($_SESSION['editDataFile']['dimZ']) ?>">
+                                                <input type="number" id="zPos" name="zPos" 
+                                                value="< ?= htmlspecialchars($figure['pos']['zAxis']) ?>" 
+                                                step="< ?= STEP_AXIS ?>" min="0" max="< ?= htmlspecialchars($_SESSION['editDataFile']['dimZ']) ?>" required>
+                                            </label>
+                                            -->
+                                        </td>
+                                    </tr>
+                                    <tr><td colspan="2"><br></td></tr>
                                     <tr>
                                         <th colspan="2">Translation (X-Y-Z) :</th>
                                     </tr>
