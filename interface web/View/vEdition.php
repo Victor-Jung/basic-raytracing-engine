@@ -7,39 +7,28 @@ define('MAX_GROWTH', 10);
 define('STEP_GROWTH', 0.1);
 define('STEP_AXIS', 1);
 
+
 // debut provisoire : test de la page
-    //avant chargement de la page
-    $_SESSION['edit']['step'] = 1;
-
     //valeurs par defaut (initialisees au lancement de la page) :
-        $_SESSION['editDataFile']['name'] = '';
-        $_SESSION['editDataFile']['format'] = 'BMP';
-        $_SESSION['editDataFile']['dimX'] = 768;
-        $_SESSION['editDataFile']['dimY'] = 768;
-        $_SESSION['editDataFile']['dimZ'] = MAX_Z_IMG;
-        $_SESSION['editDataFile']['video']['duration'] = MAX_DURATION;
-        $_SESSION['editDataFile']['video']['frequency'] = 1;
+        $_SESSION['edit']['dataFile']['name'] = '';
+        $_SESSION['edit']['dataFile']['format'] = 'BMP';
+        $_SESSION['edit']['dataFile']['dimX'] = 768;
+        $_SESSION['edit']['dataFile']['dimY'] = 768;
+        $_SESSION['edit']['dataFile']['dimZ'] = MAX_Z_IMG;
+        $_SESSION['edit']['dataFile']['video']['duration'] = MAX_DURATION;
+        $_SESSION['edit']['dataFile']['video']['frequency'] = 1;
 
-        $_SESSION['editDataScene']['bright'] = 100;
-        $_SESSION['editDataScene']['backgroundColor'] = '#000000';
+        $_SESSION['edit']['dataScene']['bright'] = 100;
+        $_SESSION['edit']['dataScene']['backgroundColor'] = '#000000';
     
         //pour chaque ajout de shape : initialise tous les champs
-        $_SESSION['editDataScene']['shape'] = array();
-        $_SESSION['editDataScene']['shape'][] = array('name' => '(nom)',
-                                                    'id' => count($_SESSION['editDataScene']['shape']) + 1,
+        $_SESSION['edit']['dataScene']['shape'][0] = array('name' => '(nom)',
+                                                    'id' => count($_SESSION['edit']['dataScene']['shape']),
                                                     'growth' => 0,
                                                     'color' => '#ffffff',
-                                                    'pos' => array('xAxis' => $_SESSION['editDataFile']['dimX'], 
-                                                                'yAxis' => $_SESSION['editDataFile']['dimY'], 
-                                                                'zAxis' => $_SESSION['editDataFile']['dimZ']),
-                                                    'rot' => array('xAxis' => 0, 'yAxis' => 0, 'zAxis' => 0));
-        $_SESSION['editDataScene']['shape'][] = array('name' => '(nom)',
-                                                    'id' => count($_SESSION['editDataScene']['shape']) + 1,
-                                                    'growth' => 0,
-                                                    'color' => '#ffffff',
-                                                    'pos' => array('xAxis' => $_SESSION['editDataFile']['dimX'], 
-                                                                'yAxis' => $_SESSION['editDataFile']['dimY'], 
-                                                                'zAxis' => $_SESSION['editDataFile']['dimZ']),
+                                                    'pos' => array('xAxis' => $_SESSION['edit']['dataFile']['dimX'], 
+                                                                'yAxis' => $_SESSION['edit']['dataFile']['dimY'], 
+                                                                'zAxis' => $_SESSION['edit']['dataFile']['dimZ']),
                                                     'rot' => array('xAxis' => 0, 'yAxis' => 0, 'zAxis' => 0));
 // fin provisoire
 
@@ -63,7 +52,7 @@ if ($_SESSION['edit']['step'] > 1) {
         <table>
             <tr>
                 <td>
-                    Fichier : <?= htmlspecialchars($_SESSION['editDataFile']['name'].'.'.$_SESSION['editDataFile']['format']) ?>
+                    Fichier : <?= htmlspecialchars($_SESSION['edit']['dataFile']['name'].'.'.$_SESSION['edit']['dataFile']['format']) ?>
                 </td>
                 <td>
                     <table>
@@ -72,7 +61,7 @@ if ($_SESSION['edit']['step'] > 1) {
                                 Dimensions du fichier
                             </td>
                             <td>
-                                <?= htmlspecialchars($_SESSION['editDataFile']['dimX'].' x '.$_SESSION['editDataFile']['dimY']) ?> pixels
+                                <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimX'].' x '.$_SESSION['edit']['dataFile']['dimY']) ?> pixels
                             </td>
                         </tr>
                         </tr>
@@ -80,7 +69,7 @@ if ($_SESSION['edit']['step'] > 1) {
                                 Profondeur
                             </td>
                             <td>
-                                <?= htmlspecialchars($_SESSION['editDataFile']['dimZ']) ?> couches
+                                <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?> couches
                             </td>
                         </tr>
                     </table>
@@ -100,7 +89,7 @@ if ($_SESSION['edit']['step'] == 3) {
                                 Couleur de fond :
                             </td>
                             <td>
-                                <input type="color" value="<?= htmlspecialchars($_SESSION['editDataScene']['backgroundColor']) ?>" disabled>
+                                <input type="color" value="<?= htmlspecialchars($_SESSION['edit']['dataScene']['backgroundColor']) ?>" disabled>
                             </td>
                         </tr>
                         <tr>
@@ -108,13 +97,13 @@ if ($_SESSION['edit']['step'] == 3) {
                                 Luminosité : 
                             </td>
                             <td>
-                                <?= htmlspecialchars($_SESSION['editDataScene']['bright']) ?>%
+                                <?= htmlspecialchars($_SESSION['edit']['dataScene']['bright']) ?>%
                             </td>
                         </tr>
                     </table>
                     <br>
-                    <div class="listSelection" style="max-height: <?= htmlspecialchars(20*($_SESSION['editDataFile']['dimY'] / $_SESSION['editDataFile']['dimX'])) ?>em">
-                        <?php foreach ($_SESSION['editDataScene']['shape'] as $figure) { ?>
+                    <div class="listSelection" style="max-height: <?= htmlspecialchars(20*($_SESSION['edit']['dataFile']['dimY'] / $_SESSION['edit']['dataFile']['dimX'])) ?>em">
+                        <?php foreach ($_SESSION['edit']['dataScene']['shape'] as $figure) { ?>
                             <table class="fiche">
                                 <tr>
                                     <th colspan="2">
@@ -162,9 +151,9 @@ if ($_SESSION['edit']['step'] == 3) {
                     </div>
                 </td>
                 <td>
-                    <div id="gridFixed" style="height: <?= htmlspecialchars(25*($_SESSION['editDataFile']['dimY'] / $_SESSION['editDataFile']['dimX'])) ?>em;
-                    background-size: <?= ($_SESSION['editDataFile']['dimX'] >= $_SESSION['editDataFile']['dimY'])? 'cover' : 'contain' ?>;
-                    background-color: <?= htmlspecialchars($_SESSION['editDataScene']['backgroundColor']) ?>">
+                    <div id="gridFixed" style="height: <?= htmlspecialchars(25*($_SESSION['edit']['dataFile']['dimY'] / $_SESSION['edit']['dataFile']['dimX'])) ?>em;
+                    background-size: <?= ($_SESSION['edit']['dataFile']['dimX'] >= $_SESSION['edit']['dataFile']['dimY'])? 'cover' : 'contain' ?>;
+                    background-color: <?= htmlspecialchars($_SESSION['edit']['dataScene']['backgroundColor']) ?>">
                         <!--Ajoute objets avec des images de fond, que l'on déplace selon les axes x et y, ou des span modifiés en css?-->
                     </div>
                 </td>
@@ -187,7 +176,7 @@ switch ($_SESSION['edit']['step']) {
                     $pixels = 256*$i;
 
                     echo '<option';
-                    if ($_SESSION['editDataFile']['dim'.$axis] == $pixels) {
+                    if ($_SESSION['edit']['dataFile']['dim'.$axis] == $pixels) {
                         echo ' selected';
                     }
                     echo '>'.$pixels.'</option>';
@@ -200,7 +189,7 @@ switch ($_SESSION['edit']['step']) {
                     <label>
                         Nom du fichier :
                         <input type="text" id="fileName" name="fileName" maxlength="<?= LENGTH_NAME ?>" 
-                        value="<?= htmlspecialchars($_SESSION['editDataFile']['name']) ?>" required>
+                        value="<?= htmlspecialchars($_SESSION['edit']['dataFile']['name']) ?>" required>
                     </label>
                     <br><br>
                     <table>
@@ -219,7 +208,7 @@ switch ($_SESSION['edit']['step']) {
                             <td>
                                 <label title="Entrez une valeur entre 1 et <?= MAX_Z_IMG ?>">
                                     <input type="number" id="dimZ" name="dimZ" 
-                                    value="<?= htmlspecialchars($_SESSION['editDataFile']['dimZ']) ?>"
+                                    value="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?>"
                                     step="1" min="1" max="<?= MAX_Z_IMG ?>" required> couches
                                 </label>
                             </td>
@@ -244,7 +233,7 @@ switch ($_SESSION['edit']['step']) {
                             </td>
                             <td>
                                 <input type="number" id="duration" name="duration" 
-                                value="<?= htmlspecialchars($_SESSION['editDataFile']['video']['duration']) ?>" 
+                                value="<?= htmlspecialchars($_SESSION['edit']['dataFile']['video']['duration']) ?>" 
                                 step="1" min="1" max="<?= MAX_DURATION ?>" required>
                             </td>
                         </tr>
@@ -254,7 +243,7 @@ switch ($_SESSION['edit']['step']) {
                             </td>
                             <td>
                                 <input type="number" id="frequency" name="frequency" 
-                                value="<?= htmlspecialchars($_SESSION['editDataFile']['video']['frequency']) ?>" 
+                                value="<?= htmlspecialchars($_SESSION['edit']['dataFile']['video']['frequency']) ?>" 
                                 step="1" min="1" max="60" required>
                             </td>
                         </tr>
@@ -276,7 +265,7 @@ switch ($_SESSION['edit']['step']) {
                     <label title="Entrez une valeur entre 0 et 100">
                         Luminosité du fichier :
                         <input type="number" id="bright" name="bright" 
-                        value="<?= htmlspecialchars($_SESSION['editDataScene']['bright']) ?>" 
+                        value="<?= htmlspecialchars($_SESSION['edit']['dataScene']['bright']) ?>" 
                         step="1" min="0" max="100" required>%
                     </label>
                 </td>
@@ -284,7 +273,7 @@ switch ($_SESSION['edit']['step']) {
                     <label>
                         Couleur de fond du fichier :
                         <input type="color" id="fileName" name="fileName" 
-                        value="<?= htmlspecialchars($_SESSION['editDataScene']['backgroundColor']) ?>">
+                        value="<?= htmlspecialchars($_SESSION['edit']['dataScene']['backgroundColor']) ?>">
                     </label>
                 </td>
             </tr>
@@ -313,8 +302,8 @@ switch ($_SESSION['edit']['step']) {
                         </tr>
                         <tr>
                             <td class="listSelection">
-                                <div style="max-height: <?= htmlspecialchars(20*($_SESSION['editDataFile']['dimY'] / $_SESSION['editDataFile']['dimX'])) ?>em">
-                                    <?php foreach ($_SESSION['editDataScene']['shape'] as $figure) {
+                                <div style="max-height: <?= htmlspecialchars(20*($_SESSION['edit']['dataFile']['dimY'] / $_SESSION['edit']['dataFile']['dimX'])) ?>em">
+                                    <?php foreach ($_SESSION['edit']['dataScene']['shape'] as $figure) {
                                         if ($figure['id'] > 1) {
                                             echo '<hr>';
                                         } ?>
@@ -350,22 +339,22 @@ switch ($_SESSION['edit']['step']) {
                                             </tr>
                                             <tr>
                                                 <td colspan="2">
-                                                    <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['editDataFile']['dimX']) ?>">
+                                                    <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimX']) ?>">
                                                         <input type="number" id="xPos" name="xPos" 
                                                         value="<?= htmlspecialchars($figure['pos']['xAxis']) ?>" 
-                                                        step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['editDataFile']['dimX']) ?>" required>
+                                                        step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimX']) ?>" required>
                                                     </label>
                                                     -
-                                                    <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['editDataFile']['dimY']) ?>">
+                                                    <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimY']) ?>">
                                                         <input type="number" id="yPos" name="yPos" 
                                                         value="<?= htmlspecialchars($figure['pos']['yAxis']) ?>" 
-                                                        step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['editDataFile']['dimY']) ?>" required>
+                                                        step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimY']) ?>" required>
                                                     </label>
                                                     -
-                                                    <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['editDataFile']['dimZ']) ?>">
+                                                    <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?>">
                                                         <input type="number" id="zPos" name="zPos" 
                                                         value="<?= htmlspecialchars($figure['pos']['zAxis']) ?>" 
-                                                        step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['editDataFile']['dimZ']) ?>" required>
+                                                        step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?>" required>
                                                     </label>
                                                 </td>
                                             </tr>
@@ -424,8 +413,8 @@ switch ($_SESSION['edit']['step']) {
                     </table>
                 </td>
                 <td>
-                    <div id="gridFillable" style="height: <?= htmlspecialchars(25*($_SESSION['editDataFile']['dimY'] / $_SESSION['editDataFile']['dimX'])) ?>em;
-                    background-size: <?= ($_SESSION['editDataFile']['dimX'] >= $_SESSION['editDataFile']['dimY'])? 'cover' : 'contain' ?>;">
+                    <div id="gridFillable" style="height: <?= htmlspecialchars(25*($_SESSION['edit']['dataFile']['dimY'] / $_SESSION['edit']['dataFile']['dimX'])) ?>em;
+                    background-size: <?= ($_SESSION['edit']['dataFile']['dimX'] >= $_SESSION['edit']['dataFile']['dimY'])? 'cover' : 'contain' ?>;">
                         <!--Ajoute objets avec des images de fond, que l'on déplace selon les axes x et y, ou des span modifiés en css?-->
                     </div>
                 </td>
@@ -458,8 +447,6 @@ switch ($_SESSION['edit']['step']) {
         <?php $edition['content']['fillable'] = ob_get_clean();
     break;
 }
-
-
 
 
 //fragments de code du template
@@ -524,9 +511,16 @@ ob_start(); ?>
                                 <tr>
                                     <td>
                                         <label>
-                                            <input type="checkbox" id="nextStep" name="nextStep" value="validation">
-                                            <?= ($i != 3) ? 'Passer à l\'étape suivante' : 'Conserver les données' ?>
+                                            <input type="checkbox" id="nextStep" name="nextStep" value="true">
+                                            <?= ($i != 3) ? 'Passer à l\'étape suivante' : 'Nouveau fichier' ?>
                                         </label>
+                                        <?php if ($i == 3) { ?>
+                                            <br>
+                                            <label>
+                                                <input type="checkbox" id="nextStep" name="reuseData" value="true">
+                                                <?= 'Conserver les données' ?>
+                                            </label>
+                                        <?php } ?>
                                     </td>
                                     <td>
                                         <input type="submit" value="<?= ($i != 3) ? 'Actualiser' : 'Nouveau fichier' ?>">

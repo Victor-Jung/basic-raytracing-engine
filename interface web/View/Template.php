@@ -9,8 +9,22 @@
     </head>
     
     <body>
+    <!--
+    <table>
+        <tr>
+            <td>
+                <div style="height: 300px; overflow-y: scroll">
+                    <pre><?= print_r($_SESSION) ?></pre>
+                </div>
+            </td>
+            <td>
+                <pre><?php if (isset($_POST)) { print_r($_POST); } ?></pre>
+            </td>
+        </tr>
+    </table>
+    -->
         <header>
-            <h1>Modélisation d'images en ray tracing</h1>
+            <h1>Modélisation d'images en ray tracing - étape <?= $_SESSION['edit']['step'] ?></h1>
         </header>
 
         <menu>

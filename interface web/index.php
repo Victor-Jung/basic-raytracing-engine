@@ -15,7 +15,7 @@ try {
 
     switch ($_GET['action']) {
         case 'edit':
-            require('View/vEdition.php');
+            Edition();
             //Edition(verifFormEdit(verifScript('edit')));
         break;
         case 'add':
