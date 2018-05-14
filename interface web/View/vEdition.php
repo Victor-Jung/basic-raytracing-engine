@@ -253,6 +253,7 @@ ob_start(); ?>
                                     </tr>
                                     <tr>
                                         <td colspan="2">
+                                            réfléchir à implémentation
                                             <!--
                                             <label title="Entrez une valeur entre 0 et < ?= htmlspecialchars($_SESSION['editDataFile']['dimX']) ?>">
                                                 <input type="number" id="xPos" name="xPos" 
