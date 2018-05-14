@@ -7,10 +7,10 @@
 
 sFile* newBMP(int w, int h)
 {
-	sFile* I = malloc(sizeof(sFile));
-	I->w = w;
+	sFile* I = malloc(sizeof(sFile));  //on alloue la memoire.
+	I->w = w; //on enregistre width et height dans la structure.
 	I->h = h;
-	I->dat = calloc(1, w*h * sizeof(sColor*));
+	I->data = calloc(1, w*h * sizeof(sColor*)); //on initialise les pixels a 0 0 0.
 	return I;
 }
 
@@ -20,29 +20,29 @@ sFile* copyBMP(sFile* I)
 	if (!I)
 		return NULL;
 	res = newBMP(I->w, I->h);
-	memcpy(res->dat, I->dat, I->w*I->h * sizeof(sColor));
-	return res;
+	memcpy(res->data, I->data, I->w*I->h * sizeof(sColor)); //on copie la structure I dans une nouvelle.
+	return res;												//pour la garder en memoire.
 }
 
 void deleteBMP(sFile* I)
 {
 	if (I)
 	{
-		free(I->dat);
+		free(I->data);
 		free(I);
 	}
 }
 
 void setcolor(sFile* I, int i, int j, sColor p)
 {
-	assert(I && i >= 0 && i<I->w && j >= 0 && j<I->h);
-	I->dat[I->w*j + i] = p;
+	assert(I && i >= 0 && i<I->w && j >= 0 && j<I->h);  //on verifie la condition.
+	I->data[I->w*j + i] = p;  //on set le pixel a sa position dans l'image.
 }
 
 sColor getcolor(sFile* I, int i, int j)
 {
 	assert(I && i >= 0 && i<I->w && j >= 0 && j<I->h);
-	return I->dat[I->w*j + i];
+	return I->data[I->w*j + i];  //on retourn la couleur du pixel a la position donnee
 }
 
 // -------------------------------------------

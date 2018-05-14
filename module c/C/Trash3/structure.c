@@ -5,12 +5,6 @@
 #include <string.h>
 #define sizeName 30
 
-
-void freeAll(sParam *param) {
-	free(param->object);
-	free(param->image.name);
-}
-
 int nbLine(FILE* f) {
 	int c;
 	int line = 0;
@@ -32,9 +26,6 @@ void showStruct(sParam param) {
 	printf("Background-b: %d\n", param.image.background.b);
 	printf("Nb Objects: %d\n", param.nbObjects);
 	printf("Light Factor: %f\n", param.light.lightFactor);
-	printf("LightPosition:\n	x: %f\n	y: %f\n	z:%f\n", param.lightSource.x, param.lightSource.y, param.lightSource.z);
-
-	printf("ViewerPosition:\n	x: %f\n	y: %f\n	z:%f\n", param.viewerPos.x, param.viewerPos.y, param.viewerPos.z);
 	for (int i = 0; i < param.nbObjects; i++) {
 		printf("Object %d:\n", i + 1);
 		printf("	Color:\n");
@@ -50,7 +41,14 @@ void showStruct(sParam param) {
 		}
 		for (int j = 0; j < param.object[i].formula.nbZ; j++) {
 			printf("		z^%d: %f\n", j + 1, param.object[i].formula.z[j]);
-		}		
+		}
+		printf("	Parametric Equation:\n");
+		printf("		A%d: %f\n", i, param.light.paramEqua.x[0]);
+		printf("		a%d: %f\n", i, param.light.paramEqua.x[1]);
+		printf("		B%d: %f\n", i, param.light.paramEqua.y[0]);
+		printf("		b%d: %f\n", i, param.light.paramEqua.y[1]);
+		printf("		C%d: %f\n", i, param.light.paramEqua.z[0]);
+		printf("		c%d: %f\n", i, param.light.paramEqua.z[1]);
 		for (int j = 1; j <= param.object[i].nbFaces; j++) {
 			printf("	Plan Equation %d:\n", j);
 			printf("		a%d: %f\n", j, param.object[i].face[j - 1].planEqua.a);
@@ -117,39 +115,38 @@ int loadFromFile(sParam *param) {
 			fscanf(f, "%s", line);
 			param->light.lightFactor = atof(line);
 		}
-		else if (!strcmp(line, "LightPosition:")) {
-			i++;
+		else if (!strcmp(line, "ParametricEquation:")) {
 			fscanf(f, "%s", line);
 			i++;
 			fscanf(f, "%s", line);
-			param->lightSource.x = atof(line);
 			i++;
+			for (int l = 0; l < 2; l++) {
+				fscanf(f, "%s", line);
+				i++;
+				param->light.paramEqua.x[l] = atof(line);
+				fscanf(f, "%s", line);
+				i++;
+			}
 			fscanf(f, "%s", line);
 			i++;
-			fscanf(f, "%s", line);
-			param->lightSource.y = atof(line);
-			i++;
-			fscanf(f, "%s", line);
-			i++;
-			fscanf(f, "%s", line);
-			param->lightSource.z = atof(line);
-		}
-		else if (!strcmp(line, "ViewerPosition:")) {
-			i++;
+			for (int l = 0; l < 2; l++) {
+				fscanf(f, "%s", line);
+				i++;
+				param->light.paramEqua.y[l] = atof(line);
+				fscanf(f, "%s", line);
+				i++;
+			}
 			fscanf(f, "%s", line);
 			i++;
-			fscanf(f, "%s", line);
-			param->viewerPos.x = atof(line);
-			i++;
-			fscanf(f, "%s", line);
-			i++;
-			fscanf(f, "%s", line);
-			param->viewerPos.y = atof(line);
-			i++;
-			fscanf(f, "%s", line);
-			i++;
-			fscanf(f, "%s", line);
-			param->viewerPos.z = atof(line);
+			for (int l = 0; l < 2; l++) {
+				fscanf(f, "%s", line);
+				i++;
+				param->light.paramEqua.z[l] = atof(line);
+				if (l != 1) {
+					fscanf(f, "%s", line);
+					i++;
+				}
+			}
 		}
 		else if (!strcmp(line, "Numberofobjects:")) {
 			i++;

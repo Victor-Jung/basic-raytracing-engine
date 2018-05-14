@@ -52,8 +52,8 @@ struct sObject_ {
 typedef struct sImage_ sImage;
 struct sImage_ {
 	char *name;
-	unsigned int width;
-	unsigned int height;
+	unsigned double width;
+	unsigned double height;
 	sColor background;
 };
 
@@ -67,9 +67,12 @@ typedef struct sParam_ sParam;
 struct sParam_ {
 	sImage image;
 
+	sPos viewerPos;
+
 	int nbObjects;
 	sObject *object;
 
+	sPos lightSource;
 	sLight light;
 };
 
@@ -78,3 +81,5 @@ int nbLine(FILE *f);
 void showStruct(sParam param);
 
 int loadFromFile(sParam *param);
+
+void freeAll(sParam *param);

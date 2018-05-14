@@ -8,7 +8,7 @@ struct sColor_ {
 typedef struct sFile_ sFile;
 struct sFile_ {
 	int w, h;
-	sColor* dat;
+	sColor* data;
 };
 
 sFile* loadBMP(const char* fichier);
