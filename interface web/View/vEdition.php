@@ -9,7 +9,7 @@ define('STEP_AXIS', 1);
 
 // debut provisoire : test de la page
     //avant chargement de la page
-    $_SESSION['edit']['step'] = 2;
+    $_SESSION['edit']['step'] = 1;
 
     //valeurs par defaut (initialisees au lancement de la page) :
         $_SESSION['editDataFile']['name'] = '';
@@ -478,9 +478,8 @@ ob_start(); ?>
             </tr>
         </thead>
         <tbody>
-            <?php
+            <?php $i = 1;
             if (isset($edition['content']['fixed'])) {
-                $i = 1;
                 foreach ($edition['content']['fixed'] as $content) {
                     if ($i == 1) { ?>
                         <tr>
@@ -512,8 +511,7 @@ ob_start(); ?>
                     <?php }
                     $i++;
                 }
-            }
-            ?>
+            } ?>
             <tr>
                 <td>
                     <fieldset>
