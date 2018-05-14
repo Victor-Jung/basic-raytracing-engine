@@ -14,11 +14,11 @@
         <tr>
             <td>
                 <div style="height: 300px; overflow-y: scroll">
-                    <pre><?= print_r($_SESSION) ?></pre>
+                    <pre>< ?= print_r($_SESSION) ?></pre>
                 </div>
             </td>
             <td>
-                <pre><?php if (isset($_POST)) { print_r($_POST); } ?></pre>
+                <pre>< ?php if (isset($_POST)) { print_r($_POST); } ?></pre>
             </td>
         </tr>
     </table>

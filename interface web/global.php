@@ -2,6 +2,15 @@
 //define('MAX_X_IMG', 4096);//4K
 //define('MAX_Y_IMG', 4096);//4K
 
+//Page d edition
+define('RESOLUTION_LEVELS', 8);
+define('LENGTH_NAME', 20);
+define('MAX_DURATION', 5*60);
+define('MAX_Z_IMG', 100);
+define('MAX_GROWTH', 10);
+define('STEP_GROWTH', 0.1);
+define('STEP_AXIS', 1);
+
 
 
 function hex2rgb($hex) {

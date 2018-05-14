@@ -85,3 +85,11 @@ section > table > thead th {
     padding: 0.4em;
     width: 20em;
 }
+
+#reuseData, #reuseData + label {
+    display: none;
+}
+
+#nextStep:checked ~ #reuseData, #nextStep:checked ~ #reuseData + label  {
+    display: initial;
+}

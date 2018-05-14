@@ -1,51 +1,4 @@
 <?php
-define('RESOLUTION_LEVELS', 8);
-define('LENGTH_NAME', 20);
-define('MAX_DURATION', 5*60);
-define('MAX_Z_IMG', 100);
-define('MAX_GROWTH', 10);
-define('STEP_GROWTH', 0.1);
-define('STEP_AXIS', 1);
-
-
-// debut provisoire : test de la page
-    //valeurs par defaut (initialisees au lancement de la page) :
-        $_SESSION['edit']['dataFile']['name'] = '';
-        $_SESSION['edit']['dataFile']['format'] = 'BMP';
-        $_SESSION['edit']['dataFile']['dimX'] = 768;
-        $_SESSION['edit']['dataFile']['dimY'] = 768;
-        $_SESSION['edit']['dataFile']['dimZ'] = MAX_Z_IMG;
-        $_SESSION['edit']['dataFile']['video']['duration'] = MAX_DURATION;
-        $_SESSION['edit']['dataFile']['video']['frequency'] = 1;
-
-        $_SESSION['edit']['dataScene']['bright'] = 100;
-        $_SESSION['edit']['dataScene']['backgroundColor'] = '#000000';
-    
-        //pour chaque ajout de shape : initialise tous les champs
-        $_SESSION['edit']['dataScene']['shape'][0] = array('name' => '(nom)',
-                                                    'id' => count($_SESSION['edit']['dataScene']['shape']),
-                                                    'growth' => 0,
-                                                    'color' => '#ffffff',
-                                                    'pos' => array('xAxis' => $_SESSION['edit']['dataFile']['dimX'], 
-                                                                'yAxis' => $_SESSION['edit']['dataFile']['dimY'], 
-                                                                'zAxis' => $_SESSION['edit']['dataFile']['dimZ']),
-                                                    'rot' => array('xAxis' => 0, 'yAxis' => 0, 'zAxis' => 0));
-// fin provisoire
-
-
-
-//variables du template
-$template['pageName'] = 'Edition d\'image';
-$template['actual'] = 'edit';
-$template['script'] = false;
-
-
-//variables de la page
-$edition['legend'][1] = 'Caractérisation du fichier';
-$edition['legend'][2] = 'Composition du fichier';
-$edition['legend'][3] = 'Validation du résultat';
-
-
 //fragments de code de la page
 if ($_SESSION['edit']['step'] > 1) {
     ob_start(); ?>
@@ -284,7 +237,7 @@ switch ($_SESSION['edit']['step']) {
                         <tr>
                             <td class="listSelection">
                                 Choisissez une forme :<br>
-                                <select>
+                                <select id="shape" name="shape">
                                     <optgroup label="Formes simples">
                                         <option>Surface</option>
                                         <option>Sphère</option>
@@ -297,116 +250,118 @@ switch ($_SESSION['edit']['step']) {
                                         <option>(Courbes)</option>
                                     </optgroup>
                                 </select>
-                                <input type="submit" value="Confirmer">
+                                <input type="submit" name="confirmShape" value="Confirmer">
                             </td>
                         </tr>
                         <tr>
                             <td class="listSelection">
                                 <div style="max-height: <?= htmlspecialchars(20*($_SESSION['edit']['dataFile']['dimY'] / $_SESSION['edit']['dataFile']['dimX'])) ?>em">
-                                    <?php foreach ($_SESSION['edit']['dataScene']['shape'] as $figure) {
-                                        if ($figure['id'] > 1) {
-                                            echo '<hr>';
-                                        } ?>
-                                        <style type="text/css">
-                                            #display<?= htmlspecialchars($figure['id']) ?>, #display<?= htmlspecialchars($figure['id']) ?> + label + table {
-                                                display: none;
-                                            }
-                                            #display<?= htmlspecialchars($figure['id']) ?>:checked + label + table {
-                                                display: initial;
-                                            }
-                                        </style>
+                                    <?php if (isset($_SESSION['edit']['dataScene']['shape'])) {
+                                        foreach ($_SESSION['edit']['dataScene']['shape'] as $figure) {
+                                            if ($figure['id'] > 1) {
+                                                echo '<hr>';
+                                            } ?>
+                                            <style type="text/css">
+                                                #display<?= htmlspecialchars($figure['id']) ?>, #display<?= htmlspecialchars($figure['id']) ?> + label + table {
+                                                    display: none;
+                                                }
+                                                #display<?= htmlspecialchars($figure['id']) ?>:checked + label + table {
+                                                    display: initial;
+                                                }
+                                            </style>
 
-                                        <input type="checkbox" id="display<?= htmlspecialchars($figure['id']) ?>">
-                                        <label for="display<?= htmlspecialchars($figure['id']) ?>">
-                                            <h3>Forme <?= htmlspecialchars($figure['id'].' : '.ucfirst($figure['name'])) ?></h3>
-                                        </label>
-                                        <table>
-                                            <tr>
-                                                <th colspan="2">Dimensions (X-Y-Z) :</th>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
-                                                    ->faire switch<br>
-                                                    si plan : x y<br>
-                                                    si pavé : x y z<br>
-                                                    si sphère : r<br>
-                                                    si pyramide : ??
-                                                </td>
-                                            </tr>
-                                            <tr><td colspan="2"><br></td></tr>
-                                            <tr>
-                                                <th colspan="2">Translation (X-Y-Z) :</th>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
-                                                    <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimX']) ?>">
-                                                        <input type="number" id="xPos" name="xPos" 
-                                                        value="<?= htmlspecialchars($figure['pos']['xAxis']) ?>" 
-                                                        step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimX']) ?>" required>
-                                                    </label>
-                                                    -
-                                                    <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimY']) ?>">
-                                                        <input type="number" id="yPos" name="yPos" 
-                                                        value="<?= htmlspecialchars($figure['pos']['yAxis']) ?>" 
-                                                        step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimY']) ?>" required>
-                                                    </label>
-                                                    -
-                                                    <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?>">
-                                                        <input type="number" id="zPos" name="zPos" 
-                                                        value="<?= htmlspecialchars($figure['pos']['zAxis']) ?>" 
-                                                        step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?>" required>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <?php if ($figure['name'] != 'sphère') { ?>
-                                                <tr><td colspan="2"><br></td></tr>
+                                            <input type="checkbox" id="display<?= htmlspecialchars($figure['id']) ?>">
+                                            <label for="display<?= htmlspecialchars($figure['id']) ?>">
+                                                <h3>Forme <?= htmlspecialchars($figure['id'].' : '.ucfirst($figure['name'])) ?></h3>
+                                            </label>
+                                            <table>
                                                 <tr>
-                                                    <th colspan="2">Rotation (X-Y-Z) :</th>
+                                                    <th colspan="2">Dimensions (X-Y-Z) :</th>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2">
-                                                        <label title="Entrez une valeur entre -90 et 90">
-                                                            <input type="number" id="xRot" name="xRot" 
-                                                            value="<?= htmlspecialchars($figure['rot']['xAxis']) ?>"
-                                                            step="1" min="-90" max="90" required disabled>
+                                                        ->faire switch<br>
+                                                        si plan : x y<br>
+                                                        si pavé : x y z<br>
+                                                        si sphère : r<br>
+                                                        si pyramide : ??
+                                                    </td>
+                                                </tr>
+                                                <tr><td colspan="2"><br></td></tr>
+                                                <tr>
+                                                    <th colspan="2">Translation (X-Y-Z) :</th>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimX']) ?>">
+                                                            <input type="number" id="xPos" name="xPos" 
+                                                            value="<?= htmlspecialchars($figure['pos']['xAxis']) ?>" 
+                                                            step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimX']) ?>" required>
                                                         </label>
                                                         -
-                                                        <label title="Entrez une valeur entre -90 et 90">
-                                                            <input type="number" id="yRot" name="yRot" 
-                                                            value="<?= htmlspecialchars($figure['rot']['yAxis']) ?>" 
-                                                            step="1" min="-90" max="90" required disabled>
+                                                        <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimY']) ?>">
+                                                            <input type="number" id="yPos" name="yPos" 
+                                                            value="<?= htmlspecialchars($figure['pos']['yAxis']) ?>" 
+                                                            step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimY']) ?>" required>
                                                         </label>
                                                         -
-                                                        <label title="Entrez une valeur entre -90 et 90">
-                                                            <input type="number" id="zRot" name="zRot" 
-                                                            value="<?= htmlspecialchars($figure['rot']['zAxis']) ?>" 
-                                                            step="1" min="-90" max="90" required disabled>
+                                                        <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?>">
+                                                            <input type="number" id="zPos" name="zPos" 
+                                                            value="<?= htmlspecialchars($figure['pos']['zAxis']) ?>" 
+                                                            step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?>" required>
                                                         </label>
                                                     </td>
                                                 </tr>
-                                            <?php } ?>
-                                            <tr><td colspan="2"><br></td></tr>
-                                            <tr>
-                                                <th>Grossissement :</th>
-                                                <td>
-                                                    <label title="Entrez une valeur entre <?= '-'.MAX_GROWTH ?> et <?= MAX_GROWTH ?>">
-                                                        x<input type="number" id="growth" name="growth" 
-                                                        value="<?= htmlspecialchars($figure['growth']) ?>" 
-                                                        step="<?= STEP_GROWTH ?>" min="<?= '-'.MAX_GROWTH ?>" max="<?= MAX_GROWTH ?>" required disabled>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                            <tr><td colspan="2"><br></td></tr>
-                                            <tr>
-                                                <th>Coloration :</th>
-                                                <td>
-                                                    <input type="color" id="color" name="color" 
-                                                    value="<?= htmlspecialchars($figure['color']) ?>">
-                                                </td>
-                                            </tr>
-                                            <tr><td colspan="2"><br></td></tr>
-                                        </table>
-                                    <?php } ?>
+                                                <?php if ($figure['name'] != 'sphère') { ?>
+                                                    <tr><td colspan="2"><br></td></tr>
+                                                    <tr>
+                                                        <th colspan="2">Rotation (X-Y-Z) :</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <label title="Entrez une valeur entre -90 et 90">
+                                                                <input type="number" id="xRot" name="xRot" 
+                                                                value="<?= htmlspecialchars($figure['rot']['xAxis']) ?>"
+                                                                step="1" min="-90" max="90" required disabled>
+                                                            </label>
+                                                            -
+                                                            <label title="Entrez une valeur entre -90 et 90">
+                                                                <input type="number" id="yRot" name="yRot" 
+                                                                value="<?= htmlspecialchars($figure['rot']['yAxis']) ?>" 
+                                                                step="1" min="-90" max="90" required disabled>
+                                                            </label>
+                                                            -
+                                                            <label title="Entrez une valeur entre -90 et 90">
+                                                                <input type="number" id="zRot" name="zRot" 
+                                                                value="<?= htmlspecialchars($figure['rot']['zAxis']) ?>" 
+                                                                step="1" min="-90" max="90" required disabled>
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                                <tr><td colspan="2"><br></td></tr>
+                                                <tr>
+                                                    <th>Grossissement :</th>
+                                                    <td>
+                                                        <label title="Entrez une valeur entre <?= '-'.MAX_GROWTH ?> et <?= MAX_GROWTH ?>">
+                                                            x<input type="number" id="growth" name="growth" 
+                                                            value="<?= htmlspecialchars($figure['growth']) ?>" 
+                                                            step="<?= STEP_GROWTH ?>" min="<?= '-'.MAX_GROWTH ?>" max="<?= MAX_GROWTH ?>" required disabled>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                <tr><td colspan="2"><br></td></tr>
+                                                <tr>
+                                                    <th>Coloration :</th>
+                                                    <td>
+                                                        <input type="color" id="color" name="color" 
+                                                        value="<?= htmlspecialchars($figure['color']) ?>">
+                                                    </td>
+                                                </tr>
+                                                <tr><td colspan="2"><br></td></tr>
+                                            </table>
+                                        <?php }
+                                    } ?>
                                 </div>
                             </td>
                         </tr>
@@ -510,20 +465,20 @@ ob_start(); ?>
                                 <tr><td colspan="2"><br><hr></td></tr>
                                 <tr>
                                     <td>
-                                        <label>
-                                            <input type="checkbox" id="nextStep" name="nextStep" value="true">
+                                        <input type="checkbox" id="nextStep" name="nextStep" value="true">
+                                        <label for="nextStep">
                                             <?= ($i != 3) ? 'Passer à l\'étape suivante' : 'Nouveau fichier' ?>
                                         </label>
                                         <?php if ($i == 3) { ?>
                                             <br>
-                                            <label>
-                                                <input type="checkbox" id="nextStep" name="reuseData" value="true">
+                                            <input type="checkbox" id="reuseData" name="reuseData" value="true">
+                                            <label for="reuseData">
                                                 <?= 'Conserver les données' ?>
                                             </label>
                                         <?php } ?>
                                     </td>
                                     <td>
-                                        <input type="submit" value="<?= ($i != 3) ? 'Actualiser' : 'Nouveau fichier' ?>">
+                                        <input type="submit" value="Actualiser">
                                     </td>
                                 </tr>
                             </table>
