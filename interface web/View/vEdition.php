@@ -55,7 +55,7 @@ if ($_SESSION['edit']['step'] == 3) {
                                 </td>
                             </tr>
                         </table>
-                        <?php if (isset($_SESSION['edit']['dataScene']['shape'])) {
+                        <?php if (isset($_SESSION['edit']['dataScene']['shape']) && count($_SESSION['edit']['dataScene']['shape']) > 0) {
                             foreach ($_SESSION['edit']['dataScene']['shape'] as $figure) { ?>
                                 <br>
                                 <table class="fiche">
@@ -355,7 +355,7 @@ switch ($_SESSION['edit']['step']) {
                                         <option>Pyramide</option><!--peut préciser nb de faces-->
                                     </optgroup>
                                     <optgroup label="Objets complexes" disabled>
-                                        <option>(Courbes)</option>
+                                        <option>Objets courbes</option>
                                     </optgroup>
                                 </select>
                                 <input type="submit" name="confirmShape" value="Confirmer">
@@ -380,10 +380,21 @@ switch ($_SESSION['edit']['step']) {
 
                                             <input type="checkbox" id="display<?= htmlspecialchars($figure['id']) ?>">
                                             <label for="display<?= htmlspecialchars($figure['id']) ?>">
-                                                <h3>Objet <?= htmlspecialchars($figure['id'].' : '.$figure['name']) ?></h3>
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <h3>Objet <?= htmlspecialchars($figure['id'].' :') ?></h3>
+                                                        </td>
+                                                        <td>
+                                                            <h3><?= htmlspecialchars($figure['name']) ?></h3>
+                                                        </td>
+                                                        <td>
+                                                            <button name="delete_<?= htmlspecialchars($figure['id']) ?>" value="true">Supprimer</button>
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                             </label>
                                             <table>
-                                                <tr><td colspan="2">(bouton) supprimer l'objet<br><br></td></tr>
                                                 <?php shapeData($figure) ?>
                                                 <tr><td colspan="2"><br></td></tr>
                                                 <tr>

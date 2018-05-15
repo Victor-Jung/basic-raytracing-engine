@@ -29,7 +29,7 @@ function Edition() {
         $_SESSION['edit']['dataFile']['video']['frequency'] = 1;
 
         $_SESSION['edit']['dataScene']['bright'] = 100;
-        $_SESSION['edit']['dataScene']['backgroundColor'] = '#0096C8';
+        $_SESSION['edit']['dataScene']['backgroundColor'] = '#80D4FF';
     }
     if (isset($_POST['confirmShape']) && $_POST['confirmShape'] == 'Confirmer' && $_POST['shape'] != 'Aucun') {//initialise
         if (!isset($_SESSION['edit']['dataScene']['shape'])) {
@@ -48,6 +48,22 @@ function Edition() {
                                                                         'yAxis' => $_SESSION['edit']['dataFile']['dimY'], 
                                                                         'zAxis' => $_SESSION['edit']['dataFile']['dimZ']);
         $_SESSION['edit']['dataScene']['shape'][$nbShape]['rot'] = array('xAxis' => 0, 'yAxis' => 0, 'zAxis' => 0);
+    }
+
+    if (isset($_POST['script']) && $_POST['script'] = 'sceneConfig' && isset($_SESSION['edit']['dataScene']['shape'])) {
+        $nbObjects = count($_SESSION['edit']['dataScene']['shape']);
+
+        for ($i = 1; $i <= $nbObjects; $i++) {
+            if (isset($_POST['delete_'.$i])) {
+                while ($i < $nbObjects) {
+                    $i++;
+                    $_SESSION['edit']['dataScene']['shape'][$i]['id']--;
+                    $_SESSION['edit']['dataScene']['shape'][$i-1] = $_SESSION['edit']['dataScene']['shape'][$i];
+
+                }
+                unset($_SESSION['edit']['dataScene']['shape'][$i]);
+            }
+        }
     }
 
     $_POST = array();//fin d'exploitation : vide la variable
