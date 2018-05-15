@@ -83,13 +83,6 @@ if ($_SESSION['edit']['step'] == 3) {
                                             </td>
                                         </tr>
                                     <?php } ?>
-                                    <tr>
-                                        <td>
-                                            Grossissement :
-                                        </td>
-                                        <td>
-                                            x<?= htmlspecialchars($figure['growth']) ?>
-                                        </td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -125,7 +118,7 @@ switch ($_SESSION['edit']['step']) {
         $edition['script'] = 'fileConfig';
 
         function definition($axis) { ?>
-            <select id="dim<?= $axis ?>" name="dim<?= $axis ?>">
+            <select id="dim<?= $axis ?>File" name="dim<?= $axis ?>File">
                 <?php for ($i = 1; $i <= RESOLUTION_LEVELS; $i++) {
                     $pixels = 256*$i;
 
@@ -161,7 +154,7 @@ switch ($_SESSION['edit']['step']) {
                             </td>
                             <td>
                                 <label title="Entrez une valeur entre 1 et <?= MAX_Z_IMG ?>">
-                                    <input type="number" class="number" name="dimZ" 
+                                    <input type="number" class="number" name="dimZFile" 
                                     value="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?>"
                                     step="1" min="1" max="<?= MAX_Z_IMG ?>" required> couches
                                 </label>
@@ -220,10 +213,11 @@ switch ($_SESSION['edit']['step']) {
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <?php $diff = ($_SESSION['edit']['dataFile']['dimX'] > $_SESSION['edit']['dataFile']['dimY'])? $_SESSION['edit']['dataFile']['dimX'] / 2 : $_SESSION['edit']['dataFile']['dimY'] / 2 ?>
+                        <?php $diff = ($_SESSION['edit']['dataFile']['dimX'] > $_SESSION['edit']['dataFile']['dimY'])? 
+                            $_SESSION['edit']['dataFile']['dimX'] / 2 : $_SESSION['edit']['dataFile']['dimY'] / 2 ?>
                         <label title="Entrez une valeur entre 1 et <?= htmlspecialchars($diff) ?>">
                             <input type="number" class="number" name="radius<?= htmlspecialchars($shape['id']) ?>" 
-                            value="<?= htmlspecialchars($diff) ?>" 
+                            value="<?= htmlspecialchars($shape['radius']) ?>" 
                             step="<?= STEP_AXIS ?>" min="1" max="<?= htmlspecialchars($diff) ?>" required>
                         </label>
                     </td>
@@ -236,20 +230,20 @@ switch ($_SESSION['edit']['step']) {
                 <tr>
                     <td colspan="2">
                         <label title="Entrez une valeur entre 1 et <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimX']) ?>">
-                            <input type="number" class="number" name="xDim<?= htmlspecialchars($shape['id']) ?>" 
+                            <input type="number" class="number" name="dimX<?= htmlspecialchars($shape['id']) ?>" 
                             value="<?= htmlspecialchars($shape['dim']['xAxis']) ?>" 
                             step="<?= STEP_AXIS ?>" min="1" max="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimX']) ?>" required>
                         </label>
                         -
                         <label title="Entrez une valeur entre 1 et <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimY']) ?>">
-                            <input type="number" class="number" name="yDim<?= htmlspecialchars($shape['id']) ?>" 
+                            <input type="number" class="number" name="dimY<?= htmlspecialchars($shape['id']) ?>" 
                             value="<?= htmlspecialchars($shape['dim']['yAxis']) ?>" 
                             step="<?= STEP_AXIS ?>" min="1" max="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimY']) ?>" required>
                         </label>
                         <?php if ($shape['name'] != 'Surface') { ?>
                             -
                             <label title="Entrez une valeur entre 1 et <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?>">
-                                <input type="number" class="number" name="zDim<?= htmlspecialchars($shape['id']) ?>" 
+                                <input type="number" class="number" name="dimZ<?= htmlspecialchars($shape['id']) ?>" 
                                 value="<?= htmlspecialchars($shape['dim']['zAxis']) ?>" 
                                 step="<?= STEP_AXIS ?>" min="1" max="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?>" required>
                             </label>
@@ -260,31 +254,32 @@ switch ($_SESSION['edit']['step']) {
 
             <tr><td colspan="2"><br></td></tr>
             <tr>
-                <th colspan="2">Position du <?= ($shape['name'] == 'Sphère')? 'centre' : 'premier sommet' ?> (X-Y) :</th>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <?php $diff = array(2 - $shape['dim']['xAxis'], $_SESSION['edit']['dataFile']['dimX'] - $shape['dim']['xAxis']) ?>
+                <th>Position du <?= ($shape['name'] == 'Sphère')? 'centre' : 'premier sommet' ?> (X-Y) :</th>
+                <td>
+                    <?php $dimension = ($shape['name'] == 'Sphère')? 
+                        array('x' => $shape['radius'],       'y' => $shape['radius']) : 
+                        array('x' => $shape['dim']['xAxis'], 'y' => $shape['dim']['yAxis']) ;
+
+                    $diff = array(2 - $dimension['x'], $_SESSION['edit']['dataFile']['dimX'] - $dimension['x']) ?>
                     <label title="Entrez une valeur entre <?= htmlspecialchars($diff[0].' et '.$diff[1]) ?>">
-                        <input type="number" class="number" name="xPos<?= htmlspecialchars($shape['id']) ?>" 
-                        value="<?= htmlspecialchars($shape['dim']['xAxis']) ?>" 
+                        <input type="number" class="number" name="posX<?= htmlspecialchars($shape['id']) ?>" 
+                        value="<?= htmlspecialchars($shape['pos']['xAxis']) ?>" 
                         step="<?= STEP_AXIS ?>" min="<?= htmlspecialchars($diff[0]) ?>" max="<?= htmlspecialchars($diff[1]) ?>" required>
                     </label>
                     -
-                    <?php $diff = array(2 - $shape['dim']['xAxis'], $_SESSION['edit']['dataFile']['dimX'] - $shape['dim']['xAxis']) ?>
+                    <?php $diff = array(2 - $dimension['y'], $_SESSION['edit']['dataFile']['dimY'] - $dimension['y']) ?>
                     <label title="Entrez une valeur entre <?= htmlspecialchars($diff[0].' et '.$diff[1]) ?>">
-                        <input type="number" class="number" name="yPos<?= htmlspecialchars($shape['id']) ?>" 
-                        value="<?= htmlspecialchars($shape['dim']['yAxis']) ?>" 
+                        <input type="number" class="number" name="posY<?= htmlspecialchars($shape['id']) ?>" 
+                        value="<?= htmlspecialchars($shape['pos']['yAxis']) ?>" 
                         step="<?= STEP_AXIS ?>" min="<?= htmlspecialchars($diff[0]) ?>" max="<?= htmlspecialchars($diff[1]) ?>" required>
                     </label>
                 </td>
             </tr>
-            <tr><td colspan="2"><br></td></tr>
             <tr>
-                <th>Plan de l'objet :</th>
+                <th>Plan de l'objet (Z) :</th>
                 <td>
                     <label title="Entrez une valeur entre 1 et <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?>">
-                        <input type="number" class="number" name="zPos<?= htmlspecialchars($shape['id']) ?>" 
+                        <input type="number" class="number" name="posZ<?= htmlspecialchars($shape['id']) ?>" 
                         value="<?= htmlspecialchars($shape['pos']['zAxis']) ?>" 
                         step="<?= STEP_AXIS ?>" min="1" max="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?>" required>
                     </label>
@@ -299,19 +294,19 @@ switch ($_SESSION['edit']['step']) {
                 <tr>
                     <td colspan="2">
                         <label title="Entrez une valeur entre -90 et 90">
-                            <input type="number" class="number" name="xRot<?= htmlspecialchars($shape['id']) ?>" 
+                            <input type="number" class="number" name="rotX<?= htmlspecialchars($shape['id']) ?>" 
                             value="<?= htmlspecialchars($shape['rot']['xAxis']) ?>"
                             step="1" min="-90" max="90" required disabled>
                         </label>
                         -
                         <label title="Entrez une valeur entre -90 et 90">
-                            <input type="number" class="number" name="yRot<?= htmlspecialchars($shape['id']) ?>" 
+                            <input type="number" class="number" name="rotY<?= htmlspecialchars($shape['id']) ?>" 
                             value="<?= htmlspecialchars($shape['rot']['yAxis']) ?>" 
                             step="1" min="-90" max="90" required disabled>
                         </label>
                         -
                         <label title="Entrez une valeur entre -90 et 90">
-                            <input type="number" class="number" name="zRot<?= htmlspecialchars($shape['id']) ?>" 
+                            <input type="number" class="number" name="rotZ<?= htmlspecialchars($shape['id']) ?>" 
                             value="<?= htmlspecialchars($shape['rot']['zAxis']) ?>" 
                             step="1" min="-90" max="90" required disabled>
                         </label>
@@ -332,7 +327,7 @@ switch ($_SESSION['edit']['step']) {
                 <td>
                     <label>
                         Couleur de fond du fichier :
-                        <input type="color" id="fileName" name="fileName" 
+                        <input type="color" id="backgroundColor" name="backgroundColor" 
                         value="<?= htmlspecialchars($_SESSION['edit']['dataScene']['backgroundColor']) ?>">
                     </label>
                 </td>
@@ -347,9 +342,9 @@ switch ($_SESSION['edit']['step']) {
                                 <select id="shape" name="shape">
                                     <option>Aucun</option>
                                     <optgroup label="Objets simples">
+                                        <option>Sphère</option>
                                         <option>Surface</option>
                                         <option>Pavé</option>
-                                        <option>Sphère</option>
                                     </optgroup>
                                     <optgroup label="Objets avancés" disabled>
                                         <option>Pyramide</option><!--peut préciser nb de faces-->
@@ -400,7 +395,7 @@ switch ($_SESSION['edit']['step']) {
                                                 <tr>
                                                     <th>Coloration de l'objet :</th>
                                                     <td>
-                                                        <input type="color" id="color" name="color" 
+                                                        <input type="color" class="color" name="color<?= htmlspecialchars($figure['id']) ?>" 
                                                         value="<?= htmlspecialchars($figure['color']) ?>">
                                                     </td>
                                                 </tr>

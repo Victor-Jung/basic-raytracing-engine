@@ -67,6 +67,10 @@ section > table > thead th {
     width: 60px;
 }
 
+#shapeSelection .number {
+    width: 50px;
+}
+
 #fixed>tbody>tr>th {
     border-right: 1px solid black;
     width: 20%;
