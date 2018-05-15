@@ -16,11 +16,9 @@ function Edition() {
                 unset($_SESSION['edit']['dataScene']);
             }
         }
-        $_POST['nextStep'] = false;
     }
     if (!isset($_SESSION['edit']['step'])) {//initialise
         $_SESSION['edit']['step'] = 1;
-
 
         $_SESSION['edit']['dataFile']['name'] = 'temporaire';
         $_SESSION['edit']['dataFile']['format'] = 'BMP';
@@ -31,10 +29,9 @@ function Edition() {
         $_SESSION['edit']['dataFile']['video']['frequency'] = 1;
 
         $_SESSION['edit']['dataScene']['bright'] = 100;
-        $_SESSION['edit']['dataScene']['backgroundColor'] = '#000000';
+        $_SESSION['edit']['dataScene']['backgroundColor'] = '#0096C8';
     }
-    
-    if (isset($_POST['confirmShape'])) {//initialise
+    if (isset($_POST['confirmShape']) && $_POST['confirmShape'] == 'Confirmer' && $_POST['shape'] != 'Aucun') {//initialise
         if (!isset($_SESSION['edit']['dataScene']['shape'])) {
             $nbShape = 1;
         }
@@ -53,6 +50,7 @@ function Edition() {
         $_SESSION['edit']['dataScene']['shape'][$nbShape]['rot'] = array('xAxis' => 0, 'yAxis' => 0, 'zAxis' => 0);
     }
 
+    $_POST = array();//fin d'exploitation : vide la variable
 
 
     //variables du template

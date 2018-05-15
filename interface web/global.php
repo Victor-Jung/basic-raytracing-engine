@@ -12,7 +12,6 @@ define('STEP_GROWTH', 0.1);
 define('STEP_AXIS', 1);
 
 
-
 function hex2rgb($hex) {
     $hex = str_replace("#", "", $hex);
  

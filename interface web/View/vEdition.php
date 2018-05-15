@@ -11,7 +11,7 @@ if ($_SESSION['edit']['step'] > 1) {
                     <table>
                         <tr>
                             <td>
-                                Dimensions du fichier
+                                Dimensions du fichier :
                             </td>
                             <td>
                                 <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimX'].' x '.$_SESSION['edit']['dataFile']['dimY']) ?> pixels
@@ -19,7 +19,7 @@ if ($_SESSION['edit']['step'] > 1) {
                         </tr>
                         </tr>
                             <td>
-                                Profondeur
+                                Profondeur :
                             </td>
                             <td>
                                 <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?> couches
@@ -36,71 +36,72 @@ if ($_SESSION['edit']['step'] == 3) {
         <table>
             <tr>
                 <td>
-                    <table>
-                        <tr>
-                            <td>
-                                Couleur de fond :
-                            </td>
-                            <td>
-                                <input type="color" value="<?= htmlspecialchars($_SESSION['edit']['dataScene']['backgroundColor']) ?>" disabled>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Luminosité : 
-                            </td>
-                            <td>
-                                <?= htmlspecialchars($_SESSION['edit']['dataScene']['bright']) ?>%
-                            </td>
-                        </tr>
-                    </table>
-                    <br>
-                    <div class="listSelection" style="max-height: <?= htmlspecialchars(20*($_SESSION['edit']['dataFile']['dimY'] / $_SESSION['edit']['dataFile']['dimX'])) ?>em">
-                        <?php foreach ($_SESSION['edit']['dataScene']['shape'] as $figure) { ?>
-                            <table class="fiche">
-                                <tr>
-                                    <th colspan="2">
-                                        Forme <?= htmlspecialchars($figure['id'].' : '.ucfirst($figure['name'])) ?>
-                                    </th>
-                                </tr>
-                                <tr><th colspan="2"><br></th></tr>
-                                <tr>
-                                    <td>
-                                        Translation :
-                                    </td>
-                                    <td>
-                                        <?= htmlspecialchars($figure['pos']['xAxis'].' ; '.$figure['pos']['yAxis'].' ; '.$figure['pos']['zAxis']) ?>
-                                    </td>
-                                </tr>
-                                <?php if ($figure['name'] != 'Sphère') { ?>
+                    <div class="listSelection" style="max-height: <?= htmlspecialchars(22*($_SESSION['edit']['dataFile']['dimY'] / $_SESSION['edit']['dataFile']['dimX'])) ?>em">
+                        <table>
+                            <tr>
+                                <td>
+                                    Couleur de fond :
+                                </td>
+                                <td>
+                                    <input type="color" value="<?= htmlspecialchars($_SESSION['edit']['dataScene']['backgroundColor']) ?>" disabled>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Luminosité : 
+                                </td>
+                                <td>
+                                    <?= htmlspecialchars($_SESSION['edit']['dataScene']['bright']) ?>%
+                                </td>
+                            </tr>
+                        </table>
+                        <?php if (isset($_SESSION['edit']['dataScene']['shape'])) {
+                            foreach ($_SESSION['edit']['dataScene']['shape'] as $figure) { ?>
+                                <br>
+                                <table class="fiche">
+                                    <tr>
+                                        <th colspan="2">
+                                            Objet <?= htmlspecialchars($figure['id'].' : '.ucfirst($figure['name'])) ?>
+                                        </th>
+                                    </tr>
+                                    <tr><th colspan="2"><br></th></tr>
                                     <tr>
                                         <td>
-                                            Rotation :
+                                            Translation :
                                         </td>
                                         <td>
-                                            <?= htmlspecialchars($figure['rot']['xAxis'].' ; '.$figure['rot']['yAxis'].' ; '.$figure['rot']['zAxis']) ?>
+                                            <?= htmlspecialchars($figure['pos']['xAxis'].' ; '.$figure['pos']['yAxis'].' ; '.$figure['pos']['zAxis']) ?>
                                         </td>
                                     </tr>
-                                <?php } ?>
-                                <tr>
-                                    <td>
-                                        Grossissement :
-                                    </td>
-                                    <td>
-                                        x<?= htmlspecialchars($figure['growth']) ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Coloration :
-                                    </td>
-                                    <td>
-                                        <input type="color" value="<?= htmlspecialchars($figure['color']) ?>" disabled>
-                                    </td>
-                                </tr>
-                            </table>
-                            <br>
-                        <?php } ?>
+                                    <?php if ($figure['name'] != 'Sphère') { ?>
+                                        <tr>
+                                            <td>
+                                                Rotation :
+                                            </td>
+                                            <td>
+                                                <?= htmlspecialchars($figure['rot']['xAxis'].' ; '.$figure['rot']['yAxis'].' ; '.$figure['rot']['zAxis']) ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                    <tr>
+                                        <td>
+                                            Grossissement :
+                                        </td>
+                                        <td>
+                                            x<?= htmlspecialchars($figure['growth']) ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Coloration :
+                                        </td>
+                                        <td>
+                                            <input type="color" value="<?= htmlspecialchars($figure['color']) ?>" disabled>
+                                        </td>
+                                    </tr>
+                                </table>
+                            <?php }
+                        } ?>
                     </div>
                 </td>
                 <td>
@@ -342,28 +343,29 @@ switch ($_SESSION['edit']['step']) {
                     <table id="shapeSelection">
                         <tr>
                             <td class="listSelection">
-                                Choisissez une forme :<br>
+                                Choisissez un objet :<br>
                                 <select id="shape" name="shape">
-                                    <optgroup label="Formes simples">
+                                    <option>Aucun</option>
+                                    <optgroup label="Objets simples">
                                         <option>Surface</option>
                                         <option>Sphère</option>
                                         <option>Pavé</option>
                                     </optgroup>
-                                    <optgroup label="Formes avancées" disabled>
+                                    <optgroup label="Objets avancés" disabled>
                                         <option>Pyramide</option><!--peut préciser nb de faces-->
                                     </optgroup>
-                                    <optgroup label="Formes complexes" disabled>
+                                    <optgroup label="Objets complexes" disabled>
                                         <option>(Courbes)</option>
                                     </optgroup>
                                 </select>
                                 <input type="submit" name="confirmShape" value="Confirmer">
                             </td>
                         </tr>
-                        <tr>
-                            <td class="listSelection">
-                                <div style="max-height: <?= htmlspecialchars(20*($_SESSION['edit']['dataFile']['dimY'] / $_SESSION['edit']['dataFile']['dimX'])) ?>em">
-                                    <?php if (isset($_SESSION['edit']['dataScene']['shape'])) {
-                                        foreach ($_SESSION['edit']['dataScene']['shape'] as $figure) {
+                        <?php if (isset($_SESSION['edit']['dataScene']['shape'])) { ?>
+                            <tr>
+                                <td>
+                                    <div class="listSelection" style="max-height: <?= htmlspecialchars(20*($_SESSION['edit']['dataFile']['dimY'] / $_SESSION['edit']['dataFile']['dimX'])) ?>em">
+                                        <?php foreach ($_SESSION['edit']['dataScene']['shape'] as $figure) {
                                             if ($figure['id'] > 1) {
                                                 echo '<hr>';
                                             } ?>
@@ -378,9 +380,10 @@ switch ($_SESSION['edit']['step']) {
 
                                             <input type="checkbox" id="display<?= htmlspecialchars($figure['id']) ?>">
                                             <label for="display<?= htmlspecialchars($figure['id']) ?>">
-                                                <h3>Forme <?= htmlspecialchars($figure['id'].' : '.$figure['name']) ?></h3>
+                                                <h3>Objet <?= htmlspecialchars($figure['id'].' : '.$figure['name']) ?></h3>
                                             </label>
                                             <table>
+                                                <tr><td colspan="2">(bouton) supprimer l'objet<br><br></td></tr>
                                                 <?php shapeData($figure) ?>
                                                 <tr><td colspan="2"><br></td></tr>
                                                 <tr>
@@ -392,13 +395,11 @@ switch ($_SESSION['edit']['step']) {
                                                 </tr>
                                                 <tr><td colspan="2"><br></td></tr>
                                             </table>
-                                            <br>
-                                            (bouton supprimer)
-                                        <?php }
-                                    } ?>
-                                </div>
-                            </td>
-                        </tr>
+                                        <?php } ?>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php } ?>
                     </table>
                 </td>
                 <td>

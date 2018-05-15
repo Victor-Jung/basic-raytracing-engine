@@ -35,16 +35,17 @@ section > table > thead th {
 #shapeSelection table {
     border-collapse: separate;
 }
-#shapeSelection > tbody > tr > td, .listSelection {
+#shapeSelection > tbody > tr > td {
     padding: 1em;
     border: 1px solid gray;
 }
 #shapeSelection > tbody > tr:nth-child(2) > td {
-    padding-top: 0;
-    padding-bottom: 0; 
+    padding: 0; 
 }
-#shapeSelection div, #fixed .listSelection {
+.listSelection {
     overflow-y: scroll;
+    padding: 0 1em;
+    min-height: 12em;
 }
 #shapeSelection h3 {
     margin: 1em 0;

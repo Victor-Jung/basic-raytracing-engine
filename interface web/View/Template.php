@@ -9,20 +9,34 @@
     </head>
     
     <body>
-    <!--
-    <table>
-        <tr>
-            <td>
-                <div style="height: 300px; overflow-y: scroll">
+<!--
+    <div style="max-height: 300px; overflow-y: scroll">
+        <table>
+            <tr>
+                <td>
+                    Session
+                </td>
+                <td>
+                    Post
+                </td>
+                <td>
+                    Formes
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <pre>< ?= print_r($_SESSION) ?></pre>
-                </div>
-            </td>
-            <td>
-                <pre>< ?php if (isset($_POST)) { print_r($_POST); } ?></pre>
-            </td>
-        </tr>
-    </table>
-    -->
+                </td>
+                <td>
+                    <pre>< ?php if (isset($_POST)) print_r($_POST) ?></pre>
+                </td>
+                <td>
+                    <pre>< ?php if (isset($_SESSION['edit']['dataScene']['shape'])) print_r($_SESSION['edit']['dataScene']['shape']) ?></pre>
+                </td>
+            </tr>
+        </table>
+    </div>
+-->
         <header>
             <h1>Modélisation d'images en ray tracing - étape <?= $_SESSION['edit']['step'] ?></h1>
         </header>
