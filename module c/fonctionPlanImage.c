@@ -118,7 +118,7 @@ int isInTheShadow(sPos pos, sParam param){
 
 	tTab = listingTimes(param, tTab);
 
-	while(t < tTab[i]){
+	while(t < tTab[i] && tTab[i] <=0){
 		if(!doesCollide_PEUL){
 			return 1;
 		}
