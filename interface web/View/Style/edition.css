@@ -62,9 +62,7 @@ section > table > thead th {
     background-position: center;
 }
 
-#xPos, #yPos, #zPos,
-#xRot, #yRot, #zRot, 
-#bright, #growth, #dimZ {
+.number, #bright, #growth {
     width: 60px;
 }
 

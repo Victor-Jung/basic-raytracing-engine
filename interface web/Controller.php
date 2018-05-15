@@ -46,6 +46,7 @@ function Edition() {
         $_SESSION['edit']['dataScene']['shape'][$nbShape]['id'] = $nbShape;
         $_SESSION['edit']['dataScene']['shape'][$nbShape]['growth'] = 0;
         $_SESSION['edit']['dataScene']['shape'][$nbShape]['color'] = '#ffffff';
+        $_SESSION['edit']['dataScene']['shape'][$nbShape]['dim'] = array('xAxis' => 1, 'yAxis' => 1, 'zAxis' => 1);
         $_SESSION['edit']['dataScene']['shape'][$nbShape]['pos'] = array('xAxis' => $_SESSION['edit']['dataFile']['dimX'], 
                                                                         'yAxis' => $_SESSION['edit']['dataFile']['dimY'], 
                                                                         'zAxis' => $_SESSION['edit']['dataFile']['dimZ']);
