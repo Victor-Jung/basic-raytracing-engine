@@ -96,8 +96,8 @@ double* calcAngleWithSnellDescartes (double teta[2], sPos orientationVectorIncid
 	double scalarProduct = 0;
 
 //calcule de teta 1
-	//produit scalaire
-	scalarProduct = normalisedVector.x*orientationVectorIncidentRay.x + normalisedVector.y*orientationVectorIncidentRay.y + normalisedVector.z*orientationVectorIncidentRay.z;
+	//produit scalaire n . -u
+	scalarProduct = (-1)*normalisedVector.x*orientationVectorIncidentRay.x + (-1)*normalisedVector.y*orientationVectorIncidentRay.y + (-1)*normalisedVector.z*orientationVectorIncidentRay.z;
 	//formule calcule d'angle à partir de la formule du produit scalaire avec les normes et l'angle
 	teta[0] = acos(scalarProduct / sqrt( ( pow(normalisedVector.x,2) + pow(normalisedVector.y,2) + pow(normalisedVector.z,2) )*( pow(orientationVectorIncidentRay.x,2) + pow(orientationVectorIncidentRay.y,2) + pow(orientationVectorIncidentRay.z,2) ) ) );
 //calcule de teta 2
@@ -105,6 +105,15 @@ double* calcAngleWithSnellDescartes (double teta[2], sPos orientationVectorIncid
 	teta[1] = asin((refractiveIndexA/refractiveIndexB)*sin(teta[0]));
 
 	return teta
+}
+
+int isTotallyReflected(double refractiveIndexA, double refractiveIndexB, double tetaA){
+	double test = 0;
+	test = 1 - pow(refractiveIndexA/refractiveIndexB, 2)*pow(1-cos(tetaA), 2);
+	if (test < 0){
+		return 1;
+	}
+	return 0
 }
 
 
@@ -133,12 +142,27 @@ sParamEqua refractedRay(sParamEqua incidentRay, sFace face, double refractiveInd
 	orientationVectorIncidentRay.x = incidentRay.x[0];
 	orientationVectorIncidentRay.y = incidentRay.y[0];
 	orientationVectorIncidentRay.z = incidentRay.z[0];
+
 //calcule des angles incident et réfracté
 	teta = calcAngleWithSnellDescartes(teta, orientationVectorIncidentRay, normalisedVector, refractiveIndexA, refractiveIndexB);
+
+//test de la réflexion complète
+	if(isTotallyReflected){
+		return reflectedRay(incidentRay, face);
+	}
+
 //determination du vecteur directeur du rayon réfracté
-	orientationVectorRefractedRay.x = (refractiveIndexA/refractiveIndexB) * orientationVectorIncidentRay.x + ((refractiveIndexA/refractiveIndexB)*cos(teta[0]) - cos(teta[1]))*normalisedVector.x;
-	orientationVectorRefractedRay.y = (refractiveIndexA/refractiveIndexB) * orientationVectorIncidentRay.y + ((refractiveIndexA/refractiveIndexB)*cos(teta[0]) - cos(teta[1]))*normalisedVector.y;
-	orientationVectorRefractedRay.z = (refractiveIndexA/refractiveIndexB) * orientationVectorIncidentRay.z + ((refractiveIndexA/refractiveIndexB)*cos(teta[0]) - cos(teta[1]))*normalisedVector.z;
+	if(((-1)*normalisedVector.x*orientationVectorIncidentRay.x + (-1)*normalisedVector.y*orientationVectorIncidentRay.y + (-1)*normalisedVector.z*orientationVectorIncidentRay.z) >=0 ){
+		orientationVectorRefractedRay.x = (refractiveIndexA/refractiveIndexB) * orientationVectorIncidentRay.x + ((refractiveIndexA/refractiveIndexB)*cos(teta[0]) - cos(teta[1]))*normalisedVector.x;
+		orientationVectorRefractedRay.y = (refractiveIndexA/refractiveIndexB) * orientationVectorIncidentRay.y + ((refractiveIndexA/refractiveIndexB)*cos(teta[0]) - cos(teta[1]))*normalisedVector.y;
+		orientationVectorRefractedRay.z = (refractiveIndexA/refractiveIndexB) * orientationVectorIncidentRay.z + ((refractiveIndexA/refractiveIndexB)*cos(teta[0]) - cos(teta[1]))*normalisedVector.z;
+	}
+	else{
+		orientationVectorRefractedRay.x = (refractiveIndexA/refractiveIndexB) * orientationVectorIncidentRay.x + ((refractiveIndexA/refractiveIndexB)*cos(teta[0]) + cos(teta[1]))*normalisedVector.x;
+		orientationVectorRefractedRay.y = (refractiveIndexA/refractiveIndexB) * orientationVectorIncidentRay.y + ((refractiveIndexA/refractiveIndexB)*cos(teta[0]) + cos(teta[1]))*normalisedVector.y;
+		orientationVectorRefractedRay.z = (refractiveIndexA/refractiveIndexB) * orientationVectorIncidentRay.z + ((refractiveIndexA/refractiveIndexB)*cos(teta[0]) + cos(teta[1]))*normalisedVector.z;
+	}
+
 //équation paramétrique du rayon réfracté
 	refractedRay.x[0] = orientationVectorIncidentRay.x;
 	refractedRay.x[1] = pI.x;
