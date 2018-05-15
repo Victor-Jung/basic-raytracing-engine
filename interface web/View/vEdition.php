@@ -348,8 +348,8 @@ switch ($_SESSION['edit']['step']) {
                                     <option>Aucun</option>
                                     <optgroup label="Objets simples">
                                         <option>Surface</option>
-                                        <option>Sphère</option>
                                         <option>Pavé</option>
+                                        <option>Sphère</option>
                                     </optgroup>
                                     <optgroup label="Objets avancés" disabled>
                                         <option>Pyramide</option><!--peut préciser nb de faces-->
