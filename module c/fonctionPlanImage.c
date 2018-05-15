@@ -59,7 +59,7 @@ sPos* intersectLight_PEUL(sParamEqua paramEqua, double t) {
 void* doesCollide_PEUL(sParam param, double t, sParamEqua paramEqua) {
 	for (int i = 0; i < param.nbObjects; i++) {
 		sPos *pos = NULL;
-		pos = intersectLight(paramEqua, t);
+		pos = intersectLight_PEUL(paramEqua, t);
 		double theta = 0;
 		for (int k = 0; k < param.object[i].nbFaces; k++) {
 			for (int l = 0; l < param.object[i].face[k].nbPeaks; l++) {
@@ -118,7 +118,7 @@ int isInTheShadow(sPos pos, sParam param){
 
 	tTab = listingTimes(param, tTab);
 
-	while(t < tTab[i]){
+	while(t > tTab[i]){
 		if(!doesCollide_PEUL){
 			return 1;
 		}
