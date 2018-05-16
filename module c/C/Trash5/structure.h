@@ -43,10 +43,10 @@ struct sFace_ {
 
 typedef struct sObject_ sObject;
 struct sObject_ {
+	sColor color;
 	sFormula formula;
 	int nbFaces;
 	sFace *face;
-	sColor color;
 };
 
 typedef struct sImage_ sImage;
@@ -63,13 +63,6 @@ struct sLight_ {
 	sParamEqua paramEqua;
 };
 
-typedef struct sSphere_ sSphere;
-struct sSphere_ {
-	sPos center;
-	double radius;
-	sColor color;
-};
-
 typedef struct sParam_ sParam;
 struct sParam_ {
 	sImage image;
@@ -78,9 +71,6 @@ struct sParam_ {
 
 	int nbObjects;
 	sObject *object;
-
-	int nbSpheres;
-	sSphere *sphere;
 
 	sPos lightSource;
 	sLight light;

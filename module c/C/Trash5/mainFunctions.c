@@ -6,8 +6,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include "structure.h"
-#include "mainFunctions_PEUL.h"
-#define ALIASING 1
 #define PI 3,1415926535
 #define MORE
 
@@ -74,7 +72,7 @@ void equaParamLight(sParam *param, double X, double Y) {
 	planImage.planEqua.d = -1;
 	double nWidth = (param->image.width) / 256;
 	double nHeight = (param->image.height) / 256;
-	param->light.paramEqua.x[1] = param->viewerPos.x;  //AAAAAAAAAAAAAAAAAAAH
+	param->light.paramEqua.x[1] = 0;  //AAAAAAAAAAAAAAAAAAAH
 	param->light.paramEqua.x[0] = 1;
 	param->light.paramEqua.y[1] = param->viewerPos.y;
 	param->light.paramEqua.y[0] = (nHeight / 2) - (X / 256);
@@ -126,7 +124,7 @@ void* doesCollide(sParam param, double *t) {
 				}
 				theta /= 2 * PI;  //precision environ egale a 2.6646.10^-15
 				//printf("%.16f\n", theta);
-				if (theta > 1.047197/*1.047197551196*/ && theta < 1.047198/*1.047197551197*/) {  //1.0471975511965976
+				if (theta > 1.047197551196 && theta < 1.047197551197) {  //1.0471975511965976
 					return pos;
 				}
 				theta = 0;
@@ -139,101 +137,47 @@ void* doesCollide(sParam param, double *t) {
 
 #ifdef MORE
 
-sColor pixelAvg(sColor pixel, sFile *imageStart, sFile *imageEnd, int w, int h, sParam param) {
-	int averageR = 0;
-	int averageG = 0;
-	int averageB = 0;
-	int nbColMax = param.image.width;
-	int nbLigneMax = param.image.height;
-	int n = 0;
-	for (int i = w - ALIASING; i <= w + ALIASING; i++) {
-		for (int j = h - ALIASING; j <= h + ALIASING; j++) {
-			if ((i >= 0 && j >= 0) && i != nbColMax + 1 && j != nbLigneMax + 1 && (i != w || j != h)) {
-				//if(imageStart->data[nbColMax * j + i].r - )
-				averageR = averageR + imageStart->data[nbColMax * j + i].r;
-				averageG = averageG + imageStart->data[nbColMax * j + i].g;
-				averageB = averageB + imageStart->data[nbColMax * j + i].b;
-				n++;
-			}
-		}
-	}
-	if (n != 0) {
-		pixel.r = (int)(averageR / n);
-		pixel.g = (int)(averageG / n);
-		pixel.b = (int)(averageB / n);
-		return pixel;
-	}
-}
-
 int createImage(sPos posLight, sParam param) {
+	sColor color;
 	sFile* I = newBMP(param.image.width, param.image.height);
-	int cpt = 0;
-	int cptObj = -1;
-	int cptFace = -1;
 	for (int w = 1; w <= param.image.width; w++) {
 		for (int h = 1; h <= param.image.height; h++) {
 			double *t = NULL;
-			equaParamLight(&param, w, h); ///////BOUCLE
+			equaParamLight(&param, w, h);
 			t = listingTimes(param, t);
 			//showTab(t);
 			sPos *posPointObjet = NULL;
 			sColor p;
-			float lightFactor = param.light.lightFactor;
 			if ((posPointObjet = doesCollide(param, t))) {
-				cptObj = -1;
+				int cpt = -1;
 				for (int i = 0; i < param.nbObjects; i++) {
-					cptFace = -1;
 					for (int j = 0; j < param.object[i].nbFaces; j++) {
-						if (((param.object[i].face[j].planEqua.a * posPointObjet->x)+ (param.object[i].face[j].planEqua.b * posPointObjet->y)+ (param.object[i].face[j].planEqua.c * posPointObjet->z)) + param.object[i].face[j].planEqua.d <= 0.1 && ((param.object[i].face[j].planEqua.a * posPointObjet->x) + (param.object[i].face[j].planEqua.b * posPointObjet->y) + (param.object[i].face[j].planEqua.c * posPointObjet->z)) + param.object[i].face[j].planEqua.d >= -0.1) {
-							cptObj = i;
-							cptFace = j;
+						if (((param.object[i].face[j].planEqua.a * posPointObjet->x)+ (param.object[i].face[j].planEqua.b * posPointObjet->y)+ (param.object[i].face[j].planEqua.c * posPointObjet->z)) == -param.object[i].face[j].planEqua.d) {
+							cpt = i;
 						}
 					}
 				}
-				if (isInTheShadow(*posPointObjet, param)) {
-					lightFactor -= 0.3;
-				}
-				p.r = param.object[cptObj].color.r * lightFactor;
-				p.g = param.object[cptObj].color.g * lightFactor;
-				p.b = param.object[cptObj].color.b * lightFactor;
+				p.r = param.object[cpt].color.r;
+				p.g = param.object[cpt].color.g;
+				p.b = param.object[cpt].color.b;
 				setcolor(I, w-1, h-1, p);
 			}
 			else {
 				p.r = param.image.background.r;
 				p.g = param.image.background.g;
 				p.b = param.image.background.b;
-				setcolor(I, w - 1, h - 1, p);
+				setcolor(I, w-1, h-1, p);
 			}
-			cpt++;
 			free(t);
 		}
 	}
-	char nameI[50];
-	char nameJ[50];
-	///
-	sFile* J = newBMP(param.image.width, param.image.height);
-	sColor p;
-	for (int w = 0; w < param.image.width; w++) {
-		for (int h = 0; h < param.image.height; h++) {
-			p = I->data[(int)param.image.height * w + h];
-			p = pixelAvg(p, I, J, w, h, param);
-			setcolor(J, w, h, p);
-		}
-	}
-	///
-	strcpy(nameI, param.image.name);
-	strcat(nameI, ".bmp");
-	saveBMP(I, nameI);
-	strcpy(nameJ, param.image.name);
-	strcat(nameJ, "2.bmp");
-	saveBMP(J, nameJ);
+	char name[50];
+	strcpy(name, param.image.name);
+	strcat(name, ".bmp");
+	saveBMP(I, name);
 	deleteBMP(I);
-	deleteBMP(J);
 	return 1;
 }
 
 #endif // MORE
 
-
-//TPS ESTIME 80 000px par seconde
-//TPS ESTIME 16 350px par seconde

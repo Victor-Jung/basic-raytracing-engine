@@ -32,12 +32,10 @@ int main() {
 	return 0;*/
 	sParam param;
 	if (!loadFromFile(&param)) {
-		freeAll(&param);
 		return 0;
 	}
-	//showStruct(param);
+	showStruct(param);
 	if (createImage(param.lightSource, param)) {
-		freeAll(&param);
 		return 1;
 	}
 	return 0;

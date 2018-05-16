@@ -7,10 +7,8 @@
 
 
 void freeAll(sParam *param) {
-	//remove("data.txt");
 	free(param->object);
 	free(param->image.name);
-	free(param->sphere);
 }
 
 int nbLine(FILE* f) {
@@ -32,12 +30,17 @@ void showStruct(sParam param) {
 	printf("Background-r: %d\n", param.image.background.r);
 	printf("Background-g: %d\n", param.image.background.g);
 	printf("Background-b: %d\n", param.image.background.b);
+	printf("Nb Objects: %d\n", param.nbObjects);
 	printf("Light Factor: %f\n", param.light.lightFactor);
 	printf("LightPosition:\n	x: %f\n	y: %f\n	z:%f\n", param.lightSource.x, param.lightSource.y, param.lightSource.z);
+
 	printf("ViewerPosition:\n	x: %f\n	y: %f\n	z:%f\n", param.viewerPos.x, param.viewerPos.y, param.viewerPos.z);
-	printf("Nb Objects: %d\n", param.nbObjects);
 	for (int i = 0; i < param.nbObjects; i++) {
 		printf("Object %d:\n", i + 1);
+		printf("	Color:\n");
+		printf("	r: %d\n", param.object[i].color.r);
+		printf("	g: %d\n", param.object[i].color.g);
+		printf("	b: %d\n", param.object[i].color.b);
 		printf("	Formula:\n");
 		for (int j = 0; j < param.object[i].formula.nbX; j++) {
 			printf("		x^%d: %f\n", j + 1, param.object[i].formula.x[j]);
@@ -62,12 +65,7 @@ void showStruct(sParam param) {
 			}
 		}
 	}
-	printf("Number of spheres : %d\n", param.nbSpheres);
-	for (int i = 0; i < param.nbSpheres; i++) {
-		printf("	Color:\n		r : %d\n		g : %d\n		b : %d\n", param.sphere[i].color.r, param.sphere[i].color.g, param.sphere[i].color.b);
-		printf("	Center:\n		x : %f\n		y : %f\n		z : %f\n", param.sphere[i].center.x, param.sphere[i].center.y, param.sphere[i].center.z);
-		printf("	Radius : %f\n", param.sphere[i].radius);
-	}
+
 }
 
 int loadFromFile(sParam *param) {
@@ -157,7 +155,7 @@ int loadFromFile(sParam *param) {
 			i++;
 			fscanf(f, "%s", line);
 			param->nbObjects = atoi(line);
-			param->object = (sObject*)malloc(param->nbObjects * sizeof(sObject));
+			param->object = (sObject*)malloc(param->nbObjects*sizeof(sObject));
 			for (int j = 0; j < param->nbObjects; j++) {
 				fscanf(f, "%s", line);
 				i++;
@@ -232,7 +230,7 @@ int loadFromFile(sParam *param) {
 							fscanf(f, "%s", line);
 							i++;
 							if (k == 0) {
-								param->object[j].formula.x[cpy - l] = atof(line);
+								param->object[j].formula.x[cpy-l] = atof(line);
 							}
 							if (k == 1) {
 								param->object[j].formula.y[cpy - l] = atof(line);
@@ -309,77 +307,6 @@ int loadFromFile(sParam *param) {
 						}
 					}
 				}
-			}
-		}
-		else if (!strcmp(line, "NumberOfSpheres:")) {
-			i++;
-			fscanf(f, "%s", line);
-			param->nbSpheres = atoi(line);
-			param->sphere = (sSphere*)malloc(param->nbSpheres * sizeof(sSphere));
-			for (int j = 0; j < param->nbSpheres; j++) {
-				i++;
-				fscanf(f, "%s", line); 
-				char buffer[2];
-				sprintf(buffer, "%d", j + 1);
-				char searched[sizeName];
-				strcpy(searched, "Sphere");
-				strcat(searched, buffer);
-				strcat(searched, ":");
-				if (strcmp(searched, line)) {
-					return 0;
-				}
-				fscanf(f, "%s", line);
-				i++;
-				if (strcmp(line, "Color:")) {
-					return 0;
-				}
-				fscanf(f, "%s", line);
-				i++;
-				for (int k = 0; k < 3; k++) {
-					if (!strcmp(line, "r:")) {
-						fscanf(f, "%s", line);
-						i++;
-						param->sphere[j].color.r = atoi(line);
-					}
-					if (!strcmp(line, "g:")) {
-						fscanf(f, "%s", line);
-						i++;
-						param->sphere[j].color.g = atoi(line);
-					}
-					if (!strcmp(line, "b:")) {
-						fscanf(f, "%s", line);
-						i++;
-						param->sphere[j].color.b = atoi(line);
-					}
-					fscanf(f, "%s", line);
-					i++;
-					if (strcmp(line, "r:") && strcmp(line, "g:") && strcmp(line, "b:") && strcmp(line, "Center:")) {
-						return 0;
-					}
-				}
-				fscanf(f, "%s", line);
-				i++;
-				fscanf(f, "%s", line);
-				i++;
-				param->sphere[j].center.x = atof(line);
-				fscanf(f, "%s", line);
-				i++;
-				fscanf(f, "%s", line);
-				i++;
-				param->sphere[j].center.y= atof(line);
-				fscanf(f, "%s", line);
-				i++;
-				fscanf(f, "%s", line);
-				i++;
-				param->sphere[j].center.z= atof(line);
-				fscanf(f, "%s", line);
-				i++;
-				if (strcmp(line, "Radius:")) {
-					return 0;
-				}
-				fscanf(f, "%s", line);
-				i++;
-				param->sphere[j].radius = atof(line);
 			}
 		}
 		else { 
