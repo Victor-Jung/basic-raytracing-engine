@@ -35,16 +35,17 @@ section > table > thead th {
 #shapeSelection table {
     border-collapse: separate;
 }
-#shapeSelection > tbody > tr > td, .listSelection {
+#shapeSelection > tbody > tr > td {
     padding: 1em;
     border: 1px solid gray;
 }
 #shapeSelection > tbody > tr:nth-child(2) > td {
-    padding-top: 0;
-    padding-bottom: 0; 
+    padding: 0; 
 }
-#shapeSelection div, #fixed .listSelection {
+.listSelection {
     overflow-y: scroll;
+    padding: 0 1em;
+    min-height: 12em;
 }
 #shapeSelection h3 {
     margin: 1em 0;
@@ -62,10 +63,12 @@ section > table > thead th {
     background-position: center;
 }
 
-#xPos, #yPos, #zPos,
-#xRot, #yRot, #zRot, 
-#bright, #growth, #dimZ {
+.number, #bright, #growth {
     width: 60px;
+}
+
+#shapeSelection .number {
+    width: 50px;
 }
 
 #fixed>tbody>tr>th {
@@ -84,4 +87,12 @@ section > table > thead th {
     border: 1px solid gray;
     padding: 0.4em;
     width: 20em;
+}
+
+#reuseData, #reuseData + label {
+    display: none;
+}
+
+#nextStep:checked ~ #reuseData, #nextStep:checked ~ #reuseData + label  {
+    display: initial;
 }
