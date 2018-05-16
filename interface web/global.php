@@ -47,14 +47,12 @@ function verifHexaColor($hex) {
 }
 
 function createTextFiles() {
-    $file = fopen('data.txt', 'r+');
+    $file = fopen('link/data.txt', 'a');
  
-    $pages_vues = fgets($monfichier); // On lit la première ligne (nombre de pages vues)
-    $pages_vues += 1; // On augmente de 1 ce nombre de pages vues
-    fseek($monfichier, 0); // On remet le curseur au début du fichier
-    fputs($monfichier, $pages_vues); // On écrit le nouveau nombre de pages vues
+    $string = 'nom du fichier : '.$_SESSION['edit']['dataFile']['name'];
+    fwrite($file, $string); // On écrit le nouveau nombre de pages vues
     
-    fclose($monfichier);
+    fclose($file);
 }
 
 function presetEdition() {
