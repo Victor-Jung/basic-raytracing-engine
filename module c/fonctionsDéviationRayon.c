@@ -1,8 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
-#include"mainFunctions.h"
-#include"mainFunctionsPEUL.h"
 #include"structure.h"
 
 #define PI 3,1415926535
