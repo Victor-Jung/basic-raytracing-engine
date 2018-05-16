@@ -438,7 +438,7 @@ switch ($_SESSION['edit']['step']) {
                     <input type="submit" value="Confirmer">
                 </td>
                 <td>
-                    (fichier final)
+                    <img src="../link/preview.bmp" alt="Smiley face" width="100%">
                 </td>
             </tr>
         <?php $edition['content']['fillable'] = ob_get_clean();

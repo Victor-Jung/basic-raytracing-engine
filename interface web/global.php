@@ -46,6 +46,16 @@ function verifHexaColor($hex) {
     return true;
 }
 
+function createTextFiles() {
+    $file = fopen('data.txt', 'r+');
+ 
+    $pages_vues = fgets($monfichier); // On lit la première ligne (nombre de pages vues)
+    $pages_vues += 1; // On augmente de 1 ce nombre de pages vues
+    fseek($monfichier, 0); // On remet le curseur au début du fichier
+    fputs($monfichier, $pages_vues); // On écrit le nouveau nombre de pages vues
+    
+    fclose($monfichier);
+}
 
 function presetEdition() {
     $listWarning = false;
@@ -55,6 +65,9 @@ function presetEdition() {
         //changement de bloc
         if (isset($_SESSION['edit']['step'], $_POST['nextStep']) && $_POST['nextStep']) {
             if ($_SESSION['edit']['step'] < 3) {
+                if ($_SESSION['edit']['step'] == 2){
+                    createTextFiles();
+                }
                 $_SESSION['edit']['step']++;
             }
             else {
@@ -67,6 +80,7 @@ function presetEdition() {
                 }
             }
         }
+
         //initialisation de la page (premier bloc)
         if (!isset($_SESSION['edit']['step'])) {
             $_SESSION['edit']['step'] = 1;
