@@ -4,7 +4,7 @@ session_start();
 require('global.php');
 require('Controller.php');
 
-
+//$_SESSION = array();
 try {
     if (!isset($_GET['action'])) {
         $action = 'edit';

@@ -31,7 +31,7 @@ if ($_SESSION['edit']['step'] > 1) {
         </table>
     <?php $edition['content']['fixed'][1] = ob_get_clean();
 }
-if ($_SESSION['edit']['step'] == 3) {
+if ($_SESSION['edit']['step'] == 3) {//reprendre
     ob_start(); ?>
         <table>
             <tr>
@@ -295,19 +295,19 @@ switch ($_SESSION['edit']['step']) {
                     <td colspan="2">
                         <label title="Entrez une valeur entre -90 et 90">
                             <input type="number" class="number" name="rotX<?= htmlspecialchars($shape['id']) ?>" 
-                            value="<?= htmlspecialchars($shape['rot']['xAxis']) ?>"
+                            value="<?= (empty($shape['rot']['xAxis']))? 0 : htmlspecialchars($shape['rot']['xAxis']) ?>"
                             step="1" min="-90" max="90" required disabled>
                         </label>
                         -
                         <label title="Entrez une valeur entre -90 et 90">
                             <input type="number" class="number" name="rotY<?= htmlspecialchars($shape['id']) ?>" 
-                            value="<?= htmlspecialchars($shape['rot']['yAxis']) ?>" 
+                            value="<?= (empty($shape['rot']['yAxis']))? 0 : htmlspecialchars($shape['rot']['yAxis']) ?>" 
                             step="1" min="-90" max="90" required disabled>
                         </label>
                         -
                         <label title="Entrez une valeur entre -90 et 90">
                             <input type="number" class="number" name="rotZ<?= htmlspecialchars($shape['id']) ?>" 
-                            value="<?= htmlspecialchars($shape['rot']['zAxis']) ?>" 
+                            value="<?= (empty($shape['rot']['zAxis']))? 0 : htmlspecialchars($shape['rot']['zAxis']) ?>" 
                             step="1" min="-90" max="90" required disabled>
                         </label>
                     </td>
@@ -373,6 +373,7 @@ switch ($_SESSION['edit']['step']) {
                                                 }
                                             </style>
 
+                                            <input type="hidden" name="name<?= htmlspecialchars($figure['id']) ?>" value="<?= htmlspecialchars($figure['name']) ?>">
                                             <input type="checkbox" id="display<?= htmlspecialchars($figure['id']) ?>">
                                             <label for="display<?= htmlspecialchars($figure['id']) ?>">
                                                 <table>

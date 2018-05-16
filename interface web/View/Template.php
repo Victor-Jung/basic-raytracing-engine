@@ -65,14 +65,14 @@
                 </li>
             </span>
             <span class="alert">
-                <li>
+                <li <?php if (isset($template['listWarning'])) echo 'style="font-weight: bold"' ?>>
                     Notification
                     <ul>
-                        <li>
+                        <li style="font-weight: initial">
                             <?php if (isset($template['listWarning'])) {
                                 echo 'Champs incorrects ou manquants :';
                                 foreach($template['listWarning'] as $message) {
-                                    echo '<br>- '.htmlspecialchars($message);
+                                    echo '<br><br>- '.htmlspecialchars($message);
                                 }
                             }
                             else {

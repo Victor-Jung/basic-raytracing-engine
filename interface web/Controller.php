@@ -42,80 +42,144 @@ function Edition() {
         //bloc 1
         if ($_POST['script'] == 'fileConfig') {
             //enregistrement des entrees
-            /*
-                fileName -> $_SESSION['edit']['dataFile']['name']
-                dimXFile -> $_SESSION['edit']['dataFile']['dimX']
-                dimYFile -> $_SESSION['edit']['dataFile']['dimY']
-                dimZFile -> $_SESSION['edit']['dataFile']['dimZ']
+            if (!isset($_POST['fileName']) || !isset($_POST['typeFile']) ||
+            !isset($_POST['duration']) || !isset($_POST['frequency']) ||
+            !isset($_POST['dimXFile']) || !isset($_POST['dimYFile']) || !isset($_POST['dimZFile'])) {
+                $template['listWarning'][] = 'données formulaire';
+                $_SESSION['edit']['step'] = 1;
+                //throw new Exception("Connxion : Données formulaire incomplètes");
+            }
 
-                typeFile -> $_SESSION['edit']['dataFile']['format']
-                duration -> $_SESSION['edit']['dataFile']['video']['duration']
-                frequency-> $_SESSION['edit']['dataFile']['video']['frequency']
-            */
+            $_SESSION['edit']['dataFile']['name'] = filter_input(INPUT_POST, 'fileName', FILTER_SANITIZE_STRING);
+            $_SESSION['edit']['dataFile']['format'] = filter_input(INPUT_POST, 'typeFile', FILTER_CALLBACK, 
+                    ['options' => function ($data) {return in_array($data, ['picture', 'video']) ? $data : false;}]);
+
+            $_SESSION['edit']['dataFile']['video']['duration'] = filter_input(INPUT_POST, 'duration', FILTER_VALIDATE_INT);
+            $_SESSION['edit']['dataFile']['video']['frequency'] = filter_input(INPUT_POST, 'frequency', FILTER_VALIDATE_INT);
+
+            $_SESSION['edit']['dataFile']['dimX'] = filter_input(INPUT_POST, 'dimXFile', FILTER_VALIDATE_INT);
+            $_SESSION['edit']['dataFile']['dimY'] = filter_input(INPUT_POST, 'dimYFile', FILTER_VALIDATE_INT);
+            $_SESSION['edit']['dataFile']['dimZ'] = filter_input(INPUT_POST, 'dimZFile', FILTER_VALIDATE_INT);
+
+
+            if (!$_SESSION['edit']['dataFile']['name'])   $template['listWarning'][] = 'nom de fichier';
+            if (!$_SESSION['edit']['dataFile']['format']) $template['listWarning'][] = 'format de fichier';
+            if (!$_SESSION['edit']['dataFile']['video']['duration'])  $template['listWarning'][] = 'durée de la vidéo';
+            if (!$_SESSION['edit']['dataFile']['video']['frequency']) $template['listWarning'][] = 'images par secondes';
+            if (!$_SESSION['edit']['dataFile']['dimX']) $template['listWarning'][] = 'dimension X du fichier';
+            if (!$_SESSION['edit']['dataFile']['dimY']) $template['listWarning'][] = 'dimension Y du fichier';
+            if (!$_SESSION['edit']['dataFile']['dimZ']) $template['listWarning'][] = 'dimension Z du fichier';
         } 
 
         //bloc 2
         if ($_POST['script'] == 'sceneConfig') {
+            //comptage des objets
+            if (!isset($_SESSION['edit']['dataScene']['shape'])) {
+                $nbObjects = 0;
+            }
+            else {
+                $nbObjects = count($_SESSION['edit']['dataScene']['shape']);
+            }
+
             //enregistrement des entrees
-            /*
-                bright -> $_SESSION['edit']['dataScene']['bright']
-                backgroundColor -> $_SESSION['edit']['dataScene']['backgroundColor']
+            {
+                if (!isset($_POST['bright']) || !isset($_POST['backgroundColor'])) {
+                    $template['listWarning'][] = 'données formulaire';
+                    $_SESSION['edit']['step'] = 2;
+                    //throw new Exception("Connexion : Données formulaire incomplètes");
+                }
 
-                color<id> -> $_SESSION['edit']['dataScene']['shape'][<id>]['color']
+                $_SESSION['edit']['dataScene']['bright'] = filter_input(INPUT_POST, 'bright', FILTER_VALIDATE_INT);
+                $_SESSION['edit']['dataScene']['backgroundColor'] = filter_input(INPUT_POST, 'backgroundColor', FILTER_SANITIZE_STRING);
 
-                posX<id> -> $_SESSION['edit']['dataScene']['shape'][<id>]['pos']['xAxis']
-                posY<id> -> $_SESSION['edit']['dataScene']['shape'][<id>]['pos']['yAxis']
-                posZ<id> -> $_SESSION['edit']['dataScene']['shape'][<id>]['pos']['zAxis']
+                if (!$_SESSION['edit']['dataScene']['bright']) $template['listWarning'][] = 'luminosité de la scène';
+                if (!$_SESSION['edit']['dataScene']['backgroundColor']) $template['listWarning'][] = 'couleur de fond de la scène';
 
-                rotX<id> -> $_SESSION['edit']['dataScene']['shape'][<id>]['rot']['xAxis']
-                rotY<id> -> $_SESSION['edit']['dataScene']['shape'][<id>]['rot']['yAxis']
-                rotZ<id> -> $_SESSION['edit']['dataScene']['shape'][<id>]['rot']['zAxis']
+                $i = 0;
+                while ($i < $nbObjects) {
+                    $i++;
 
-                sphère : 
-                    radius<id> -> $_SESSION['edit']['dataScene']['shape'][<id>]['radius']
-                autre :
-                    dimX<id> -> $_SESSION['edit']['dataScene']['shape'][<id>]['dim']['xAxis']
-                    dimY<id> -> $_SESSION['edit']['dataScene']['shape'][<id>]['dim']['yAxis']
-                    dimZ<id> -> $_SESSION['edit']['dataScene']['shape'][<id>]['dim']['zAxis']
-            */
+                    if (!isset($_POST['color'.$i]) || ($_POST['name'.$i] == 'Sphère' && !isset($_POST['radius'.$i])) ||
+                    !isset($_POST['posX'.$i], $_POST['posY'.$i], $_POST['posZ'.$i]) ||
+                    ($_POST['name'.$i] != 'Sphère' && isset($_POST['rotX'.$i], $_POST['rotY'.$i], $_POST['rotZ'.$i])) &&
+                    (!isset($_POST['dimX'.$i], $_POST['dimY'.$i]) && ($_POST['name'.$i] != 'Surface' && !isset($_POST['dimZ'.$i])))) {
+                        $template['listWarning'][] = 'données formulaire objets';
+                        $_SESSION['edit']['step'] = 2;
+                        //throw new Exception("Connexion : Données formulaire incomplètes");
+                    }
+
+                    $_SESSION['edit']['dataScene']['shape'][$i]['color'] = filter_input(INPUT_POST, 'color'.$i, FILTER_SANITIZE_STRING);
+
+                    if ($_POST['name'.$i] == 'Sphère') {
+                        $_SESSION['edit']['dataScene']['shape'][$i]['radius'] = filter_input(INPUT_POST, 'radius'.$i, FILTER_VALIDATE_INT);
+                    }
+                    else {
+                        $_SESSION['edit']['dataScene']['shape'][$i]['dim']['xAxis'] = filter_input(INPUT_POST, 'dimX'.$i, FILTER_VALIDATE_INT);
+                        $_SESSION['edit']['dataScene']['shape'][$i]['dim']['yAxis'] = filter_input(INPUT_POST, 'dimY'.$i, FILTER_VALIDATE_INT);
+                        if ($_POST['name'.$i] != 'Surface') {
+                            $_SESSION['edit']['dataScene']['shape'][$i]['dim']['zAxis'] = filter_input(INPUT_POST, 'dimZ'.$i, FILTER_VALIDATE_INT);
+                        }
+                    }
+
+                    $_SESSION['edit']['dataScene']['shape'][$i]['pos']['xAxis'] = filter_input(INPUT_POST, 'posX'.$i, FILTER_VALIDATE_INT);
+                    $_SESSION['edit']['dataScene']['shape'][$i]['pos']['yAxis'] = filter_input(INPUT_POST, 'posY'.$i, FILTER_VALIDATE_INT);
+                    $_SESSION['edit']['dataScene']['shape'][$i]['pos']['zAxis'] = filter_input(INPUT_POST, 'posZ'.$i, FILTER_VALIDATE_INT);
+                    
+                    $_SESSION['edit']['dataScene']['shape'][$i]['rot']['xAxis'] = filter_input(INPUT_POST, 'rotX'.$i, FILTER_VALIDATE_INT);
+                    $_SESSION['edit']['dataScene']['shape'][$i]['rot']['yAxis'] = filter_input(INPUT_POST, 'rotY'.$i, FILTER_VALIDATE_INT);
+                    $_SESSION['edit']['dataScene']['shape'][$i]['rot']['zAxis'] = filter_input(INPUT_POST, 'rotZ'.$i, FILTER_VALIDATE_INT);
+
+
+                    if (!$_SESSION['edit']['dataScene']['shape'][$i]['color']) $template['listWarning'][] = 'objet '.$i.' : couleur';
+                    
+                    if ($_POST['name'.$i] == 'Sphère') {
+                        if (!$_SESSION['edit']['dataScene']['shape'][$i]['radius']) $template['listWarning'][] = 'objet '.$i.' : rayon';
+                    }
+                    else {
+                        if (!$_SESSION['edit']['dataScene']['shape'][$i]['dim']['xAxis']) $template['listWarning'][] = 'objet '.$i.' : dimension X';
+                        if (!$_SESSION['edit']['dataScene']['shape'][$i]['dim']['yAxis']) $template['listWarning'][] = 'objet '.$i.' : dimension Y';
+                        if ($_POST['name'.$i] != 'Surface') {
+                            if (!$_SESSION['edit']['dataScene']['shape'][$i]['dim']['zAxis']) $template['listWarning'][] = 'objet '.$i.' : dimension Z';
+                        }
+                    }
+                    
+                    if (!$_SESSION['edit']['dataScene']['shape'][$i]['pos']['xAxis']) $template['listWarning'][] = 'objet '.$i.' : position X';
+                    if (!$_SESSION['edit']['dataScene']['shape'][$i]['pos']['yAxis']) $template['listWarning'][] = 'objet '.$i.' : position Y';
+                    if (!$_SESSION['edit']['dataScene']['shape'][$i]['pos']['zAxis']) $template['listWarning'][] = 'objet '.$i.' : position Z';
+
+                    if ($_SESSION['edit']['dataScene']['shape'][$i]['rot']['xAxis'] === false) $template['listWarning'][] = 'objet '.$i.' : rotation X';
+                    if ($_SESSION['edit']['dataScene']['shape'][$i]['rot']['yAxis'] === false) $template['listWarning'][] = 'objet '.$i.' : rotation Y';
+                    if ($_SESSION['edit']['dataScene']['shape'][$i]['rot']['zAxis'] === false) $template['listWarning'][] = 'objet '.$i.' : rotation Z';
+                }
+            }
 
             //initialisation d objet
             if (isset($_POST['confirmShape']) && $_POST['confirmShape'] == 'Confirmer' && $_POST['shape'] != 'Aucun') {
-                if (!isset($_SESSION['edit']['dataScene']['shape'])) {
-                    $nbShape = 1;
+                $_SESSION['edit']['dataScene']['shape'][$nbObjects+1]['name'] = $_POST['shape'];
+                $_SESSION['edit']['dataScene']['shape'][$nbObjects+1]['id'] = $nbObjects+1;
+                $_SESSION['edit']['dataScene']['shape'][$nbObjects+1]['color'] = '#ffffff';
+
+                if ($_SESSION['edit']['dataScene']['shape'][$nbObjects+1]['name'] == 'Sphère') {
+                    $_SESSION['edit']['dataScene']['shape'][$nbObjects+1]['radius'] = 1;
                 }
                 else {
-                    $nbShape = count($_SESSION['edit']['dataScene']['shape']) + 1;
+                    $_SESSION['edit']['dataScene']['shape'][$nbObjects+1]['dim'] = array('xAxis' => 1, 'yAxis' => 1, 'zAxis' => 1);
                 }
-
-                $_SESSION['edit']['dataScene']['shape'][$nbShape]['name'] = $_POST['shape'];
-                $_SESSION['edit']['dataScene']['shape'][$nbShape]['id'] = $nbShape;
-                $_SESSION['edit']['dataScene']['shape'][$nbShape]['color'] = '#ffffff';
-
-                if ($_SESSION['edit']['dataScene']['shape'][$nbShape]['name'] == 'Sphère') {
-                    $_SESSION['edit']['dataScene']['shape'][$nbShape]['radius'] = 1;
-                }
-                else {
-                    $_SESSION['edit']['dataScene']['shape'][$nbShape]['dim'] = array('xAxis' => 1, 'yAxis' => 1, 'zAxis' => 1);
-                }
-                $_SESSION['edit']['dataScene']['shape'][$nbShape]['pos'] = array('xAxis' => $_SESSION['edit']['dataFile']['dimX']-1, 
+                $_SESSION['edit']['dataScene']['shape'][$nbObjects+1]['pos'] = array('xAxis' => $_SESSION['edit']['dataFile']['dimX']-1, 
                                                                                 'yAxis' => $_SESSION['edit']['dataFile']['dimY']-1, 
                                                                                 'zAxis' => $_SESSION['edit']['dataFile']['dimZ']);
-                $_SESSION['edit']['dataScene']['shape'][$nbShape]['rot'] = array('xAxis' => 0, 'yAxis' => 0, 'zAxis' => 0);
+                $_SESSION['edit']['dataScene']['shape'][$nbObjects+1]['rot'] = array('xAxis' => 0, 'yAxis' => 0, 'zAxis' => 0);
                 
             }
 
             //suppression d objet
             if (isset($_SESSION['edit']['dataScene']['shape'])) {
-                $nbObjects = count($_SESSION['edit']['dataScene']['shape']);
-
                 for ($i = 1; $i <= $nbObjects; $i++) {
                     if (isset($_POST['delete_'.$i])) {
                         while ($i < $nbObjects) {
                             $i++;
                             $_SESSION['edit']['dataScene']['shape'][$i]['id']--;
                             $_SESSION['edit']['dataScene']['shape'][$i-1] = $_SESSION['edit']['dataScene']['shape'][$i];
-
                         }
                         unset($_SESSION['edit']['dataScene']['shape'][$i]);
                     }
@@ -130,12 +194,10 @@ function Edition() {
                 rien pour l instant
             */
         }
+
+        //fin d'exploitation : 'detruit' la variable
+        $_POST['script'] = false;
     }
-
-    unset($_POST);//fin d'exploitation : vide la variable
-
-
-
 
 
     //variables du template
