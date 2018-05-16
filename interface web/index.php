@@ -18,12 +18,10 @@ try {
 
     switch ($action) {
         case 'edit':
-            Edition();
-            //Edition(verifFormEdit(verifScript('edit')));
+            presetEdition();
         break;
         case 'add':
-            require('View/vUpdate.php');
-            //Update(verifFormAdd(verifScript('add')));
+            presetUpdate();
         break;
     }
 }
