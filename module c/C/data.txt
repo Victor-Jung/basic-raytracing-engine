@@ -1,43 +1,43 @@
 ﻿
 Name:
-test
+cube
 Height:
-1024
+512
 Width:
-1024
+512
 Background-color:
 	r:
-	255
+	213
 	g:
-	0
+	214
 	b:
-	0
+	213
 Brightness:
 1
 LightPosition:
 	x:
 	0
 	y:
-	0
+	5
 	z:
-	0
+	3
 ViewerPosition:
 	x:
-	0
+	-2
 	y:
 	0
 	z:
-	2
+	0
 Numberofobjects:
-2
+1
 Object1:
 	Color:
 		r:
 		0
 		g:
-		255
-		b:
 		0
+		b:
+		200
 	Formula:
 		Powersofx:
 		4
@@ -62,7 +62,7 @@ Object1:
 			2:
 			2
 	NumberOfFaces:
-	1
+	6
 		Face1:
 			a1:
 			1
@@ -77,86 +77,201 @@ Object1:
 			x1:
 			3
 			y1:
-			1
+			6
 			z1:
-			1
+			6
 			x2:
 			3
 			y2:
 			1
 			z2:
-			4
+			6
 			x3:
 			3
 			y3:
-			4
+			1
 			z3:
-			4
+			1
 			x4:
 			3
 			y4:
-			4
+			6
 			z4:
 			1
-Object2:
-	Color:
-		r:
-		0
-		g:
-		0
-		b:
-		255
-	Formula:
-		Powersofx:
-		4
-			1:
-			1
-			2:
+		Face2:
+			a1:
 			0
-			3:
+			b1:
 			0
-			4:
+			c1:
 			1
-		Powersofy:
-		2
-			1:
-			1
-			2:
-			1
-		Powersofz:
-		2
-			1:
-			1
-			2:
-			2
-	NumberOfFaces:
-	1
-		Face1:
-			a2:
-			1
-			b2:
-			1
-			c2:
-			0
-			d2:
-			-5
+			d1:
+			-6
 			Numberofpeaks:
-			3
-			x1:
-			2
-			y1:
-			3
-			z1:
 			4
+			x1:
+			3
+			y1:
+			6
+			z1:
+			6
 			x2:
 			3
 			y2:
-			2
-			z2:
-			3
-			x3:
 			1
+			z2:
+			6
+			x3:
+			5
 			y3:
-			4
+			1
 			z3:
-			2
+			6
+			x4:
+			5
+			y4:
+			6
+			z4:
+			6
+		Face3:
+			a1:
+			0
+			b1:
+			1
+			c1:
+			0
+			d1:
+			-1
+			Numberofpeaks:
+			4
+			x1:
+			3
+			y1:
+			1
+			z1:
+			1
+			x2:
+			3
+			y2:
+			1
+			z2:
+			6
+			x3:
+			5
+			y3:
+			1
+			z3:
+			6
+			x4:
+			5
+			y4:
+			1
+			z4:
+			1
+		Face4:
+			a1:
+			1
+			b1:
+			0
+			c1:
+			0
+			d1:
+			-5
+			Numberofpeaks:
+			4
+			x1:
+			5
+			y1:
+			1
+			z1:
+			1
+			x2:
+			5
+			y2:
+			1
+			z2:
+			6
+			x3:
+			5
+			y3:
+			6
+			z3:
+			6
+			x4:
+			5
+			y4:
+			6
+			z4:
+			1
+		Face5:
+			a1:
+			0
+			b1:
+			1
+			c1:
+			0
+			d1:
+			-6
+			Numberofpeaks:
+			4
+			x1:
+			3
+			y1:
+			6
+			z1:
+			6
+			x2:
+			3
+			y2:
+			6
+			z2:
+			1
+			x3:
+			5
+			y3:
+			6
+			z3:
+			6
+			x4:
+			5
+			y4:
+			6
+			z4:
+			1
+		Face6:
+			a1:
+			0
+			b1:
+			0
+			c1:
+			1
+			d1:
+			-1
+			Numberofpeaks:
+			4
+			x1:
+			3
+			y1:
+			1
+			z1:
+			1
+			x2:
+			3
+			y2:
+			6
+			z2:
+			1
+			x3:
+			5
+			y3:
+			6
+			z3:
+			1
+			x4:
+			5
+			y4:
+			1
+			z4:
+			1
+NumberOfSpheres:
+0
