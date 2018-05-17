@@ -181,21 +181,21 @@ int createImage(sPos posLight, sParam param) {
 			float lightFactor = param.light.lightFactor;
 			if ((posPointObjet = doesCollide(param, t))) {
 				cptObj = -1;
-				cptFace = -1;
 				for (int i = 0; i < param.nbObjects; i++) {
+					cptFace = -1;
 					for (int j = 0; j < param.object[i].nbFaces; j++) {
 						if (((param.object[i].face[j].planEqua.a * posPointObjet->x)+ (param.object[i].face[j].planEqua.b * posPointObjet->y)+ (param.object[i].face[j].planEqua.c * posPointObjet->z)) + param.object[i].face[j].planEqua.d <= 0.1 && ((param.object[i].face[j].planEqua.a * posPointObjet->x) + (param.object[i].face[j].planEqua.b * posPointObjet->y) + (param.object[i].face[j].planEqua.c * posPointObjet->z)) + param.object[i].face[j].planEqua.d >= -0.1) {
-							cptFace = j;
 							cptObj = i;
+							cptFace = j;
 						}
 					}
 				}
 				if (isInTheShadow(*posPointObjet, param)) {
 					lightFactor -= 0.3;
 				}
-				p.r = param.object[cptObj].face[cptFace].color.r * lightFactor;
-				p.g = param.object[cptObj].face[cptFace].color.g * lightFactor;
-				p.b = param.object[cptObj].face[cptFace].color.b * lightFactor;
+				p.r = param.object[cptObj].color.r * lightFactor;
+				p.g = param.object[cptObj].color.g * lightFactor;
+				p.b = param.object[cptObj].color.b * lightFactor;
 				setcolor(I, w-1, h-1, p);
 			}
 			else {
