@@ -206,7 +206,6 @@ int createImage(sPos posLight, sParam param) {
 			}
 			cpt++;
 			free(t);
-			free(posPointObjet);
 		}
 	}
 	char nameI[50];

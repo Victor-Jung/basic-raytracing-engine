@@ -53,10 +53,11 @@ int testTvalueFromParamEqua(sPos pos, sParamEqua paramEqua) {
 }
 
 //ATTENTION CHANGER LE NOM !!!!!!!!!!!!!!!!!!
-sPos* intersectLight_PEUL(sParamEqua paramEqua, double t, sPos *pos) {
+sPos* intersectLight_PEUL(sParamEqua paramEqua, double t) {
 	double x = paramEqua.x[0] * t + paramEqua.x[1];
 	double y = paramEqua.y[0] * t + paramEqua.y[1];
 	double z = paramEqua.z[0] * t + paramEqua.z[1];
+	sPos *pos = (sPos*)malloc(sizeof(sPos));
 	pos->x = x;
 	pos->y = y;
 	pos->z = z;
@@ -66,10 +67,9 @@ sPos* intersectLight_PEUL(sParamEqua paramEqua, double t, sPos *pos) {
 
 //ATTENTION CHANGER LE NOM !!!!!!!!!!!!!!!!
 void* doesCollide_PEUL(sParam param, double t, sParamEqua paramEqua) {
-	sPos *pos = NULL;
-	pos = (sPos*)malloc(sizeof(sPos));
 	for (int i = 0; i < param.nbObjects; i++) {
-		pos = intersectLight_PEUL(paramEqua, t, pos);
+		sPos *pos = NULL;
+		pos = intersectLight_PEUL(paramEqua, t);
 		double theta = 0;
 		for (int k = 0; k < param.object[i].nbFaces; k++) {
 			for (int l = 0; l < param.object[i].face[k].nbPeaks; l++) {
@@ -98,13 +98,13 @@ void* doesCollide_PEUL(sParam param, double t, sParamEqua paramEqua) {
 			}
 			theta /= 2 * PI;  //precision environ egale a 2.6646.10^-15
 			if (theta > 1.047197/*1.047197551196*/ && theta < 1.047198/*1.047197551197*/) {  //1.0471975511965976
-				free(pos);
-				return true;
+				return pos;
 			}
 			theta = 0;
 		}
+		free(pos);
+
 	}
-	free(pos);
 	return false;
 }
 
@@ -159,12 +159,10 @@ int isInTheShadow(sPos pos, sParam param) {
 	while (i < tTab[0]) {
 		if (tTab[i] > 0) {
 			if (doesCollide_PEUL(param, tTab[i], paramEquaLightToPos)) {
-				free(tTab);
 				return 1;
 			}
 		}
 		i++;
 	}
-	free(tTab);
 	return 0;
 }
