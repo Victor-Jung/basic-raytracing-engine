@@ -33,28 +33,6 @@ function hex2rgb($hex) {
 }
 
 
-function verifHexaColor($hex) {
-    $rgb = hex2rgb($hex);
-
-    if (!isset($rgb['R'], $rgb['G'], $rgb['B']) ||
-    $rgb['R'] < 0 || $rgb['R'] > 255 ||
-    $rgb['G'] < 0 || $rgb['G'] > 255 ||
-    $rgb['B'] < 0 || $rgb['B'] > 255) {
-        return false;
-    }
-    
-    return true;
-}
-
-function createTextFiles() {
-    $file = fopen('link/data.txt', 'a');
- 
-    $string = 'nom du fichier : '.$_SESSION['edit']['dataFile']['name'];
-    fwrite($file, $string); // On écrit le nouveau nombre de pages vues
-    
-    fclose($file);
-}
-
 function presetEdition() {
     $listWarning = false;
 
@@ -64,7 +42,15 @@ function presetEdition() {
         if (isset($_SESSION['edit']['step'], $_POST['nextStep']) && $_POST['nextStep']) {
             if ($_SESSION['edit']['step'] < 3) {
                 if ($_SESSION['edit']['step'] == 2){
-                    createTextFiles();
+                    //cree fichiers textes
+                    $file = fopen('link/data.txt', 'a');
+ 
+                    $string = "\n".'nom du fichier : '.$_SESSION['edit']['dataFile']['name'];
+                    fwrite($file, $string); // On écrit le nouveau nombre de pages vues
+                    
+                    fclose($file);
+
+                    //createTextFiles(); -> les fichiers objets
                 }
                 $_SESSION['edit']['step']++;
             }
@@ -141,6 +127,19 @@ function presetEdition() {
 
             //enregistrement des entrees
             {
+                function verifHexaColor($hex) {
+                    $rgb = hex2rgb($hex);
+                
+                    if (!isset($rgb['R'], $rgb['G'], $rgb['B']) ||
+                    $rgb['R'] < 0 || $rgb['R'] > 255 ||
+                    $rgb['G'] < 0 || $rgb['G'] > 255 ||
+                    $rgb['B'] < 0 || $rgb['B'] > 255) {
+                        return false;
+                    }
+                    
+                    return true;
+                }
+
                 if (!isset($_POST['bright'], $_POST['backgroundColor'])) {
                     $listWarning[] = 'données formulaire';
                     $_SESSION['edit']['step'] = 2;
