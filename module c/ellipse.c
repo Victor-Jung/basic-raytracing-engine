@@ -68,3 +68,22 @@ void* doesCollideEllipse (sEllipse ellipse, sParamEqua lightRay){
 		return false;
 	}
 }
+
+
+sPlanEqua makeTangentPlanFromEllipse(sEllipse ellipse, sPos collisionPoint){
+	sPlanEqua tangentPlan;
+	sPso gradientVectorAtCollisionPoint;
+
+	gradientVectorAtCollisionPoint.x = 2*(collisionPoint.x - ellipse.a)/pow(ellipse.alpha,2);
+	gradientVectorAtCollisionPoint.y = 2*(collisionPoint.y - ellipse.b)/pow(ellipse.beta,2);
+	gradientVectorAtCollisionPoint.z = 2*(collisionPoint.z - ellipse.c)/pow(ellipse.gamma,2);
+
+	tangentPlan.a = gradientVectorAtCollisionPoint.x;
+	tangentPlan.b = gradientVectorAtCollisionPoint.y;
+	tangentPlan.c = gradientVectorAtCollisionPoint.z;
+
+	tangentPlan.d = (-1)*(tangentPlan.a*collisionPoint.x + tangentPlan.b*collisionPoint.y + tangentPlan.c*collisionPoint.z);
+
+
+	return tangentPlan;
+}
