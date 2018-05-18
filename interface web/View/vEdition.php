@@ -1,11 +1,11 @@
 <?php
 //fragments de code de la page
-if ($_SESSION['edit']['step'] > 1) {
+if ($_SESSION['pageBlock'] > 1) {
     ob_start(); ?>
         <table>
             <tr>
                 <td>
-                    Fichier : <?= htmlspecialchars($_SESSION['edit']['dataFile']['name'].'.'.$_SESSION['edit']['dataFile']['format']) ?>
+                    Fichier : <?= htmlspecialchars($_SESSION['name'].'.'.$_SESSION['format']) ?>
                 </td>
                 <td>
                     <table>
@@ -14,7 +14,7 @@ if ($_SESSION['edit']['step'] > 1) {
                                 Dimensions du fichier :
                             </td>
                             <td>
-                                <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimX'].' x '.$_SESSION['edit']['dataFile']['dimY']) ?> pixels
+                                <?= htmlspecialchars($_SESSION['dimX'].' x '.$_SESSION['dimY']) ?> pixels
                             </td>
                         </tr>
                         </tr>
@@ -22,7 +22,7 @@ if ($_SESSION['edit']['step'] > 1) {
                                 Profondeur :
                             </td>
                             <td>
-                                <?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?> couches
+                                <?= htmlspecialchars($_SESSION['dimZ']) ?> couches
                             </td>
                         </tr>
                     </table>
@@ -31,19 +31,19 @@ if ($_SESSION['edit']['step'] > 1) {
         </table>
     <?php $edition['content']['fixed'][1] = ob_get_clean();
 }
-if ($_SESSION['edit']['step'] == 3) {
+if ($_SESSION['pageBlock'] == 3) {
     ob_start(); ?>
         <table>
             <tr>
                 <td>
-                    <div class="listSelection" style="max-height: <?= htmlspecialchars(22*($_SESSION['edit']['dataFile']['dimY'] / $_SESSION['edit']['dataFile']['dimX'])) ?>em">
+                    <div class="listSelection" style="max-height: <?= htmlspecialchars(22*($_SESSION['dimY'] / $_SESSION['dimX'])) ?>em">
                         <table>
                             <tr>
                                 <td>
                                     Couleur de fond :
                                 </td>
                                 <td>
-                                    <input type="color" value="<?= htmlspecialchars($_SESSION['edit']['dataScene']['backgroundColor']) ?>" disabled>
+                                    <input type="color" value="<?= htmlspecialchars($_SESSION['backgroundColor']) ?>" disabled>
                                 </td>
                             </tr>
                             <tr>
@@ -51,12 +51,12 @@ if ($_SESSION['edit']['step'] == 3) {
                                     Luminosité : 
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($_SESSION['edit']['dataScene']['bright']) ?>%
+                                    <?= htmlspecialchars($_SESSION['brightScene']) ?>%
                                 </td>
                             </tr>
                         </table>
-                        <?php if (isset($_SESSION['edit']['dataScene']['shape']) && count($_SESSION['edit']['dataScene']['shape']) > 0) {
-                            foreach ($_SESSION['edit']['dataScene']['shape'] as $shape) { ?>
+                        <?php if (isset($_SESSION['shape']) && count($_SESSION['shape']) > 0) {
+                            foreach ($_SESSION['shape'] as $shape) { ?>
                                 <br>
                                 <table class="fiche">
                                     <tr>
@@ -114,9 +114,9 @@ if ($_SESSION['edit']['step'] == 3) {
                     </div>
                 </td>
                 <td>
-                    <div id="gridFixed" style="height: <?= htmlspecialchars(25*($_SESSION['edit']['dataFile']['dimY'] / $_SESSION['edit']['dataFile']['dimX'])) ?>em;
-                    background-size: <?= ($_SESSION['edit']['dataFile']['dimX'] >= $_SESSION['edit']['dataFile']['dimY'])? 'cover' : 'contain' ?>;
-                    background-color: <?= htmlspecialchars($_SESSION['edit']['dataScene']['backgroundColor']) ?>">
+                    <div id="gridFixed" style="height: <?= htmlspecialchars(25*($_SESSION['dimY'] / $_SESSION['dimX'])) ?>em;
+                    background-size: <?= ($_SESSION['dimX'] >= $_SESSION['dimY'])? 'cover' : 'contain' ?>;
+                    background-color: <?= htmlspecialchars($_SESSION['backgroundColor']) ?>">
                         <!--Ajoute objets avec des images de fond, que l'on déplace selon les axes x et y, ou des span modifiés en css?-->
                     </div>
                 </td>
@@ -125,7 +125,7 @@ if ($_SESSION['edit']['step'] == 3) {
     <?php $edition['content']['fixed'][2] = ob_get_clean();
 }
 
-switch ($_SESSION['edit']['step']) {
+switch ($_SESSION['pageBlock']) {
     case 1:
         $edition['display'][1] = true;
         $edition['display'][2] = false;
@@ -139,7 +139,7 @@ switch ($_SESSION['edit']['step']) {
                     $pixels = 256*$i;
 
                     echo '<option';
-                    if ($_SESSION['edit']['dataFile']['dim'.$axis] == $pixels) {
+                    if ($_SESSION['dim'.$axis] == $pixels) {
                         echo ' selected';
                     }
                     echo '>'.$pixels.'</option>';
@@ -152,7 +152,7 @@ switch ($_SESSION['edit']['step']) {
                     <label>
                         Nom du fichier :
                         <input type="text" id="fileName" name="fileName" maxlength="<?= LENGTH_NAME ?>" 
-                        value="<?= htmlspecialchars($_SESSION['edit']['dataFile']['name']) ?>" required>
+                        value="<?= htmlspecialchars($_SESSION['name']) ?>" required>
                     </label>
                     <br><br>
                     <table>
@@ -171,7 +171,7 @@ switch ($_SESSION['edit']['step']) {
                             <td>
                                 <label title="Entrez une valeur entre 1 et <?= MAX_Z_IMG ?>">
                                     <input type="number" class="number" name="dimZFile" 
-                                    value="<?= htmlspecialchars($_SESSION['edit']['dataFile']['dimZ']) ?>"
+                                    value="<?= htmlspecialchars($_SESSION['dimZ']) ?>"
                                     step="1" min="1" max="<?= MAX_Z_IMG ?>" required> couches
                                 </label>
                             </td>
@@ -196,7 +196,7 @@ switch ($_SESSION['edit']['step']) {
                             </td>
                             <td>
                                 <input type="number" name="duration" 
-                                value="<?= htmlspecialchars($_SESSION['edit']['dataFile']['video']['duration']) ?>" 
+                                value="<?= htmlspecialchars($_SESSION['video']['duration']) ?>" 
                                 step="1" min="1" max="<?= MAX_DURATION ?>" required>
                             </td>
                         </tr>
@@ -206,7 +206,7 @@ switch ($_SESSION['edit']['step']) {
                             </td>
                             <td>
                                 <input type="number" name="frequency" 
-                                value="<?= htmlspecialchars($_SESSION['edit']['dataFile']['video']['frequency']) ?>" 
+                                value="<?= htmlspecialchars($_SESSION['video']['frequency']) ?>" 
                                 step="1" min="1" max="60" required>
                             </td>
                         </tr>
@@ -246,7 +246,7 @@ switch ($_SESSION['edit']['step']) {
                     <label title="Entrez une valeur entre 0 et 100">
                         Luminosité du fichier :
                         <input type="number" id="bright" name="bright" 
-                        value="<?= htmlspecialchars($_SESSION['edit']['dataScene']['bright']) ?>" 
+                        value="<?= htmlspecialchars($_SESSION['brightScene']) ?>" 
                         step="1" min="0" max="100" required>%
                     </label>
                 </td>
@@ -254,7 +254,7 @@ switch ($_SESSION['edit']['step']) {
                     <label>
                         Couleur de fond du fichier :
                         <input type="color" id="backgroundColor" name="backgroundColor" 
-                        value="<?= htmlspecialchars($_SESSION['edit']['dataScene']['backgroundColor']) ?>">
+                        value="<?= htmlspecialchars($_SESSION['backgroundColor']) ?>">
                     </label>
                 </td>
             </tr>
@@ -275,8 +275,9 @@ switch ($_SESSION['edit']['step']) {
                                         <option>Sphère</option>
                                     </optgroup>
                                     <optgroup label="Objets 3D avancés" disabled>
-                                        <option>Pyramide</option>
                                         <option>Ellipsoïde</option>
+                                        <option>"canette"</option>
+                                        <option>Pyramide</option>
                                     </optgroup>
                                     <optgroup label="Objets personnalisés" disabled>
                                         <option>Polyèdre</option>
@@ -285,11 +286,11 @@ switch ($_SESSION['edit']['step']) {
                                 <input type="submit" name="confirmShape" value="Confirmer">
                             </td>
                         </tr>
-                        <?php if (isset($_SESSION['edit']['dataScene']['shape'])) { ?>
+                        <?php if (isset($_SESSION['shape'])) { ?>
                             <tr>
                                 <td>
-                                    <div class="listSelection" style="max-height: <?= htmlspecialchars(20*($_SESSION['edit']['dataFile']['dimY'] / $_SESSION['edit']['dataFile']['dimX'])) ?>em">
-                                        <?php foreach ($_SESSION['edit']['dataScene']['shape'] as $shape) {
+                                    <div class="listSelection" style="max-height: <?= htmlspecialchars(20*($_SESSION['dimY'] / $_SESSION['dimX'])) ?>em">
+                                        <?php foreach ($_SESSION['shape'] as $shape) {
                                             if ($shape['id'] > 1) {
                                                 echo '<hr>';
                                             } ?>
@@ -330,10 +331,10 @@ switch ($_SESSION['edit']['step']) {
                                                     </tr>
                                                 <?php }
                                                 else {
-                                                    $table = array('dessus', 'dessous', 'devant', 'derrière', 'droite', 'gauche');
+                                                    $face = array('devant', 'derrière', 'gauche', 'droite', 'dessus', 'dessous');
                                                     for ($i = 0; $i < 6; $i++) { ?>
                                                         <tr>
-                                                            <td>Couleur de <?= htmlspecialchars($table[$i]) ?></td>
+                                                            <td>Couleur de <?= htmlspecialchars($face[$i]) ?></td>
                                                             <td>
                                                                 <input type="color" class="color" name="color<?= htmlspecialchars($shape['id'].'_face'.$i) ?>" 
                                                                 value="<?= htmlspecialchars($shape['faces'][$i]['color']) ?>">
@@ -389,8 +390,8 @@ switch ($_SESSION['edit']['step']) {
                     </table>
                 </td>
                 <td>
-                    <div id="gridFillable" style="height: <?= htmlspecialchars(25*($_SESSION['edit']['dataFile']['dimY'] / $_SESSION['edit']['dataFile']['dimX'])) ?>em;
-                    background-size: <?= ($_SESSION['edit']['dataFile']['dimX'] >= $_SESSION['edit']['dataFile']['dimY'])? 'cover' : 'contain' ?>;">
+                    <div id="gridFillable" style="height: <?= htmlspecialchars(25*($_SESSION['dimY'] / $_SESSION['dimX'])) ?>em;
+                    background-size: <?= ($_SESSION['dimX'] >= $_SESSION['dimY'])? 'cover' : 'contain' ?>;">
                         <!--Ajoute objets avec des images de fond, que l'on déplace selon les axes x et y, ou des span modifiés en css?-->
                     </div>
                 </td>
@@ -423,94 +424,6 @@ switch ($_SESSION['edit']['step']) {
         <?php $edition['content']['fillable'] = ob_get_clean();
     break;
 }
-
-
-//fragments de code du template
-ob_start(); ?>
-    <table>
-        <thead>
-            <tr>
-                <th>
-                    Édition d'image ou de vidéo
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    (Survolez les champs numériques pour connaître leur amplitude)
-                </td>
-            </tr>
-        </thead>
-        <tbody>
-            <?php $i = 1;
-            if (isset($edition['content']['fixed'])) {
-                foreach ($edition['content']['fixed'] as $content) {
-                    if ($i == 1) { ?>
-                        <tr>
-                            <td>
-                                <br><br>
-                                <table id="fixed">
-                    <?php }
-                    else { ?>
-                                    <tr>
-                                        <td colspan="3"><hr></td>
-                                    </tr>
-                    <?php } ?>
-                                    <tr>
-                                        <th>
-                                            <?= htmlspecialchars($edition['legend'][$i]) ?>
-                                        </th>
-                                        <td>
-                                            <?= $content ?>
-                                        </td>
-                                    </tr>
-                                    
-                    <?php if ($i == 2 || ($i == 1 && !$edition['display'][3])) { ?>
-                                    <tr>
-                                        <td colspan="3"><br></td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    <?php }
-                    $i++;
-                }
-            } ?>
-            <tr>
-                <td>
-                    <fieldset>
-                        <legend><?= $edition['legend'][$i] ?></legend>
-                        <form method="post" action="index.php?action=edit">
-                            <input type="hidden" name="script" value="<?= htmlspecialchars($edition['script']) ?>">
-                            <table>
-                                <?= $edition['content']['fillable'] ?>
-                                <tr><td colspan="2"><br><hr></td></tr>
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" id="nextStep" name="nextStep" value="true">
-                                        <label for="nextStep">
-                                            <?= ($i != 3) ? 'Passer à l\'étape suivante' : 'Nouveau fichier' ?>
-                                        </label>
-                                        <?php if ($i == 3) { ?>
-                                            <br>
-                                            <input type="checkbox" id="reuseData" name="reuseData" value="true">
-                                            <label for="reuseData">
-                                                <?= 'Conserver les données' ?>
-                                            </label>
-                                        <?php } ?>
-                                    </td>
-                                    <td>
-                                        <input type="submit" value="Actualiser">
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                    </fieldset>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-<?php $template['content'] = ob_get_clean();
-
 
 //remplissage du template
 require('View/Template.php');

@@ -277,3 +277,136 @@ Polyedron2:
 NumberOfSpheres:
 1
 Object1:
+
+Name:
+temporaire
+Height:
+768
+Width:
+768
+Brightness:
+1
+Background-color:
+	r:
+	128
+	g:
+	212
+	b:
+	255
+LightPosition:
+	x:
+	-3
+	y:
+	5
+	z:
+	3
+ViewerPosition:
+	x:
+	-10
+	y:
+	-3
+	z:
+	-2
+Polyhedron:
+0
+NumberOfSpheres:
+0
+Name:
+temporaire
+Height:
+768
+Width:
+768
+Brightness:
+1
+Background-color:
+	r:
+	128
+	g:
+	212
+	b:
+	255
+LightPosition:
+	x:
+	-3
+	y:
+	5
+	z:
+	3
+ViewerPosition:
+	x:
+	-10
+	y:
+	-3
+	z:
+	-2
+Polyhedron:
+0
+NumberOfSpheres:
+0
+Name:
+temporaire
+Height:
+768
+Width:
+768
+Brightness:
+0
+Background-color:
+	r:
+	128
+	g:
+	212
+	b:
+	255
+LightPosition:
+	x:
+	-3
+	y:
+	5
+	z:
+	3
+ViewerPosition:
+	x:
+	-10
+	y:
+	-3
+	z:
+	-2
+Polyhedron:
+0
+NumberOfSpheres:
+0
+Name:
+temporaire
+Height:
+768
+Width:
+768
+Brightness:
+1
+Background-color:
+	r:
+	128
+	g:
+	212
+	b:
+	255
+LightPosition:
+	x:
+	-3
+	y:
+	5
+	z:
+	3
+ViewerPosition:
+	x:
+	-10
+	y:
+	-3
+	z:
+	-2
+Polyhedron:
+0
+NumberOfSpheres:
+0
