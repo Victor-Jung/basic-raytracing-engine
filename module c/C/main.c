@@ -32,9 +32,11 @@ int main() {
 	return 0;*/
 	sParam param;
 	if (!loadFromFile(&param)) {
+		//remove("data.txt");
 		freeAll(&param);
 		return 0;
 	}
+	//remove("data.txt");
 	showStruct(param);
 	if (createImage(param.lightSource, param)) {
 		freeAll(&param);

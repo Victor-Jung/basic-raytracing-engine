@@ -7,8 +7,7 @@
 
 
 void freeAll(sParam *param) {
-	//remove("data.txt");
-	free(param->object);
+	free(param->poly);
 	free(param->image.name);
 	free(param->sphere);
 }
@@ -46,15 +45,15 @@ sPlanEqua planEqua(sParam *param, int iObj, int iFace) {
 	int iPeakA = 0, iPeakB = 1, iPeakC = 2;
 	sVect AC;
 	sVect AB;
-	AC = vect(param->object[iObj].face[iFace].peak[iPeakA], param->object[iObj].face[iFace].peak[iPeakC]);
-	AB = vect(param->object[iObj].face[iFace].peak[iPeakA], param->object[iObj].face[iFace].peak[iPeakB]);
+	AC = vect(param->poly[iObj].face[iFace].peak[iPeakA], param->poly[iObj].face[iFace].peak[iPeakC]);
+	AB = vect(param->poly[iObj].face[iFace].peak[iPeakA], param->poly[iObj].face[iFace].peak[iPeakB]);
 	sVect res = produitVect3d(AC, AB);
-	float d = res.x*param->object[iObj].face[iFace].peak[iPeakA].x + res.y*param->object[iObj].face[iFace].peak[iPeakA].y + res.z*param->object[iObj].face[iFace].peak[iPeakA].z;
-	param->object[iObj].face[iFace].planEqua.a = res.x;
-	param->object[iObj].face[iFace].planEqua.b = res.y;
-	param->object[iObj].face[iFace].planEqua.c = res.z;
-	param->object[iObj].face[iFace].planEqua.d = -d;
-	return param->object[iObj].face[iFace].planEqua;
+	float d = res.x*param->poly[iObj].face[iFace].peak[iPeakA].x + res.y*param->poly[iObj].face[iFace].peak[iPeakA].y + res.z*param->poly[iObj].face[iFace].peak[iPeakA].z;
+	param->poly[iObj].face[iFace].planEqua.a = res.x;
+	param->poly[iObj].face[iFace].planEqua.b = res.y;
+	param->poly[iObj].face[iFace].planEqua.c = res.z;
+	param->poly[iObj].face[iFace].planEqua.d = -d;
+	return param->poly[iObj].face[iFace].planEqua;
 }
 
 void showStruct(sParam param) {
@@ -67,25 +66,25 @@ void showStruct(sParam param) {
 	printf("Light Factor: %f\n", param.light.lightFactor);
 	printf("LightPosition:\n	x: %f\n	y: %f\n	z:%f\n", param.lightSource.x, param.lightSource.y, param.lightSource.z);
 	printf("ViewerPosition:\n	x: %f\n	y: %f\n	z:%f\n", param.viewerPos.x, param.viewerPos.y, param.viewerPos.z);
-	printf("Nb Objects: %d\n", param.nbObjects);
-	for (int i = 0; i < param.nbObjects; i++) {
+	printf("Nb Objects: %d\n", param.nbPolyhedrons);
+	for (int i = 0; i < param.nbPolyhedrons; i++) {
 		printf("Object %d:\n", i + 1);
 		printf("	Formula:\n");
-		for (int j = 1; j <= param.object[i].nbFaces; j++) {
+		for (int j = 1; j <= param.poly[i].nbFaces; j++) {
 			printf("	Plan Equation %d:\n", j);
-			printf("		a%d: %f\n", j, param.object[i].face[j - 1].planEqua.a);
-			printf("		b%d: %f\n", j, param.object[i].face[j - 1].planEqua.b);
-			printf("		c%d: %f\n", j, param.object[i].face[j - 1].planEqua.c);
-			printf("		d%d: %f\n", j, param.object[i].face[j - 1].planEqua.d);
+			printf("		a%d: %f\n", j, param.poly[i].face[j - 1].planEqua.a);
+			printf("		b%d: %f\n", j, param.poly[i].face[j - 1].planEqua.b);
+			printf("		c%d: %f\n", j, param.poly[i].face[j - 1].planEqua.c);
+			printf("		d%d: %f\n", j, param.poly[i].face[j - 1].planEqua.d);
 			printf("		Color:\n");
-			printf("			r: %d", param.object[i].face[j - 1].color.r);
-			printf("			g: %d", param.object[i].face[j - 1].color.g);
-			printf("			b: %d\n", param.object[i].face[j - 1].color.b);
-			printf("	Peaks(%d):\n", param.object[i].face[j - 1].nbPeaks);
-			for (int k = 0; k < param.object[i].face[j - 1].nbPeaks; k++) {
-				printf("		x%d: %f\n", j + 1, param.object[i].face[j - 1].peak[k].x);
-				printf("		y%d: %f\n", j + 1, param.object[i].face[j - 1].peak[k].y);
-				printf("		z%d: %f\n", j + 1, param.object[i].face[j - 1].peak[k].z);
+			printf("			r: %d", param.poly[i].face[j - 1].color.r);
+			printf("			g: %d", param.poly[i].face[j - 1].color.g);
+			printf("			b: %d\n", param.poly[i].face[j - 1].color.b);
+			printf("	Peaks(%d):\n", param.poly[i].face[j - 1].nbPeaks);
+			for (int k = 0; k < param.poly[i].face[j - 1].nbPeaks; k++) {
+				printf("		x%d: %f\n", j + 1, param.poly[i].face[j - 1].peak[k].x);
+				printf("		y%d: %f\n", j + 1, param.poly[i].face[j - 1].peak[k].y);
+				printf("		z%d: %f\n", j + 1, param.poly[i].face[j - 1].peak[k].z);
 			}
 		}
 	}
@@ -99,6 +98,9 @@ void showStruct(sParam param) {
 
 int loadFromFile(sParam *param) {
 	FILE *f = fopen("data.txt", "r");
+	if (f == NULL) {
+		return 0;
+	}
 	char line[100];
 	int sizeFile = nbLine(f); //on recupere le nombre de lignes du fichier
 	fscanf(f, "%s", line);
@@ -180,18 +182,18 @@ int loadFromFile(sParam *param) {
 			fscanf(f, "%s", line);
 			param->viewerPos.z = atof(line);
 		}
-		else if (!strcmp(line, "Numberofobjects:")) {
+		else if (!strcmp(line, "Polyhedron:")) {
 			i++;
 			fscanf(f, "%s", line);
-			param->nbObjects = atoi(line);
-			param->object = (sObject*)malloc(param->nbObjects * sizeof(sObject));
-			for (int j = 0; j < param->nbObjects; j++) {
+			param->nbPolyhedrons = atoi(line);
+			param->poly = (sPoly*)malloc(param->nbPolyhedrons * sizeof(sPoly));
+			for (int j = 0; j < param->nbPolyhedrons; j++) {
 				fscanf(f, "%s", line);
 				i++;
 				char buffer[2];
 				sprintf(buffer, "%d", j + 1);
 				char searched[sizeName];
-				strcpy(searched, "Object");
+				strcpy(searched, "Polyhedron");
 				strcat(searched, buffer);
 				strcat(searched, ":");
 				if (strcmp(line, searched)) {
@@ -202,9 +204,9 @@ int loadFromFile(sParam *param) {
 				if (!strcmp(line, "NumberOfFaces:")) {
 					fscanf(f, "%s", line);
 					i++;
-					param->object[j].nbFaces = atoi(line);
-					param->object[j].face = (sFace*)malloc(param->object[j].nbFaces * sizeof(sFace));
-					for (int l = 0; l < param->object[j].nbFaces; l++) {
+					param->poly[j].nbFaces = atoi(line);
+					param->poly[j].face = (sFace*)malloc(param->poly[j].nbFaces * sizeof(sFace));
+					for (int l = 0; l < param->poly[j].nbFaces; l++) {
 						fscanf(f, "%s", line);
 						i++;
 						char buffer[sizeName];
@@ -244,30 +246,30 @@ int loadFromFile(sParam *param) {
 									return 0;
 								}
 							}
-							param->object[j].face[l].color = colorTmp;
+							param->poly[j].face[l].color = colorTmp;
 						}
 						if (!strcmp(line, "Numberofpeaks:")) {
 							fscanf(f, "%s", line);
 							i++;
 							int nbPeaks = atoi(line);
-							param->object[j].face[l].peak = (sPos*)malloc(nbPeaks * sizeof(sPos));
-							param->object[j].face[l].nbPeaks = nbPeaks;
+							param->poly[j].face[l].peak = (sPos*)malloc(nbPeaks * sizeof(sPos));
+							param->poly[j].face[l].nbPeaks = nbPeaks;
 							for (int k = 0; k < nbPeaks; k++) {
 								fscanf(f, "%s", line);
 								i++;
 								fscanf(f, "%s", line);
 								i++;
-								param->object[j].face[l].peak[k].x = atof(line);
+								param->poly[j].face[l].peak[k].x = atof(line);
 								fscanf(f, "%s", line);
 								i++;
 								fscanf(f, "%s", line);
 								i++;
-								param->object[j].face[l].peak[k].y = atof(line);
+								param->poly[j].face[l].peak[k].y = atof(line);
 								fscanf(f, "%s", line);
 								i++;
 								fscanf(f, "%s", line);
 								i++;
-								param->object[j].face[l].peak[k].z = atof(line);
+								param->poly[j].face[l].peak[k].z = atof(line);
 							}
 						}
 					}
@@ -349,9 +351,9 @@ int loadFromFile(sParam *param) {
 			return 0; 
 		}
 	}
-	for (int i = 0; i < param->nbObjects; i++) {
-		for (int j = 0; j < param->object[i].nbFaces; j++) {
-			param->object[i].face[j].planEqua = planEqua(param, i, j);
+	for (int i = 0; i < param->nbPolyhedrons; i++) {
+		for (int j = 0; j < param->poly[i].nbFaces; j++) {
+			param->poly[i].face[j].planEqua = planEqua(param, i, j);
 		}
 	}
 	return 1;
