@@ -99,6 +99,9 @@ void showStruct(sParam param) {
 
 int loadFromFile(sParam *param) {
 	FILE *f = fopen("data.txt", "r");
+	if (f == NULL) {
+		return 0;
+	}
 	char line[100];
 	int sizeFile = nbLine(f); //on recupere le nombre de lignes du fichier
 	fscanf(f, "%s", line);

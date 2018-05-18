@@ -20,19 +20,10 @@ struct sParametricEquation_ {
 };
 
 typedef struct sPosition_ sPos;
-typedef struct sPosition_ sVect;
 struct sPosition_ {
 	double x;
 	double y;
 	double z;
-};
-
-
-typedef struct sPosAndFace_ sPosFace;
-struct sPosAndFace_ {
-	sPos *position;
-	int iObj;
-	int iFace;
 };
 
 typedef struct sPlanEquation_ sPlanEqua;
@@ -45,7 +36,6 @@ struct sPlanEquation_ {
 
 typedef struct sFace_ sFace;
 struct sFace_ {
-	sColor color;
 	int nbPeaks;
 	sPos *peak;
 	sPlanEqua planEqua;
@@ -56,6 +46,7 @@ struct sObject_ {
 	sFormula formula;
 	int nbFaces;
 	sFace *face;
+	sColor color;
 };
 
 typedef struct sImage_ sImage;

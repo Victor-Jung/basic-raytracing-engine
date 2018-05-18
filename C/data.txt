@@ -5,8 +5,6 @@ Height:
 512
 Width:
 512
-Brightness:
-1
 Background-color:
 	r:
 	213
@@ -14,6 +12,8 @@ Background-color:
 	214
 	b:
 	213
+Brightness:
+1
 LightPosition:
 	x:
 	-3
@@ -27,13 +27,8 @@ ViewerPosition:
 	y:
 	-2.5
 	z:
-<<<<<<< HEAD
-	-2
-Numberofpolyhedron:
-=======
 	8
 Numberofobjects:
->>>>>>> 803493e3acc1849f7572a03721927daab1571993
 2
 Object1:
 	NumberOfFaces:
