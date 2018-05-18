@@ -36,52 +36,6 @@ function hex2rgb($hex) {
 function presetEdition() {
     $listWarning = false;
 
-    //gestion des blocs form
-    {
-        //changement de bloc
-        if (isset($_SESSION['edit']['step'], $_POST['nextStep']) && $_POST['nextStep']) {
-            if ($_SESSION['edit']['step'] < 3) {
-                if ($_SESSION['edit']['step'] == 2){
-                    //cree fichiers textes
-                    $file = fopen('link/data.txt', 'a');
- 
-                    $string = "\n".'nom du fichier : '.$_SESSION['edit']['dataFile']['name'];
-                    fwrite($file, $string); // On écrit le nouveau nombre de pages vues
-                    
-                    fclose($file);
-
-                    //createTextFiles(); -> les fichiers objets
-                }
-                $_SESSION['edit']['step']++;
-            }
-            else {
-                if (isset($_POST['reuseData']) && $_POST['reuseData']) {
-                    $_SESSION['edit']['step'] = 1;
-                }
-                else {
-                    unset($_SESSION['edit']['step']);
-                    unset($_SESSION['edit']['dataScene']);
-                }
-            }
-        }
-
-        //initialisation de la page (premier bloc)
-        if (!isset($_SESSION['edit']['step'])) {
-            $_SESSION['edit']['step'] = 1;
-
-            $_SESSION['edit']['dataFile']['name'] = 'temporaire';
-            $_SESSION['edit']['dataFile']['format'] = 'BMP';
-            $_SESSION['edit']['dataFile']['dimX'] = 768;
-            $_SESSION['edit']['dataFile']['dimY'] = 768;
-            $_SESSION['edit']['dataFile']['dimZ'] = MAX_Z_IMG;
-            $_SESSION['edit']['dataFile']['video']['duration'] = MAX_DURATION;
-            $_SESSION['edit']['dataFile']['video']['frequency'] = 1;
-
-            $_SESSION['edit']['dataScene']['bright'] = 100;
-            $_SESSION['edit']['dataScene']['backgroundColor'] = '#80D4FF';
-        }
-    }
-
     //enregistrement du contenu des blocs form
     if (isset($_POST['script'])) {
         //bloc 1
@@ -255,6 +209,337 @@ function presetEdition() {
 
         //fin d'exploitation : invalide le formulaire
         $_POST['script'] = false;
+    }
+
+    //gestion des blocs form
+    {
+        //changement de bloc
+        if (isset($_SESSION['edit']['step'], $_POST['nextStep']) && $_POST['nextStep']) {
+            if ($_SESSION['edit']['step'] < 3) {
+                if ($_SESSION['edit']['step'] == 2){
+                    //creee fichiers textes
+                    $file = fopen('link/data', 'a');
+ 
+                    //simplification des variables
+                    $detailFile = $_SESSION['edit']['dataFile'];
+                    $detailScene = $_SESSION['edit']['dataScene'];
+
+                    //part 0
+                    $fileContent['title'][0] = array('Name:'."\n",
+                                                    'Height:'."\n",
+                                                    'Width:'."\n", 
+                                                    'Brightness:'."\n");
+                    $fileContent['detail'][0] = array($detailFile['name'], 
+                                                    $detailFile['dimX'], 
+                                                    $detailFile['dimY'], 
+                                                    ($detailScene['bright'] / 100));
+                    //part 1
+                    $background = hex2rgb($_SESSION['edit']['dataScene']['backgroundColor']);
+                    $fileContent['title'][1] = array('Background-color:'."\n"."\t",
+                                                    "\t",
+                                                    "\t", 
+                                                    "\t", 
+                                                    "\t", 
+                                                    "\t");
+                    $fileContent['detail'][1] = array('r:', 
+                                                    $background['R'], 
+                                                    'g:',
+                                                    $background['G'], 
+                                                    'b:',
+                                                    $background['B']);
+                    //part 2
+                    $fileContent['title'][2] = array('LightPosition:'."\n"."\t",
+                                                    "\t",
+                                                    "\t", 
+                                                    "\t", 
+                                                    "\t", 
+                                                    "\t");
+                    $fileContent['detail'][2] = array('x:', 
+                                                    $detailScene['lightPosition']['x'], 
+                                                    'y:',
+                                                    $detailScene['lightPosition']['y'], 
+                                                    'z:',
+                                                    $detailScene['lightPosition']['z']);
+                    //part 3
+                    $fileContent['title'][3] = array('ViewerPosition:'."\n"."\t",
+                                                    "\t",
+                                                    "\t", 
+                                                    "\t", 
+                                                    "\t", 
+                                                    "\t");
+                    $fileContent['detail'][3] = array('x:', 
+                                                    $detailScene['viewerPosition']['x'], 
+                                                    'y:',
+                                                    $detailScene['viewerPosition']['y'], 
+                                                    'z:',
+                                                    $detailScene['viewerPosition']['z']);
+
+                    //boucle bloc fichier
+                    for ($i = 0; $i < 4; $i++) {
+                        for ($j = 0; $j < count($fileContent['title'][$i]); $j++) {
+                            $string = "\n".$fileContent['title'][$i][$j].$fileContent['detail'][$i][$j];
+                            fwrite($file, $string);
+                        }
+                    }
+
+
+                    //simplification des variables
+                    $nbPoly = 0;
+                    $nbElli = 0;
+                    if (isset($_SESSION['edit']['dataScene']['shape'])) {
+                        foreach ($_SESSION['edit']['dataScene']['shape'] as $shape) {
+                            if ($shape['name'] != 'Sphère' && $shape['name'] != 'Ellipsoïde') {
+                                $nbPoly++;
+                                $polyhedron[] = $shape;
+                                $polyhedron[$nbPoly-1]['id'] = $nbPoly;
+
+                                switch ($shape['name']) {
+                                    case 'Surface': 
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['z'] = $shape['pos']['zAxis'];
+                                        
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['z'] = $shape['pos']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['z'] = $shape['pos']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['z'] = $shape['pos']['zAxis'];
+                                    break;
+                                    case 'Pavé': 
+                                        //premiere face (devant : z fixe)
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['z'] = $shape['pos']['zAxis'];
+                                        
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['z'] = $shape['pos']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['z'] = $shape['pos']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['z'] = $shape['pos']['zAxis'];
+
+                                        //seconde face (derriere : z fixe)
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][1]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][1]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][1]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+                                        
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][2]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][2]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][2]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][3]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][3]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][3]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][4]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][4]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][4]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+
+                                        //troisieme face (gauche : x fixe)
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][1]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][1]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][1]['z'] = $shape['pos']['zAxis'];
+                                        
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][2]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][2]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][2]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][3]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][3]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][3]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][4]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][4]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][4]['z'] = $shape['pos']['zAxis'];
+
+                                        //quatieme face (droite : x fixe)
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][1]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][1]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][1]['z'] = $shape['pos']['zAxis'];
+                                    
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][2]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][2]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][2]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][3]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][3]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][3]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][4]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][4]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][4]['z'] = $shape['pos']['zAxis'];
+
+                                        //cinquieme face (dessus : y fixe)
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][1]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][1]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][1]['z'] = $shape['pos']['zAxis'];
+                                        
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][2]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][2]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][2]['z'] = $shape['pos']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][3]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][3]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][3]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][4]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][4]['y'] = $shape['pos']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][4]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+
+                                        //sixieme face (dessous : y fixe)
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][1]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][1]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][1]['z'] = $shape['pos']['zAxis'];
+                                        
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][2]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][2]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][2]['z'] = $shape['pos']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][3]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][3]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][3]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][4]['x'] = $shape['pos']['xAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][4]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][4]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+
+                                    break;
+                                }
+                            }
+                            else {
+                                $nbElli++;
+                                $ellipsoids[] = $shape;
+                                $ellipsoids[$nbElli-1]['id'] = $nbElli;
+                            }
+                        }
+                    }
+
+                    //boucle bloc polyedres
+                    if (!isset($polyhedron)) {
+                        $string = "\n".'Numberofpolyhedron:'."\n".'0';
+                        fwrite($file, $string);
+                    }
+                    else {
+                        $string = "\n".'Numberofpolyhedron:'."\n".(count($polyhedron));
+                        fwrite($file, $string);
+                        foreach ($polyhedron as $object) {
+                            $string = "\n".'Object'.$object['id'].':';
+                            fwrite($file, $string);
+                            
+                            $string = "\n"."\t".'NumberOfFaces:'."\n"."\t".count($object['faces']);
+                            fwrite($file, $string);
+                            $countFace = 0;
+                            foreach ($object['faces'] as $face) {
+                                $countFace++;
+                                $string = "\n"."\t"."\t".'Face'.$countFace.':';
+                                fwrite($file, $string);
+
+                                $color = hex2rgb($object['color']);
+                                $string = "\n"."\t"."\t"."\t".'Color:';
+                                fwrite($file, $string);
+                                $string = "\n"."\t"."\t"."\t"."\t".'r:';
+                                fwrite($file, $string);
+                                $string = "\n"."\t"."\t"."\t"."\t".$color['R'];
+                                fwrite($file, $string);
+                                $string = "\n"."\t"."\t"."\t"."\t".'g:';
+                                fwrite($file, $string);
+                                $string = "\n"."\t"."\t"."\t"."\t".$color['G'];
+                                fwrite($file, $string);
+                                $string = "\n"."\t"."\t"."\t"."\t".'b:';
+                                fwrite($file, $string);
+                                $string = "\n"."\t"."\t"."\t"."\t".$color['B'];
+                                fwrite($file, $string);
+                                
+                                $string = "\n"."\t"."\t"."\t".'Numberofpeaks:';
+                                fwrite($file, $string);
+                                $string = "\n"."\t"."\t"."\t".count($face['peaks']);
+                                fwrite($file, $string);
+                                $countPeak = 0;
+                                foreach ($face['peaks'] as $peak) {
+                                    $countPeak++;
+                                    $string = "\n"."\t"."\t"."\t".'x'.$countPeak.':';
+                                    fwrite($file, $string);
+                                    $string = "\n"."\t"."\t"."\t".$peak['x'];
+                                    fwrite($file, $string);
+                                    $string = "\n"."\t"."\t"."\t".'y'.$countPeak.':';
+                                    fwrite($file, $string);
+                                    $string = "\n"."\t"."\t"."\t".$peak['y'];
+                                    fwrite($file, $string);
+                                    $string = "\n"."\t"."\t"."\t".'z'.$countPeak.':';
+                                    fwrite($file, $string);
+                                    $string = "\n"."\t"."\t"."\t".$peak['z'];
+                                    fwrite($file, $string);
+                                }
+                            }
+                        }
+                    }
+
+                    //boucle bloc ellipsoides
+                    if (!isset($ellipsoids)) {
+                        $string = "\n".'NumberOfSpheres:'."\n".'0';
+                        fwrite($file, $string);
+                    }
+                    else {
+                        $string = "\n".'NumberOfSpheres:'."\n".(count($ellipsoids));
+                        fwrite($file, $string);
+                        foreach ($ellipsoids as $object) {
+                            $string = "\n".'Object'.$object['id'].':'."\n";
+                            fwrite($file, $string);
+
+                        }
+                    }
+                    
+
+                    fclose($file);
+                    
+                    //createTextFiles(); -> les fichiers objets
+                }
+                $_SESSION['edit']['step']++;
+            }
+            else {
+                if (isset($_POST['reuseData']) && $_POST['reuseData']) {
+                    $_SESSION['edit']['step'] = 1;
+                }
+                else {
+                    unset($_SESSION['edit']['step']);
+                    unset($_SESSION['edit']['dataScene']);
+                }
+            }
+        }
+
+        //initialisation de la page (premier bloc)
+        if (!isset($_SESSION['edit']['step'])) {
+            $_SESSION['edit']['step'] = 1;
+
+            $_SESSION['edit']['dataFile']['name'] = 'temporaire';
+            $_SESSION['edit']['dataFile']['format'] = 'BMP';
+            $_SESSION['edit']['dataFile']['dimX'] = 768;
+            $_SESSION['edit']['dataFile']['dimY'] = 768;
+            $_SESSION['edit']['dataFile']['dimZ'] = MAX_Z_IMG;
+            $_SESSION['edit']['dataFile']['video']['duration'] = MAX_DURATION;
+            $_SESSION['edit']['dataFile']['video']['frequency'] = 1;
+
+            $_SESSION['edit']['dataScene']['bright'] = 100;
+            $_SESSION['edit']['dataScene']['backgroundColor'] = '#80D4FF';
+            //ajouter aux formulaires
+            $_SESSION['edit']['dataScene']['lightPosition']['x'] = -3;
+            $_SESSION['edit']['dataScene']['lightPosition']['y'] = 5;
+            $_SESSION['edit']['dataScene']['lightPosition']['z'] = 3;
+            $_SESSION['edit']['dataScene']['viewerPosition']['x'] = -10;
+            $_SESSION['edit']['dataScene']['viewerPosition']['y'] = -3;
+            $_SESSION['edit']['dataScene']['viewerPosition']['z'] = -2;
+        }
     }
 
     //chargement de la page
