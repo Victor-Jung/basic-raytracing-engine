@@ -1,0 +1,100 @@
+﻿
+Name:
+test
+Height:
+512
+Width:
+512
+Background-color:
+	r:
+	255
+	g:
+	50
+	b:
+	255
+Brightness:
+1
+LightPosition:
+	x:
+	0
+	y:
+	0
+	z:
+	0
+ViewerPosition:
+	x:
+	0
+	y:
+	0
+	z:
+	2
+Numberofobjects:
+1
+Object1:
+	Color:
+		r:
+		0
+		g:
+		0
+		b:
+		255
+	Formula:
+		Powersofx:
+		4
+			1:
+			1
+			2:
+			0
+			3:
+			0
+			4:
+			1
+		Powersofy:
+		2
+			1:
+			1
+			2:
+			1
+		Powersofz:
+		2
+			1:
+			1
+			2:
+			2
+	NumberOfFaces:
+	1
+		Face1:
+			a1:
+			1
+			b1:
+			0
+			c1:
+			0
+			d1:
+			-3
+			Numberofpeaks:
+			4
+			x1:
+			3
+			y1:
+			1
+			z1:
+			1
+			x2:
+			3
+			y2:
+			1
+			z2:
+			4
+			x3:
+			3
+			y3:
+			4
+			z3:
+			4
+			x4:
+			3
+			y4:
+			4
+			z4:
+			1
