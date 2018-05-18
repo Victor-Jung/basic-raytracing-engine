@@ -18,29 +18,29 @@ LightPosition:
 	x:
 	-3
 	y:
-	5
+	4.75
 	z:
-	3
+	1
 ViewerPosition:
 	x:
 	-10
 	y:
-	-3
+	-2.5
 	z:
-	-2
+	8
 Numberofobjects:
 2
 Object1:
 	NumberOfFaces:
-	10
-		Face1:
-			Color:
-				r:
-				127
-				g:
-				72
-				b:
-				34
+	11
+	Face1:
+		Color:
+			r:
+			206
+			g:
+			227
+			b:
+			167
 			Numberofpeaks:
 			4
 			x1:
@@ -67,14 +67,14 @@ Object1:
 			6
 			z4:
 			1
-		Face2:
-			Color:
-				r:
-				127
-				g:
-				72
-				b:
-				34
+	Face2:
+		Color:
+			r:
+			206
+			g:
+			227
+			b:
+			167
 			Numberofpeaks:
 			4
 			x1:
@@ -90,25 +90,25 @@ Object1:
 			z2:
 			6
 			x3:
-			5
+			8
 			y3:
 			1
 			z3:
 			6
 			x4:
-			5
+			8
 			y4:
 			6
 			z4:
 			6
-		Face3:
-			Color:
-				r:
-				127
-				g:
-				72
-				b:
-				34
+	Face3:
+		Color:
+			r:
+			206
+			g:
+			227
+			b:
+			167
 			Numberofpeaks:
 			4
 			x1:
@@ -124,59 +124,59 @@ Object1:
 			z2:
 			6
 			x3:
-			5
+			8
 			y3:
 			1
 			z3:
 			6
 			x4:
-			5
+			8
 			y4:
 			1
 			z4:
 			1
-		Face4:
-			Color:
-				r:
-				127
-				g:
-				72
-				b:
-				34
+	Face4:
+		Color:
+			r:
+			206
+			g:
+			227
+			b:
+			167
 			Numberofpeaks:
 			4
 			x1:
-			5
+			8
 			y1:
 			1
 			z1:
 			1
 			x2:
-			5
+			8
 			y2:
 			1
 			z2:
 			6
 			x3:
-			5
+			8
 			y3:
 			6
 			z3:
 			6
 			x4:
-			5
+			8
 			y4:
 			6
 			z4:
 			1
-		Face5:
-			Color:
-				r:
-				127
-				g:
-				72
-				b:
-				34
+	Face5:
+		Color:
+			r:
+			206
+			g:
+			227
+			b:
+			167
 			Numberofpeaks:
 			4
 			x1:
@@ -185,40 +185,6 @@ Object1:
 			6
 			z1:
 			6
-			x2:
-			3
-			y2:
-			6
-			z2:
-			1
-			x3:
-			5
-			y3:
-			6
-			z3:
-			6
-			x4:
-			5
-			y4:
-			6
-			z4:
-			1
-		Face6:
-			Color:
-				r:
-				127
-				g:
-				72
-				b:
-				34
-			Numberofpeaks:
-			4
-			x1:
-			3
-			y1:
-			1
-			z1:
-			1
 			x2:
 			3
 			y2:
@@ -226,29 +192,63 @@ Object1:
 			z2:
 			1
 			x3:
-			5
+			8
+			y3:
+			6
+			z3:
+			6
+			x4:
+			8
+			y4:
+			6
+			z4:
+			1
+	Face6:
+		Color:
+			r:
+			206
+			g:
+			227
+			b:
+			167
+			Numberofpeaks:
+			4
+			x1:
+			3
+			y1:
+			1
+			z1:
+			1
+			x2:
+			3
+			y2:
+			6
+			z2:
+			1
+			x3:
+			8
 			y3:
 			6
 			z3:
 			1
 			x4:
-			5
+			8
 			y4:
 			1
 			z4:
 			1
-		Face7:
-			Color:
-				r:
-				205
-				g:
-				39
-				b:
-				23
+	Face7:
+		Color:
+			r:
+			243
+			g:
+			57
+			b:
+			27
 			Numberofpeaks:
 			3
 			x1:
-			4
+			3
 			y1:
 			3.5
 			z1:
@@ -265,74 +265,80 @@ Object1:
 			1
 			z3:
 			6
-		Face8:
-			Color:
-				r:
-				205
-				g:
-				39
-				b:
-				23
+	Face8:
+		Color:
+			r:
+			243
+			g:
+			57
+			b:
+			27
 			Numberofpeaks:
 			3
 			x1:
-			4
+			8
 			y1:
 			3.5
 			z1:
 			9
 			x2:
-			5
+			8
 			y2:
 			6
 			z2:
 			6
 			x3:
-			5
+			8
 			y3:
 			1
 			z3:
 			6
-		Face9:
-			Color:
-				r:
-				205
-				g:
-				39
-				b:
-				23
+	Face9:
+		Color:
+			r:
+			243
+			g:
+			57
+			b:
+			27
 			Numberofpeaks:
-			3
-			x1:
 			4
+			x1:
+			3
 			y1:
 			3.5
 			z1:
 			9
 			x2:
-			5
+			8
 			y2:
-			1
+			3.5
 			z2:
-			6
+			9
 			x3:
-			3
+			8
 			y3:
-			1
+			6
 			z3:
 			6
-		Face10:
-			Color:
-				r:
-				205
-				g:
-				39
-				b:
-				23
-			Numberofpeaks:
+			x4:
 			3
-			x1:
+			y4:
+			6
+			z4:
+			6
+	Face10:
+		Color:
+			r:
+			206
+			g:
+			57
+			b:
+			27
+			Numberofpeaks:
 			4
+			x1:
+			8
 			y1:
 			3.5
 			z1:
@@ -340,51 +346,113 @@ Object1:
 			x2:
 			3
 			y2:
-			6
+			3.5
 			z2:
-			6
+			9
 			x3:
-			5
+			3
 			y3:
-			6
+			1
 			z3:
 			6
+			x4:
+			8
+			y4:
+			1
+			z4:
+			6
+	Face11:
+		Color:
+			r:
+			243
+			g:
+			57
+			b:
+			27
+			Numberofpeaks:
+			4
+			x1:
+			3
+			y1:
+			2
+			z1:
+			2
+			x2:
+			3
+			y2:
+			1
+			z2:
+			2
+			x3:
+			3
+			y3:
+			1
+			z3:
+			1
+			x4:
+			3
+			y4:
+			2
+			z4:
+			1
 Object2:
 	NumberOfFaces:
-	1
-		Face1:
-			Color:
-				r:
-				100
-				g:
-				101
-				b:
-				99
+	2
+	Face1:
+		Color:
+			r:
+			100
+			g:
+			101
+			b:
+			99
 			Numberofpeaks:
-			4
+			3
 			x1:
 			-1
 			y1:
 			4
 			z1:
-			3
+			2.75
 			x2:
 			-1
 			y2:
 			4
 			z2:
-			2
+			1.75
 			x3:
 			-1
 			y3:
 			5
 			z3:
-			2
-			x4:
-			-1
-			y4:
-			5
-			z4:
+			2.75
+	Face2:
+		Color:
+			r:
+			100
+			g:
+			101
+			b:
+			99
+			Numberofpeaks:
 			3
+			x1:
+			-1
+			y1:
+			5
+			z1:
+			2.25
+			x2:
+			-1
+			y2:
+			4
+			z2:
+			1.25
+			x3:
+			-1
+			y3:
+			5
+			z3:
+			1.25
 NumberOfSpheres:
 0

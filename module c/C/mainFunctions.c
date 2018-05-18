@@ -96,29 +96,32 @@ sPos* intersectLight(sParam param, double t) {
 void* doesCollide(sParam param, double *t) {
 	for (int i = 0; i < param.nbObjects; i++) {
 		for (int j = 1; j <= t[0]; j++) {
-			sPos *pos = NULL;
-			pos = intersectLight(param, t[j]);
+			sPosFace *pos = (sPosFace*)malloc(sizeof(sPosFace));
+			pos->position = intersectLight(param, t[j]);
 			double theta = 0;
 			for (int k = 0; k < param.object[i].nbFaces; k++) {
+				if (i == 0 && k == 6) {
+					i = 0;
+				}
 				for (int l = 0; l < param.object[i].face[k].nbPeaks; l++) {
 					if (l + 1 < param.object[i].face[k].nbPeaks) {
-						double xps = param.object[i].face[k].peak[l].x - pos->x;
-						double yps = param.object[i].face[k].peak[l].y - pos->y;
-						double zps = param.object[i].face[k].peak[l].z - pos->z;
-						double xpt = param.object[i].face[k].peak[l + 1].x - pos->x;
-						double ypt = param.object[i].face[k].peak[l + 1].y - pos->y;
-						double zpt = param.object[i].face[k].peak[l + 1].z - pos->z;
+						double xps = param.object[i].face[k].peak[l].x - pos->position->x;
+						double yps = param.object[i].face[k].peak[l].y - pos->position->y;
+						double zps = param.object[i].face[k].peak[l].z - pos->position->z;
+						double xpt = param.object[i].face[k].peak[l + 1].x - pos->position->x;
+						double ypt = param.object[i].face[k].peak[l + 1].y - pos->position->y;
+						double zpt = param.object[i].face[k].peak[l + 1].z - pos->position->z;
 						double lengthPs = pow(xps, 2) + pow(yps, 2) + pow(zps, 2);
 						double lengthPt = pow(xpt, 2) + pow(ypt, 2) + pow(zpt, 2);
 						theta += acos((xps*xpt + yps*ypt + zps*zpt) / sqrt(lengthPs*lengthPt));
 					}
 					else {
-						double xps = param.object[i].face[k].peak[l].x - pos->x;
-						double yps = param.object[i].face[k].peak[l].y - pos->y;
-						double zps = param.object[i].face[k].peak[l].z - pos->z;
-						double xpt = param.object[i].face[k].peak[0].x - pos->x;
-						double ypt = param.object[i].face[k].peak[0].y - pos->y;
-						double zpt = param.object[i].face[k].peak[0].z - pos->z;
+						double xps = param.object[i].face[k].peak[l].x - pos->position->x;
+						double yps = param.object[i].face[k].peak[l].y - pos->position->y;
+						double zps = param.object[i].face[k].peak[l].z - pos->position->z;
+						double xpt = param.object[i].face[k].peak[0].x - pos->position->x;
+						double ypt = param.object[i].face[k].peak[0].y - pos->position->y;
+						double zpt = param.object[i].face[k].peak[0].z - pos->position->z;
 						double lengthPs = (pow(xps, 2) + pow(yps, 2) + pow(zps, 2));
 						double lengthPt = (pow(xpt, 2) + pow(ypt, 2) + pow(zpt, 2));
 						theta += acos((xps*xpt + yps*ypt + zps*zpt) / sqrt(lengthPs*lengthPt));
@@ -127,6 +130,8 @@ void* doesCollide(sParam param, double *t) {
 				theta /= 2 * PI;  //precision environ egale a 2.6646.10^-15
 				//printf("%.16f\n", theta);
 				if (theta > 1.047197/*1.047197551196*/ && theta < 1.047198/*1.047197551197*/) {  //1.0471975511965976
+					pos->iFace = k;
+					pos->iObj = i;
 					return pos;
 				}
 				theta = 0;
@@ -176,21 +181,13 @@ int createImage(sPos posLight, sParam param) {
 			equaParamLight(&param, w, h); ///////BOUCLE
 			t = listingTimes(param, t);
 			//showTab(t);
-			sPos *posPointObjet = NULL;
+			sPosFace *posPointObjet = NULL;
 			sColor p;
 			float lightFactor = param.light.lightFactor;
 			if ((posPointObjet = doesCollide(param, t))) {
-				cptObj = -1;
-				cptFace = -1;
-				for (int i = 0; i < param.nbObjects; i++) {
-					for (int j = 0; j < param.object[i].nbFaces; j++) {
-						if (((param.object[i].face[j].planEqua.a * posPointObjet->x)+ (param.object[i].face[j].planEqua.b * posPointObjet->y)+ (param.object[i].face[j].planEqua.c * posPointObjet->z)) + param.object[i].face[j].planEqua.d <= 0.1 && ((param.object[i].face[j].planEqua.a * posPointObjet->x) + (param.object[i].face[j].planEqua.b * posPointObjet->y) + (param.object[i].face[j].planEqua.c * posPointObjet->z)) + param.object[i].face[j].planEqua.d >= -0.1) {
-							cptFace = j;
-							cptObj = i;
-						}
-					}
-				}
-				if (isInTheShadow(*posPointObjet, param)) {
+				cptObj = posPointObjet->iObj;
+				cptFace = posPointObjet->iFace;
+				if (isInTheShadow(*(posPointObjet->position), param)) {
 					lightFactor -= 0.3;
 				}
 				p.r = param.object[cptObj].face[cptFace].color.r * lightFactor;

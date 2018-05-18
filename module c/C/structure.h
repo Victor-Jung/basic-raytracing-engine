@@ -27,6 +27,14 @@ struct sPosition_ {
 	double z;
 };
 
+
+typedef struct sPosAndFace_ sPosFace;
+struct sPosAndFace_ {
+	sPos *position;
+	int iObj;
+	int iFace;
+};
+
 typedef struct sPlanEquation_ sPlanEqua;
 struct sPlanEquation_ {
 	double a;

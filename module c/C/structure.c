@@ -71,30 +71,21 @@ void showStruct(sParam param) {
 	for (int i = 0; i < param.nbObjects; i++) {
 		printf("Object %d:\n", i + 1);
 		printf("	Formula:\n");
-		for (int j = 0; j < param.object[i].formula.nbX; j++) {
-			printf("		x^%d: %f\n", j + 1, param.object[i].formula.x[j]);
-		}
-		for (int j = 0; j < param.object[i].formula.nbY; j++) {
-			printf("		y^%d: %f\n", j + 1, param.object[i].formula.y[j]);
-		}
-		for (int j = 0; j < param.object[i].formula.nbZ; j++) {
-			printf("		z^%d: %f\n", j + 1, param.object[i].formula.z[j]);
-		}		
 		for (int j = 1; j <= param.object[i].nbFaces; j++) {
 			printf("	Plan Equation %d:\n", j);
 			printf("		a%d: %f\n", j, param.object[i].face[j - 1].planEqua.a);
 			printf("		b%d: %f\n", j, param.object[i].face[j - 1].planEqua.b);
 			printf("		c%d: %f\n", j, param.object[i].face[j - 1].planEqua.c);
 			printf("		d%d: %f\n", j, param.object[i].face[j - 1].planEqua.d);
+			printf("		Color:\n");
+			printf("			r: %d", param.object[i].face[j - 1].color.r);
+			printf("			g: %d", param.object[i].face[j - 1].color.g);
+			printf("			b: %d\n", param.object[i].face[j - 1].color.b);
 			printf("	Peaks(%d):\n", param.object[i].face[j - 1].nbPeaks);
 			for (int k = 0; k < param.object[i].face[j - 1].nbPeaks; k++) {
 				printf("		x%d: %f\n", j + 1, param.object[i].face[j - 1].peak[k].x);
 				printf("		y%d: %f\n", j + 1, param.object[i].face[j - 1].peak[k].y);
 				printf("		z%d: %f\n", j + 1, param.object[i].face[j - 1].peak[k].z);
-				printf("		Color:\n");
-				printf("			r: %d", param.object[i].face[j-1].color.r);
-				printf("			g: %d", param.object[i].face[j - 1].color.g);
-				printf("			b: %d\n", param.object[i].face[j - 1].color.b);
 			}
 		}
 	}
