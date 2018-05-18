@@ -31,7 +31,7 @@ struct sPosition_ {
 typedef struct sPosAndFace_ sPosFace;
 struct sPosAndFace_ {
 	sPos *position;
-	int iObj;
+	int iPoly;
 	int iFace;
 };
 
@@ -51,8 +51,8 @@ struct sFace_ {
 	sPlanEqua planEqua;
 };
 
-typedef struct sObject_ sObject;
-struct sObject_ {
+typedef struct sPolyhedron_ sPoly;
+struct sPolyhedron_ {
 	sFormula formula;
 	int nbFaces;
 	sFace *face;
@@ -85,8 +85,8 @@ struct sParam_ {
 
 	sPos viewerPos;
 
-	int nbObjects;
-	sObject *object;
+	int nbPolyhedrons;
+	sPoly *poly;
 
 	int nbSpheres;
 	sSphere *sphere;

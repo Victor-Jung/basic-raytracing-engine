@@ -68,29 +68,29 @@ sPos* intersectLight_PEUL(sParamEqua paramEqua, double t, sPos *pos) {
 void* doesCollide_PEUL(sParam param, double t, sParamEqua paramEqua) {
 	sPos *pos = NULL;
 	pos = (sPos*)malloc(sizeof(sPos));
-	for (int i = 0; i < param.nbObjects; i++) {
+	for (int i = 0; i < param.nbPolyhedrons; i++) {
 		pos = intersectLight_PEUL(paramEqua, t, pos);
 		double theta = 0;
-		for (int k = 0; k < param.object[i].nbFaces; k++) {
-			for (int l = 0; l < param.object[i].face[k].nbPeaks; l++) {
-				if (l + 1 < param.object[i].face[k].nbPeaks) {
-					double xps = param.object[i].face[k].peak[l].x - pos->x;
-					double yps = param.object[i].face[k].peak[l].y - pos->y;
-					double zps = param.object[i].face[k].peak[l].z - pos->z;
-					double xpt = param.object[i].face[k].peak[l + 1].x - pos->x;
-					double ypt = param.object[i].face[k].peak[l + 1].y - pos->y;
-					double zpt = param.object[i].face[k].peak[l + 1].z - pos->z;
+		for (int k = 0; k < param.poly[i].nbFaces; k++) {
+			for (int l = 0; l < param.poly[i].face[k].nbPeaks; l++) {
+				if (l + 1 < param.poly[i].face[k].nbPeaks) {
+					double xps = param.poly[i].face[k].peak[l].x - pos->x;
+					double yps = param.poly[i].face[k].peak[l].y - pos->y;
+					double zps = param.poly[i].face[k].peak[l].z - pos->z;
+					double xpt = param.poly[i].face[k].peak[l + 1].x - pos->x;
+					double ypt = param.poly[i].face[k].peak[l + 1].y - pos->y;
+					double zpt = param.poly[i].face[k].peak[l + 1].z - pos->z;
 					double lengthPs = pow(xps, 2) + pow(yps, 2) + pow(zps, 2);
 					double lengthPt = pow(xpt, 2) + pow(ypt, 2) + pow(zpt, 2);
 					theta += acos((xps*xpt + yps*ypt + zps*zpt) / sqrt(lengthPs*lengthPt));
 				}
 				else {
-					double xps = param.object[i].face[k].peak[l].x - pos->x;
-					double yps = param.object[i].face[k].peak[l].y - pos->y;
-					double zps = param.object[i].face[k].peak[l].z - pos->z;
-					double xpt = param.object[i].face[k].peak[0].x - pos->x;
-					double ypt = param.object[i].face[k].peak[0].y - pos->y;
-					double zpt = param.object[i].face[k].peak[0].z - pos->z;
+					double xps = param.poly[i].face[k].peak[l].x - pos->x;
+					double yps = param.poly[i].face[k].peak[l].y - pos->y;
+					double zps = param.poly[i].face[k].peak[l].z - pos->z;
+					double xpt = param.poly[i].face[k].peak[0].x - pos->x;
+					double ypt = param.poly[i].face[k].peak[0].y - pos->y;
+					double zpt = param.poly[i].face[k].peak[0].z - pos->z;
 					double lengthPs = (pow(xps, 2) + pow(yps, 2) + pow(zps, 2));
 					double lengthPt = (pow(xpt, 2) + pow(ypt, 2) + pow(zpt, 2));
 					theta += acos((xps*xpt + yps*ypt + zps*zpt) / sqrt(lengthPs*lengthPt));
@@ -117,19 +117,19 @@ double *listingTimes_PEUL(sParam param, sPos posObj, double *t) {
 	shadowRay.y[1] = posObj.y;
 	shadowRay.z[0] = param.lightSource.z - posObj.z;
 	shadowRay.z[1] = posObj.z;
-	for (int i = 0; i < param.nbObjects; i++) {
-		nbT += param.object[i].nbFaces;
+	for (int i = 0; i < param.nbPolyhedrons; i++) {
+		nbT += param.poly[i].nbFaces;
 	}
 	t = (double*)malloc((nbT + 1) * sizeof(double));
 	int cpt = 1;
 	t[0] = nbT;
-	for (int i = 0; i < param.nbObjects; i++) {
-		for (int j = 0; j < param.object[i].nbFaces; j++) {
-			if ((param.object[i].face[j].planEqua.a * shadowRay.x[0] + param.object[i].face[j].planEqua.b * shadowRay.y[0] + param.object[i].face[j].planEqua.c * shadowRay.z[0]) == 0) {
+	for (int i = 0; i < param.nbPolyhedrons; i++) {
+		for (int j = 0; j < param.poly[i].nbFaces; j++) {
+			if ((param.poly[i].face[j].planEqua.a * shadowRay.x[0] + param.poly[i].face[j].planEqua.b * shadowRay.y[0] + param.poly[i].face[j].planEqua.c * shadowRay.z[0]) == 0) {
 				t[cpt] = -1;
 			}
 			else {
-				t[cpt] = -((shadowRay.x[1] * param.object[i].face[j].planEqua.a + shadowRay.y[1] * param.object[i].face[j].planEqua.b + shadowRay.z[1] * param.object[i].face[j].planEqua.c + param.object[i].face[j].planEqua.d) / (param.object[i].face[j].planEqua.a * shadowRay.x[0] + param.object[i].face[j].planEqua.b * shadowRay.y[0] + param.object[i].face[j].planEqua.c * shadowRay.z[0]));
+				t[cpt] = -((shadowRay.x[1] * param.poly[i].face[j].planEqua.a + shadowRay.y[1] * param.poly[i].face[j].planEqua.b + shadowRay.z[1] * param.poly[i].face[j].planEqua.c + param.poly[i].face[j].planEqua.d) / (param.poly[i].face[j].planEqua.a * shadowRay.x[0] + param.poly[i].face[j].planEqua.b * shadowRay.y[0] + param.poly[i].face[j].planEqua.c * shadowRay.z[0]));
 			}
 			cpt++;
 		}
