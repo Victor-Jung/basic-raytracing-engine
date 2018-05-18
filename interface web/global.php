@@ -218,24 +218,24 @@ function presetEdition() {
             if ($_SESSION['edit']['step'] < 3) {
                 if ($_SESSION['edit']['step'] == 2){
                     //creee fichiers textes
-                    $file = fopen('link/data', 'a');
+                    $file = fopen('link/data.txt', 'a');
  
                     //simplification des variables
                     $detailFile = $_SESSION['edit']['dataFile'];
                     $detailScene = $_SESSION['edit']['dataScene'];
 
                     //part 0
-                    $fileContent['title'][0] = array('Name:'."\n",
-                                                    'Height:'."\n",
-                                                    'Width:'."\n", 
-                                                    'Brightness:'."\n");
+                    $fileContent['title'][0] = array('Name:'."\r"."\n",
+                                                    'Height:'."\r"."\n",
+                                                    'Width:'."\r"."\n", 
+                                                    'Brightness:'."\r"."\n");
                     $fileContent['detail'][0] = array($detailFile['name'], 
                                                     $detailFile['dimX'], 
                                                     $detailFile['dimY'], 
                                                     ($detailScene['bright'] / 100));
                     //part 1
                     $background = hex2rgb($_SESSION['edit']['dataScene']['backgroundColor']);
-                    $fileContent['title'][1] = array('Background-color:'."\n"."\t",
+                    $fileContent['title'][1] = array('Background-color:'."\r"."\n"."\t",
                                                     "\t",
                                                     "\t", 
                                                     "\t", 
@@ -248,7 +248,7 @@ function presetEdition() {
                                                     'b:',
                                                     $background['B']);
                     //part 2
-                    $fileContent['title'][2] = array('LightPosition:'."\n"."\t",
+                    $fileContent['title'][2] = array('LightPosition:'."\r"."\n"."\t",
                                                     "\t",
                                                     "\t", 
                                                     "\t", 
@@ -261,7 +261,7 @@ function presetEdition() {
                                                     'z:',
                                                     $detailScene['lightPosition']['z']);
                     //part 3
-                    $fileContent['title'][3] = array('ViewerPosition:'."\n"."\t",
+                    $fileContent['title'][3] = array('ViewerPosition:'."\r"."\n"."\t",
                                                     "\t",
                                                     "\t", 
                                                     "\t", 
@@ -277,7 +277,7 @@ function presetEdition() {
                     //boucle bloc fichier
                     for ($i = 0; $i < 4; $i++) {
                         for ($j = 0; $j < count($fileContent['title'][$i]); $j++) {
-                            $string = "\n".$fileContent['title'][$i][$j].$fileContent['detail'][$i][$j];
+                            $string = "\r"."\n".$fileContent['title'][$i][$j].$fileContent['detail'][$i][$j];
                             fwrite($file, $string);
                         }
                     }
@@ -427,58 +427,58 @@ function presetEdition() {
 
                     //boucle bloc polyedres
                     if (!isset($polyhedron)) {
-                        $string = "\n".'Numberofpolyhedron:'."\n".'0';
+                        $string = "\r"."\n".'Numberofpolyhedron:'."\r"."\n".'0';
                         fwrite($file, $string);
                     }
                     else {
-                        $string = "\n".'Numberofpolyhedron:'."\n".(count($polyhedron));
+                        $string = "\r"."\n".'Numberofpolyhedron:'."\r"."\n".(count($polyhedron));
                         fwrite($file, $string);
                         foreach ($polyhedron as $object) {
-                            $string = "\n".'Object'.$object['id'].':';
+                            $string = "\r"."\n".'Polyedron'.$object['id'].':';
                             fwrite($file, $string);
                             
-                            $string = "\n"."\t".'NumberOfFaces:'."\n"."\t".count($object['faces']);
+                            $string = "\r"."\n"."\t".'NumberOfFaces:'."\r"."\n"."\t".count($object['faces']);
                             fwrite($file, $string);
                             $countFace = 0;
                             foreach ($object['faces'] as $face) {
                                 $countFace++;
-                                $string = "\n"."\t"."\t".'Face'.$countFace.':';
+                                $string = "\r"."\n"."\t"."\t".'Face'.$countFace.':';
                                 fwrite($file, $string);
 
                                 $color = hex2rgb($object['color']);
-                                $string = "\n"."\t"."\t"."\t".'Color:';
+                                $string = "\r"."\n"."\t"."\t"."\t".'Color:';
                                 fwrite($file, $string);
-                                $string = "\n"."\t"."\t"."\t"."\t".'r:';
+                                $string = "\r"."\n"."\t"."\t"."\t"."\t".'r:';
                                 fwrite($file, $string);
-                                $string = "\n"."\t"."\t"."\t"."\t".$color['R'];
+                                $string = "\r"."\n"."\t"."\t"."\t"."\t".$color['R'];
                                 fwrite($file, $string);
-                                $string = "\n"."\t"."\t"."\t"."\t".'g:';
+                                $string = "\r"."\n"."\t"."\t"."\t"."\t".'g:';
                                 fwrite($file, $string);
-                                $string = "\n"."\t"."\t"."\t"."\t".$color['G'];
+                                $string = "\r"."\n"."\t"."\t"."\t"."\t".$color['G'];
                                 fwrite($file, $string);
-                                $string = "\n"."\t"."\t"."\t"."\t".'b:';
+                                $string = "\r"."\n"."\t"."\t"."\t"."\t".'b:';
                                 fwrite($file, $string);
-                                $string = "\n"."\t"."\t"."\t"."\t".$color['B'];
+                                $string = "\r"."\n"."\t"."\t"."\t"."\t".$color['B'];
                                 fwrite($file, $string);
                                 
-                                $string = "\n"."\t"."\t"."\t".'Numberofpeaks:';
+                                $string = "\r"."\n"."\t"."\t"."\t".'Numberofpeaks:';
                                 fwrite($file, $string);
-                                $string = "\n"."\t"."\t"."\t".count($face['peaks']);
+                                $string = "\r"."\n"."\t"."\t"."\t".count($face['peaks']);
                                 fwrite($file, $string);
                                 $countPeak = 0;
                                 foreach ($face['peaks'] as $peak) {
                                     $countPeak++;
-                                    $string = "\n"."\t"."\t"."\t".'x'.$countPeak.':';
+                                    $string = "\r"."\n"."\t"."\t"."\t".'x'.$countPeak.':';
                                     fwrite($file, $string);
-                                    $string = "\n"."\t"."\t"."\t".$peak['x'];
+                                    $string = "\r"."\n"."\t"."\t"."\t".$peak['x'];
                                     fwrite($file, $string);
-                                    $string = "\n"."\t"."\t"."\t".'y'.$countPeak.':';
+                                    $string = "\r"."\n"."\t"."\t"."\t".'y'.$countPeak.':';
                                     fwrite($file, $string);
-                                    $string = "\n"."\t"."\t"."\t".$peak['y'];
+                                    $string = "\r"."\n"."\t"."\t"."\t".$peak['y'];
                                     fwrite($file, $string);
-                                    $string = "\n"."\t"."\t"."\t".'z'.$countPeak.':';
+                                    $string = "\r"."\n"."\t"."\t"."\t".'z'.$countPeak.':';
                                     fwrite($file, $string);
-                                    $string = "\n"."\t"."\t"."\t".$peak['z'];
+                                    $string = "\r"."\n"."\t"."\t"."\t".$peak['z'];
                                     fwrite($file, $string);
                                 }
                             }
@@ -487,14 +487,14 @@ function presetEdition() {
 
                     //boucle bloc ellipsoides
                     if (!isset($ellipsoids)) {
-                        $string = "\n".'NumberOfSpheres:'."\n".'0';
+                        $string = "\r"."\n".'NumberOfSpheres:'."\r"."\n".'0';
                         fwrite($file, $string);
                     }
                     else {
-                        $string = "\n".'NumberOfSpheres:'."\n".(count($ellipsoids));
+                        $string = "\r"."\n".'NumberOfSpheres:'."\r"."\n".(count($ellipsoids));
                         fwrite($file, $string);
                         foreach ($ellipsoids as $object) {
-                            $string = "\n".'Object'.$object['id'].':'."\n";
+                            $string = "\r"."\n".'Object'.$object['id'].':'."\r"."\n";
                             fwrite($file, $string);
 
                         }
