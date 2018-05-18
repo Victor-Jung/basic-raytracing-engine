@@ -182,6 +182,11 @@ function presetEdition() {
                                                                                     'yAxis' => $_SESSION['edit']['dataFile']['dimY']-1, 
                                                                                     'zAxis' => $_SESSION['edit']['dataFile']['dimZ']);
                 $_SESSION['edit']['dataScene']['shape'][$nbObjects+1]['rot'] = array('xAxis' => 0, 'yAxis' => 0, 'zAxis' => 0);
+                
+                //ajouter aux formulaires
+                for ($i = 0; $i < 6; $i++) {//6 faces pour le pave
+                    $_SESSION['edit']['dataScene']['shape'][$nbObjects+1]['faces'][$i]['color'] = '#ffffff';
+                }
             }
 
             //suppression d objet
@@ -294,7 +299,7 @@ function presetEdition() {
                                 $polyhedron[$nbPoly-1]['id'] = $nbPoly;
 
                                 switch ($shape['name']) {
-                                    case 'Surface': 
+                                    case 'Surface':
                                         $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['x'] = $shape['pos']['xAxis'];
                                         $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['y'] = $shape['pos']['yAxis'];
                                         $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['z'] = $shape['pos']['zAxis'];
@@ -427,11 +432,11 @@ function presetEdition() {
 
                     //boucle bloc polyedres
                     if (!isset($polyhedron)) {
-                        $string = "\r"."\n".'Numberofpolyhedron:'."\r"."\n".'0';
+                        $string = "\r"."\n".'Polyhedron:'."\r"."\n".'0';
                         fwrite($file, $string);
                     }
                     else {
-                        $string = "\r"."\n".'Numberofpolyhedron:'."\r"."\n".(count($polyhedron));
+                        $string = "\r"."\n".'Polyhedron:'."\r"."\n".'1';
                         fwrite($file, $string);
                         foreach ($polyhedron as $object) {
                             $string = "\r"."\n".'Polyedron'.$object['id'].':';
@@ -491,7 +496,7 @@ function presetEdition() {
                         fwrite($file, $string);
                     }
                     else {
-                        $string = "\r"."\n".'NumberOfSpheres:'."\r"."\n".(count($ellipsoids));
+                        $string = "\r"."\n".'NumberOfSpheres:'."\r"."\n".'1';
                         fwrite($file, $string);
                         foreach ($ellipsoids as $object) {
                             $string = "\r"."\n".'Object'.$object['id'].':'."\r"."\n";
