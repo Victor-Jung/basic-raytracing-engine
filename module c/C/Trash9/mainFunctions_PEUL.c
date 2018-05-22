@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "structure.h"
 #include "mainFunctions.h"
 #include "mainFunctions_PEUL.h"
 #define PI 3,1415926535
 
-sParamEqua calcParamEquaBetweenTwoPos(sPos pos, sPos light) { //le nom de la fonction est explicite :) 
+sParamEqua calcParamEquaBetweenTwoPos(sPos pos, sPos light) {
 	sPos vectorLightToPos;
 	sParamEqua paramEquaLightToPos;
 
@@ -27,9 +28,9 @@ sParamEqua calcParamEquaBetweenTwoPos(sPos pos, sPos light) { //le nom de la fon
 	return paramEquaLightToPos;
 }
 
-int testTvalueFromParamEqua(sPos pos, sParamEqua paramEqua) { // test si un point appartient à l'equation paramétrique
+int testTvalueFromParamEqua(sPos pos, sParamEqua paramEqua) {
 	double t[3];
-	int xTrue = 0, yTrue = 0, zTrue = 0; // bcp de conditions pour éviter de diviser par 0 :(
+	int xTrue = 0, yTrue = 0, zTrue = 0;
 	if (paramEqua.x[0] != 0) {
 		t[0] = (pos.x - paramEqua.x[1]) / paramEqua.x[0];
 		xTrue = 1;
@@ -52,7 +53,7 @@ int testTvalueFromParamEqua(sPos pos, sParamEqua paramEqua) { // test si un poin
 }
 
 //ATTENTION CHANGER LE NOM !!!!!!!!!!!!!!!!!!
-sPos* intersectLight_PEUL(sParamEqua paramEqua, double t, sPos *pos) { // même fonctionalité que pour intersectLight mais entre la droite d'equation donnée
+sPos* intersectLight_PEUL(sParamEqua paramEqua, double t, sPos *pos) {
 	double x = paramEqua.x[0] * t + paramEqua.x[1];
 	double y = paramEqua.y[0] * t + paramEqua.y[1];
 	double z = paramEqua.z[0] * t + paramEqua.z[1];
@@ -64,7 +65,7 @@ sPos* intersectLight_PEUL(sParamEqua paramEqua, double t, sPos *pos) { // même f
 
 
 //ATTENTION CHANGER LE NOM !!!!!!!!!!!!!!!!
-void* doesCollide_PEUL(sParam param, double t, sParamEqua paramEqua) { // même fonction que DoesCollide mais avect du rayon entre le point d'interection et la lumière
+void* doesCollide_PEUL(sParam param, double t, sParamEqua paramEqua) {
 	sPos *pos = NULL;
 	pos = (sPos*)malloc(sizeof(sPos));
 	for (int i = 0; i < param.nbPolyhedrons; i++) {
@@ -107,7 +108,7 @@ void* doesCollide_PEUL(sParam param, double t, sParamEqua paramEqua) { // même f
 	return false;
 }
 
-double *listingTimes_PEUL(sParam param, sPos posObj, double *t) { // liste les valeurs de t entre le point voulu et la lumière en partant en partant du point voulu vers la lumière
+double *listingTimes_PEUL(sParam param, sPos posObj, double *t) {
 	int nbT = 0;
 	sParamEqua shadowRay;
 	shadowRay.x[0] = param.lightSource.x - posObj.x;
@@ -124,80 +125,18 @@ double *listingTimes_PEUL(sParam param, sPos posObj, double *t) { // liste les v
 	t[0] = nbT;
 	for (int i = 0; i < param.nbPolyhedrons; i++) {
 		for (int j = 0; j < param.poly[i].nbFaces; j++) {
-
-			/*if ((param.poly[i].face[j].planEqua.a * shadowRay.x[0] + param.poly[i].face[j].planEqua.b * shadowRay.y[0] + param.poly[i].face[j].planEqua.c * shadowRay.z[0]) == 0) {
+			if ((param.poly[i].face[j].planEqua.a * shadowRay.x[0] + param.poly[i].face[j].planEqua.b * shadowRay.y[0] + param.poly[i].face[j].planEqua.c * shadowRay.z[0]) == 0) {
 				t[cpt] = -1;
-			*/ //test pas forcément utile (ne pas oublier le else si on le réimplémente)
-
-			t[cpt] = -((shadowRay.x[1] * param.poly[i].face[j].planEqua.a + shadowRay.y[1] * param.poly[i].face[j].planEqua.b + shadowRay.z[1] * param.poly[i].face[j].planEqua.c + param.poly[i].face[j].planEqua.d) / (param.poly[i].face[j].planEqua.a * shadowRay.x[0] + param.poly[i].face[j].planEqua.b * shadowRay.y[0] + param.poly[i].face[j].planEqua.c * shadowRay.z[0]));
+			}
+			else {
+				t[cpt] = -((shadowRay.x[1] * param.poly[i].face[j].planEqua.a + shadowRay.y[1] * param.poly[i].face[j].planEqua.b + shadowRay.z[1] * param.poly[i].face[j].planEqua.c + param.poly[i].face[j].planEqua.d) / (param.poly[i].face[j].planEqua.a * shadowRay.x[0] + param.poly[i].face[j].planEqua.b * shadowRay.y[0] + param.poly[i].face[j].planEqua.c * shadowRay.z[0]));
+			}
 			cpt++;
 		}
 	}
-
+	//qsort(t + 1, t[0], sizeof(t), compare);  Ne marche pas
 	sort(t);
 	return t;
-}
-
-
-void* doesCollideSphere_PEUL(sParam param) {
-	for (int iSphere = 0; iSphere < param.nbSpheres; iSphere++) {
-		double alpha, beta, gamma, delta;
-		double t = 0;
-		//equation de la sphere devient (A²+B²+C²)t² + 2(A(a-x0) + B(b-y0) + C(c-z0))t + (x0-2a)x0 + (y0-2b)y0 + (z0-2c)z0 + a² + b² + c² - r² = 0
-		//								  alpha					beta								gamma
-		//reverifier les calculs 
-		alpha = pow(param.light.paramEqua.x[0], 2) + pow(param.light.paramEqua.y[0], 2) + pow(param.light.paramEqua.z[0], 2);
-		beta = (2 * param.light.paramEqua.x[0] * param.light.paramEqua.x[1]) - (2 * param.light.paramEqua.x[0] * param.sphere[iSphere].center.x) + (2 * param.light.paramEqua.y[0] * param.light.paramEqua.y[1]) - (2 * param.light.paramEqua.y[0] * param.sphere[iSphere].center.y) + (2 * param.light.paramEqua.z[0] * param.light.paramEqua.z[1]) - (2 * param.light.paramEqua.z[0] * param.sphere[iSphere].center.z);
-		gamma = (pow(param.light.paramEqua.x[1], 2) - 2 * param.light.paramEqua.x[1] * param.sphere[iSphere].center.x + pow(param.sphere[iSphere].center.x, 2)) + (pow(param.light.paramEqua.y[1], 2) - 2 * param.light.paramEqua.y[1] * param.sphere[iSphere].center.y + pow(param.sphere[iSphere].center.y, 2)) + (pow(param.light.paramEqua.z[1], 2) - 2 * param.light.paramEqua.z[1] * param.sphere[iSphere].center.z + pow(param.sphere[iSphere].center.z, 2)) - pow(param.sphere[iSphere].r, 2);
-		//résolution de polynôme de second degré
-		delta = pow(beta, 2) - (4 * alpha*gamma);
-
-		if (delta > 0.01) {
-			double t1 = 0, t2 = 0;
-
-			sPosSphere* intersectionPoint = NULL;
-			intersectionPoint = (sPosSphere*)malloc(sizeof(sPosSphere));
-			intersectionPoint->position = (sPos*)malloc(sizeof(sPos));
-			t1 = (-beta - sqrt(delta)) / (2 * alpha);
-			t2 = (-beta + sqrt(delta)) / (2 * alpha);
-
-			if (t1 >= t2 && t2 > 0) {
-				t = t2;
-			}
-			else if (t1 > 0) {
-				t = t1;
-			}
-			else if (t2 > 0) {
-				t = t2;
-			}
-			else {
-				return false;
-			}
-
-			intersectionPoint->position->x = param.light.paramEqua.x[0] * t + param.light.paramEqua.x[1];
-			intersectionPoint->position->y = param.light.paramEqua.y[0] * t + param.light.paramEqua.y[1];
-			intersectionPoint->position->z = param.light.paramEqua.z[0] * t + param.light.paramEqua.z[1];
-			intersectionPoint->iSphere = iSphere;
-			return intersectionPoint;
-
-		}
-		else if (delta > -0.01) {
-			sPosSphere* intersectionPoint = NULL;
-			intersectionPoint = (sPosSphere*)malloc(sizeof(sPosSphere));
-			intersectionPoint->position = (sPos*)malloc(sizeof(sPos));
-
-			t = -beta / (2 * alpha);
-
-			intersectionPoint->position->x = param.light.paramEqua.x[0] * t + param.light.paramEqua.x[1];
-			intersectionPoint->position->y = param.light.paramEqua.y[0] * t + param.light.paramEqua.y[1];
-			intersectionPoint->position->z = param.light.paramEqua.z[0] * t + param.light.paramEqua.z[1];
-			intersectionPoint->iSphere = iSphere;
-
-			return intersectionPoint;
-
-		}
-	}
-	return false;
 }
 
 int isInTheShadow(sPos pos, sParam param) {
@@ -208,17 +147,17 @@ int isInTheShadow(sPos pos, sParam param) {
 
 	paramEquaLightToPos = calcParamEquaBetweenTwoPos(pos, param.lightSource);
 
-	/*if (testTvalueFromParamEqua(pos, paramEquaLightToPos)) { // test non essentiel = calcul en trop
+	if (testTvalueFromParamEqua(pos, paramEquaLightToPos)) {
 		t = (pos.x - paramEquaLightToPos.x[1]) / paramEquaLightToPos.x[0];
 	}
 	else {
 		printf("Erreur de valeur\n");
 		return -1;
-	}*/
+	}
 
 	tTab = listingTimes_PEUL(param, pos, tTab);
 	while (i < tTab[0]) {
-		if (tTab[i] > 0.01 && tTab[i] <= 1) {
+		if (tTab[i] > 0.01) {
 			if (doesCollide_PEUL(param, tTab[i], paramEquaLightToPos)) {
 				free(tTab);
 				return 1;
@@ -231,8 +170,6 @@ int isInTheShadow(sPos pos, sParam param) {
 }
 
 
-///////////////////////////
-
 //voir avec Paul pour modifier les entrer en mettant param
 //renvoie un pointeur position si le rayon entre en collision avec la sphere ou false sinon
 void* doesCollideSphere(sParam param) {
@@ -241,14 +178,14 @@ void* doesCollideSphere(sParam param) {
 		double t = 0;
 		//equation de la sphere devient (A²+B²+C²)t² + 2(A(a-x0) + B(b-y0) + C(c-z0))t + (x0-2a)x0 + (y0-2b)y0 + (z0-2c)z0 + a² + b² + c² - r² = 0
 		//								  alpha					beta								gamma
-		//reverifier les calculs 
+		//reverifier les calculs
 		alpha = pow(param.light.paramEqua.x[0], 2) + pow(param.light.paramEqua.y[0], 2) + pow(param.light.paramEqua.z[0], 2);
-		beta = (2 * param.light.paramEqua.x[0] * param.light.paramEqua.x[1]) - (2 * param.light.paramEqua.x[0] * param.sphere[iSphere].center.x) + (2 * param.light.paramEqua.y[0] * param.light.paramEqua.y[1]) - (2 * param.light.paramEqua.y[0] * param.sphere[iSphere].center.y) + (2 * param.light.paramEqua.z[0] * param.light.paramEqua.z[1]) - (2 * param.light.paramEqua.z[0] * param.sphere[iSphere].center.z);
-		gamma = (pow(param.light.paramEqua.x[1], 2) - 2 * param.light.paramEqua.x[1] * param.sphere[iSphere].center.x + pow(param.sphere[iSphere].center.x, 2)) + (pow(param.light.paramEqua.y[1], 2) - 2 * param.light.paramEqua.y[1] * param.sphere[iSphere].center.y + pow(param.sphere[iSphere].center.y, 2)) + (pow(param.light.paramEqua.z[1], 2) - 2 * param.light.paramEqua.z[1] * param.sphere[iSphere].center.z + pow(param.sphere[iSphere].center.z, 2)) - pow(param.sphere[iSphere].r, 2);
+		beta = 2 * (param.light.paramEqua.x[0] * (param.light.paramEqua.x[1] - param.sphere[iSphere].center.x) + param.light.paramEqua.y[0] * (param.light.paramEqua.y[1] - param.sphere[iSphere].center.y) + param.light.paramEqua.z[0] * (param.light.paramEqua.z[1] - param.sphere[iSphere].center.z));
+		gamma = (param.sphere[iSphere].center.x - 2 * param.light.paramEqua.x[1])*param.light.paramEqua.x[0] + (param.sphere[iSphere].center.y - 2 * param.light.paramEqua.y[1])*param.light.paramEqua.y[0] + (param.sphere[iSphere].center.z - 2 * param.light.paramEqua.z[1])*param.light.paramEqua.z[0] + pow(param.light.paramEqua.x[1], 2) + pow(param.light.paramEqua.y[1], 2) + pow(param.light.paramEqua.z[1], 2) - pow(param.sphere[iSphere].r, 2);
 		//résolution de polynôme de second degré
-		delta = pow(beta, 2) - (4 * alpha*gamma);
+		delta = pow(beta, 2) - 4 * alpha*gamma;
 
-		if (delta > 0.01) {
+		if (delta > 0) {
 			double t1 = 0, t2 = 0;
 
 			sPosSphere* intersectionPoint = NULL;
@@ -263,9 +200,6 @@ void* doesCollideSphere(sParam param) {
 			else if (t1 > 0) {
 				t = t1;
 			}
-			else if (t2 > 0) {
-				t = t2;
-			}
 			else {
 				return false;
 			}
@@ -277,10 +211,9 @@ void* doesCollideSphere(sParam param) {
 			return intersectionPoint;
 
 		}
-		else if (delta > -0.01) {
+		else if (delta = 0) {
 			sPosSphere* intersectionPoint = NULL;
 			intersectionPoint = (sPosSphere*)malloc(sizeof(sPosSphere));
-			intersectionPoint->position = (sPos*)malloc(sizeof(sPos));
 
 			t = -beta / (2 * alpha);
 

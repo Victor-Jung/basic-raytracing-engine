@@ -92,7 +92,7 @@ void showStruct(sParam param) {
 	for (int i = 0; i < param.nbSpheres; i++) {
 		printf("	Color:\n		r : %d\n		g : %d\n		b : %d\n", param.sphere[i].color.r, param.sphere[i].color.g, param.sphere[i].color.b);
 		printf("	Center:\n		x : %f\n		y : %f\n		z : %f\n", param.sphere[i].center.x, param.sphere[i].center.y, param.sphere[i].center.z);
-		printf("	Radius : %f\n", param.sphere[i].r);
+		printf("	Radius : %f\n", param.sphere[i].radius);
 	}
 }
 
@@ -344,7 +344,7 @@ int loadFromFile(sParam *param) {
 				}
 				fscanf(f, "%s", line);
 				i++;
-				param->sphere[j].r = atof(line);
+				param->sphere[j].radius = atof(line);
 			}
 		}
 		else { 

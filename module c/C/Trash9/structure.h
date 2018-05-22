@@ -1,5 +1,7 @@
+#pragma once
 #include "bmp.h"
 #include <stdio.h>
+
 
 typedef struct sFormula_ sFormula;
 struct sFormula_ {
