@@ -5,12 +5,13 @@
 #include <math.h>
 #include <stdbool.h>
 #include <string.h>
+#include "structure.h"
 #include "mainFunctions_PEUL.h"
 #define ALIASING 1
 #define PI 3,1415926535
 #define MORE
 
-int compare(double const *a, double const *b) { //fonction de comparaison entre 2 double
+int compare(double const *a, double const *b) {
 	if (floor(*a) > floor(*b)) {
 		return 1;
 	}
@@ -26,7 +27,7 @@ int compare(double const *a, double const *b) { //fonction de comparaison entre 
 	return 0;
 }
 
-void sort(double *t) { // trie un tableau de valeurs double en partant de l'indice 1
+void sort(double *t) {
 	for (int i = 1; i < t[0]; i++) {
 		for (int j = i; j < t[0]; j++) {
 			if (compare(&t[i], &t[j + 1])==1) {
@@ -38,33 +39,33 @@ void sort(double *t) { // trie un tableau de valeurs double en partant de l'indi
 	}
 }
 
-void showTab(double *t) { //fonction de débog du tableau de t
+void showTab(double *t) {
 	for (int i = 1; i <= t[0]; i++) {
 		printf("%.15f ", t[i]);
 	}
 	printf("\n");
 }
 
-double* listingTimes(sParam param, double *t) { 
+double* listingTimes(sParam param, double *t) {
 	int nbT = 0;
-	for (int i = 0; i < param.nbPolyhedrons; i++) { // stock le nombre de plan dans nbT
-		nbT += param.poly[i].nbFaces; 
+	for (int i = 0; i < param.nbPolyhedrons; i++) {
+		nbT += param.poly[i].nbFaces;
 	}
 	t = (double*)malloc((nbT + 1) * sizeof(double));
 	int cpt = 1;
-	t[0] = nbT; //la première valeur du tableau est le nombre de plan
+	t[0] = nbT;
 	for (int i = 0; i < param.nbPolyhedrons; i++) {
-		for (int j = 0; j < param.poly[i].nbFaces; j++) { // calcul de la valeur de t pour chaque plan rencontré
+		for (int j = 0; j < param.poly[i].nbFaces; j++) {
 			t[cpt] = -((param.light.paramEqua.x[1] * param.poly[i].face[j].planEqua.a + param.light.paramEqua.y[1] * param.poly[i].face[j].planEqua.b + param.light.paramEqua.z[1] * param.poly[i].face[j].planEqua.c + param.poly[i].face[j].planEqua.d) / (param.poly[i].face[j].planEqua.a * param.light.paramEqua.x[0] + param.poly[i].face[j].planEqua.b * param.light.paramEqua.y[0] + param.poly[i].face[j].planEqua.c * param.light.paramEqua.z[0]));
 			cpt++;
 		}
 	}
 	//qsort(t + 1, t[0], sizeof(t), compare); // Ne marche pas
-	sort(t); // trie le tableau par ordre croissant de valeur de t
+	sort(t);
 	return t;
 }
 
-void equaParamLight(sParam *param, double X, double Y) { //retourne l'équation paramétrique du rayon de lumière qui passe par le pixel (X;Y) de l'image
+void equaParamLight(sParam *param, double X, double Y) {
 	/*sFace planImage;
 	planImage.nbPeaks = 0;
 	planImage.planEqua.a = 1;
@@ -73,15 +74,15 @@ void equaParamLight(sParam *param, double X, double Y) { //retourne l'équation p
 	planImage.planEqua.d = -1;*/
 	double nWidth = (param->image.width) / 256;
 	double nHeight = (param->image.height) / 256;
-	param->light.paramEqua.x[1] = param->viewerPos.x;
-	param->light.paramEqua.x[0] = 1; // x = 1 => plan image
+	param->light.paramEqua.x[1] = param->viewerPos.x;  //AAAAAAAAAAAAAAAAAAAH
+	param->light.paramEqua.x[0] = 1;
 	param->light.paramEqua.y[1] = param->viewerPos.y;
 	param->light.paramEqua.y[0] = (nHeight / 2) - (X / 256);
 	param->light.paramEqua.z[1] = param->viewerPos.z;
 	param->light.paramEqua.z[0] = (nWidth / 2) - (Y / 256);
 }
 
-sPos* intersectLight(sParam param, double t) { // retourne l'intersection entre le rayon lumineux à la valeur t
+sPos* intersectLight(sParam param, double t) {
 	double x = param.light.paramEqua.x[0] * t + param.light.paramEqua.x[1];
 	double y = param.light.paramEqua.y[0] * t + param.light.paramEqua.y[1];
 	double z = param.light.paramEqua.z[0] * t + param.light.paramEqua.z[1];
@@ -92,15 +93,18 @@ sPos* intersectLight(sParam param, double t) { // retourne l'intersection entre 
 	return pos;
 }
 
-void* doesCollide(sParam param, double *t) { // le rayon de lumière entre t il en collision avec un des polygone ?
+void* doesCollide(sParam param, double *t) {
 	for (int i = 0; i < param.nbPolyhedrons; i++) {
-		for (int j = 1; j <= t[0]; j++) { // pour chaque face valeur de t stocké 
+		for (int j = 1; j <= t[0]; j++) {
 			sPosFace *pos = (sPosFace*)malloc(sizeof(sPosFace));
-			pos->position = intersectLight(param, t[j]); // stock la position du point incident avec le plan actuel
+			pos->position = intersectLight(param, t[j]);
 			double theta = 0;
-			for (int k = 0; k < param.poly[i].nbFaces; k++) { 
-				for (int l = 0; l < param.poly[i].face[k].nbPeaks; l++) { // pour chaque sommet du polygone ciblé
-					if (l + 1 < param.poly[i].face[k].nbPeaks) { // calcul de chaque angle orienté
+			for (int k = 0; k < param.poly[i].nbFaces; k++) {
+				if (i == 0 && k == 6) {
+					i = 0;
+				}
+				for (int l = 0; l < param.poly[i].face[k].nbPeaks; l++) {
+					if (l + 1 < param.poly[i].face[k].nbPeaks) {
 						double xps = param.poly[i].face[k].peak[l].x - pos->position->x;
 						double yps = param.poly[i].face[k].peak[l].y - pos->position->y;
 						double zps = param.poly[i].face[k].peak[l].z - pos->position->z;
@@ -111,7 +115,7 @@ void* doesCollide(sParam param, double *t) { // le rayon de lumière entre t il e
 						double lengthPt = pow(xpt, 2) + pow(ypt, 2) + pow(zpt, 2);
 						theta += acos((xps*xpt + yps*ypt + zps*zpt) / sqrt(lengthPs*lengthPt));
 					}
-					else { // ce else est juste pour que l'angle entre le dernier sommet et le premier sommet de la liste soit calculé
+					else {
 						double xps = param.poly[i].face[k].peak[l].x - pos->position->x;
 						double yps = param.poly[i].face[k].peak[l].y - pos->position->y;
 						double zps = param.poly[i].face[k].peak[l].z - pos->position->z;
@@ -124,8 +128,8 @@ void* doesCollide(sParam param, double *t) { // le rayon de lumière entre t il e
 					}
 				}
 				theta /= 2 * PI;  //precision environ egale a 2.6646.10^-15
-				//printf("%.16f\n", theta); //1.0471975511965976
-				if (theta > 1.047197/*1.047197551196*/ && theta < 1.047198/*1.047197551197*/) {  // si l'angle est compris dans l'intervalle alors on retoune le numéro de la face et du polyhèdre qui lui est incident en plus de la positon du point d'intersection
+				//printf("%.16f\n", theta);
+				if (theta > 1.047197/*1.047197551196*/ && theta < 1.047198/*1.047197551197*/) {  //1.0471975511965976
 					pos->iFace = k;
 					pos->iPoly = i;
 					return pos;
@@ -135,12 +139,12 @@ void* doesCollide(sParam param, double *t) { // le rayon de lumière entre t il e
 			free(pos);
 		}
 	}
-	return false; // sinon on return false
+	return false;
 }
 
 #ifdef MORE
 
-sColor pixelAvg(sColor pixel, sFile *imageStart, sFile *imageEnd, int w, int h, sParam param) { // fonction d'antialiasing, fais la moyenne des N pixel autour du pixel ciblé et crée la nouvelle image
+sColor pixelAvg(sColor pixel, sFile *imageStart, sFile *imageEnd, int w, int h, sParam param) {
 	int averageR = 0;
 	int averageG = 0;
 	int averageB = 0;
@@ -168,9 +172,9 @@ sColor pixelAvg(sColor pixel, sFile *imageStart, sFile *imageEnd, int w, int h, 
 
 int createImage(sPos posLight, sParam param) {
 	sFile* I = newBMP(param.image.width, param.image.height);
+	int cpt = 0;
 	int cptPoly = -1;
 	int cptFace = -1;
-	int cptSphere = -1;
 	for (int w = 1; w <= param.image.width; w++) {
 		for (int h = 1; h <= param.image.height; h++) {
 			double *t = NULL;
@@ -178,60 +182,18 @@ int createImage(sPos posLight, sParam param) {
 			t = listingTimes(param, t);
 			//showTab(t);
 			sPosFace *posPointObjet = NULL;
-			sPosSphere *posPointSphere = NULL;
 			sColor p;
 			float lightFactor = param.light.lightFactor;
-			if ((posPointObjet = doesCollide(param, t)) || (posPointSphere = doesCollideSphere(param))) {
-				if (posPointObjet && !posPointSphere) {
-					cptPoly = posPointObjet->iPoly;
-					cptFace = posPointObjet->iFace;
-					if (isInTheShadow(*(posPointObjet->position), param)) {
-						lightFactor -= 0.3;
-					}
-					p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
-					p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
-					p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
-					setcolor(I, w - 1, h - 1, p);
+			if ((posPointObjet = doesCollide(param, t))) {
+				cptPoly = posPointObjet->iPoly;
+				cptFace = posPointObjet->iFace;
+				if (isInTheShadow(*(posPointObjet->position), param)) {
+					lightFactor -= 0.3;
 				}
-				else if (posPointSphere && !posPointObjet) {
-					cptSphere = posPointSphere->iSphere;
-					if (isInTheShadow(*(posPointSphere->position), param)) {
-						lightFactor -= 0.3;
-					}
-					p.r = param.sphere[cptSphere].color.r * lightFactor;
-					p.g = param.sphere[cptSphere].color.g * lightFactor;
-					p.b = param.sphere[cptSphere].color.b * lightFactor;
-					setcolor(I, w - 1, h - 1, p);
-				}
-				else if (posPointSphere != NULL && posPointObjet != NULL) {
-					if (posPointObjet->position->x > posPointSphere->position->x) {
-						p.r = param.sphere[cptSphere].color.r * lightFactor;
-						p.g = param.sphere[cptSphere].color.g * lightFactor;
-						p.b = param.sphere[cptSphere].color.b * lightFactor;
-						setcolor(I, w - 1, h - 1, p);
-					}
-					else {
-						p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
-						p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
-						p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
-						setcolor(I, w - 1, h - 1, p);
-					}
-				}
-				else if (posPointObjet == NULL) {
-					p.r = param.sphere[cptSphere].color.r * lightFactor;
-					p.g = param.sphere[cptSphere].color.g * lightFactor;
-					p.b = param.sphere[cptSphere].color.b * lightFactor;
-					setcolor(I, w - 1, h - 1, p);
-				}
-				else {
-					p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
-					p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
-					p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
-					setcolor(I, w - 1, h - 1, p);
-				}
-				free(posPointSphere);
-				free(t);
-				free(posPointObjet);
+				p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
+				p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
+				p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
+				setcolor(I, w-1, h-1, p);
 			}
 			else {
 				p.r = param.image.background.r;
@@ -239,6 +201,9 @@ int createImage(sPos posLight, sParam param) {
 				p.b = param.image.background.b;
 				setcolor(I, w - 1, h - 1, p);
 			}
+			cpt++;
+			free(t);
+			free(posPointObjet);
 		}
 	}
 	char nameI[50];
@@ -267,6 +232,6 @@ int createImage(sPos posLight, sParam param) {
 
 #endif // MORE
 
-// Avec pc ISEN :
-//TPS ESTIME 80 000px par seconde 
+
+//TPS ESTIME 80 000px par seconde
 //TPS ESTIME 16 350px par seconde

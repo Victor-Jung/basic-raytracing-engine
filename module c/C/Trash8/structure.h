@@ -1,3 +1,4 @@
+#pragma once
 #include "bmp.h"
 #include <stdio.h>
 
@@ -34,12 +35,6 @@ struct sPosAndFace_ {
 	int iFace;
 };
 
-typedef struct sPosAndSphere_ sPosSphere;
-struct sPosAndSphere_ {
-	sPos *position;
-	int iSphere;
-};
-
 typedef struct sPlanEquation_ sPlanEqua;
 struct sPlanEquation_ {
 	double a;
@@ -63,15 +58,6 @@ struct sPolyhedron_ {
 	sFace *face;
 };
 
-//equation d'une sphère : (x - x0)² + (y - y0)² + (z - z0)² = r² avec x,y,z inconnues et x0,y0,z0(position du centre de la sphere) et r(rayon) connus
-
-typedef struct sSphere_ sSphere;
-struct sSphere_ {
-	sPos center;
-	double r;
-	sColor color;
-};
-
 typedef struct sImage_ sImage;
 struct sImage_ {
 	char *name;
@@ -86,6 +72,12 @@ struct sLight_ {
 	sParamEqua paramEqua;
 };
 
+typedef struct sSphere_ sSphere;
+struct sSphere_ {
+	sPos center;
+	double radius;
+	sColor color;
+};
 
 typedef struct sParam_ sParam;
 struct sParam_ {
