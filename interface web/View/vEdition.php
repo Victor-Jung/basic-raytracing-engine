@@ -1,520 +1,429 @@
 <?php
-define('RESOLUTION_LEVELS', 8);
-define('LENGTH_NAME', 20);
-define('MAX_DURATION', 5*60);
-define('MAX_Z_IMG', 100);
-define('MAX_GROWTH', 10);
-define('STEP_GROWTH', 0.1);
-define('STEP_AXIS', 1);
-
-// debut provisoire : test de la page
-    //avant chargement de la page
-    $_SESSION['editDataFile']['initialised'] = false;// ?
-    $_SESSION['editDataScene']['initialised'] = false;// ?
-
-    //valeurs par defaut (initialisees au lancement de la page) :
-        $_SESSION['editDataFile']['name'] = '';
-        $_SESSION['editDataFile']['format'] = 'BMP';
-        $_SESSION['editDataFile']['dimX'] = 768;
-        $_SESSION['editDataFile']['dimY'] = 768;
-        $_SESSION['editDataFile']['dimZ'] = MAX_Z_IMG;
-        $_SESSION['editDataFile']['video']['duration'] = MAX_DURATION;
-        $_SESSION['editDataFile']['video']['frequency'] = 1;
-
-        $_SESSION['editDataScene']['bright'] = 100;
-        $_SESSION['editDataScene']['backgroundColor'] = '#000000';
-    
-        //pour chaque ajout de shape : initialise tous les champs
-        $_SESSION['editDataScene']['shape'] = array();
-        $_SESSION['editDataScene']['shape'][] = array('name' => '(nom)',
-                                                    'id' => count($_SESSION['editDataScene']['shape']) + 1,
-                                                    'growth' => 0,
-                                                    'color' => '#ffffff',
-                                                    'pos' => array('xAxis' => $_SESSION['editDataFile']['dimX'], 
-                                                                'yAxis' => $_SESSION['editDataFile']['dimY'], 
-                                                                'zAxis' => $_SESSION['editDataFile']['dimZ']),
-                                                    'rot' => array('xAxis' => 0, 'yAxis' => 0, 'zAxis' => 0));
-        $_SESSION['editDataScene']['shape'][] = array('name' => '(nom)',
-                                                    'id' => count($_SESSION['editDataScene']['shape']) + 1,
-                                                    'growth' => 0,
-                                                    'color' => '#ffffff',
-                                                    'pos' => array('xAxis' => $_SESSION['editDataFile']['dimX'], 
-                                                                'yAxis' => $_SESSION['editDataFile']['dimY'], 
-                                                                'zAxis' => $_SESSION['editDataFile']['dimZ']),
-                                                    'rot' => array('xAxis' => 0, 'yAxis' => 0, 'zAxis' => 0));
-        $_SESSION['editDataScene']['shape'][] = array('name' => '(nom)',
-                                                    'id' => count($_SESSION['editDataScene']['shape']) + 1,
-                                                    'growth' => 0,
-                                                    'color' => '#ffffff',
-                                                    'pos' => array('xAxis' => $_SESSION['editDataFile']['dimX'], 
-                                                                'yAxis' => $_SESSION['editDataFile']['dimY'], 
-                                                                'zAxis' => $_SESSION['editDataFile']['dimZ']),
-                                                    'rot' => array('xAxis' => 0, 'yAxis' => 0, 'zAxis' => 0));
-// fin provisoire
-
-
-
-//variables du template
-$template['pageName'] = 'Edition d\'image';
-$template['actual'] = 'edit';
-$template['script'] = false;
-
-
-//variables de la page
-$edition['display'][1] = true;
-$edition['display'][2] = true;
-$edition['display'][3] = false;
-
-$edition['legend'][1] = 'Caractérisation du fichier';
-$edition['legend'][2] = 'Composition du fichier';
-$edition['legend'][3] = 'Validation du résultat';
-
-$edition['script'][1] = 'fileConfig';
-$edition['script'][2] = 'sceneConfig';
-$edition['script'][3] = 'finishesConfig';
-
-
 //fragments de code de la page
-function definition($axis) { ?>
-    <select id="dim<?= $axis ?>" name="dim<?= $axis ?>">
-        <?php for ($i = 1; $i <= RESOLUTION_LEVELS; $i++) {
-            $pixels = 256*$i;
-
-            echo '<option';
-            if ($_SESSION['editDataFile']['dim'.$axis] == $pixels) {
-                echo ' selected';
-            }
-            echo '>'.$pixels.'</option>';
-        } ?>
-    </select>
-<?php }
-ob_start(); ?>
-    <tr>
-        <td>
-            <label>
-                Nom du fichier :
-                <input type="text" id="fileName" name="fileName" maxlength="<?= LENGTH_NAME ?>" 
-                value="<?= htmlspecialchars($_SESSION['editDataFile']['name']) ?>" required>
-            </label>
-            <br><br>
-            <table>
-                <tr>
-                    <td>
-                        Dimensions du fichier :
-                    </td>
-                    <td>
-                        <?php definition('X') ?> x <?php definition('Y') ?> pixels
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Profondeur de la scène :
-                    </td>
-                    <td>
-                        <label title="Entrez une valeur entre 1 et <?= MAX_Z_IMG ?>">
-                            <input type="number" id="dimZ" name="dimZ" 
-                            value="<?= htmlspecialchars($_SESSION['editDataFile']['dimZ']) ?>"
-                            step="1" min="1" max="<?= MAX_Z_IMG ?>" required> couches
-                        </label>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        <td id="typeFile">
-            Type de fichier :
-            <label>
-                <input type="radio" id="picture" name="typeFile" value="picture" checked required>
-                Image
-            </label>
-
-            <input type="radio" id="video" name="typeFile" value="video" required disabled>
-            <label for="video" id="buttonVideo">
-                Animation
-            </label>
-            <table>
-                <tr>
-                    <td>
-                        Durée en secondes :
-                    </td>
-                    <td>
-                        <input type="number" id="duration" name="duration" 
-                        value="<?= htmlspecialchars($_SESSION['editDataFile']['video']['duration']) ?>" 
-                        step="1" min="1" max="<?= MAX_DURATION ?>" required>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Images par seconde :
-                    </td>
-                    <td>
-                        <input type="number" id="frequency" name="frequency" 
-                        value="<?= htmlspecialchars($_SESSION['editDataFile']['video']['frequency']) ?>" 
-                        step="1" min="1" max="60" required>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-<?php $edition['content'][1]['fillable'] = ob_get_clean();
-ob_start(); ?>
-    <table>
-        <tr>
-            <td>
-                Fichier : <?= htmlspecialchars($_SESSION['editDataFile']['name'].'.'.$_SESSION['editDataFile']['format']) ?>
-            </td>
-            <td>
-                <table>
-                    <tr>
-                        <td>
-                            Dimensions du fichier
-                        </td>
-                        <td>
-                            <?= htmlspecialchars($_SESSION['editDataFile']['dimX'].' x '.$_SESSION['editDataFile']['dimY']) ?> pixels
-                        </td>
-                    </tr>
-                    </tr>
-                        <td>
-                            Profondeur
-                        </td>
-                        <td>
-                            <?= htmlspecialchars($_SESSION['editDataFile']['dimZ']) ?> couches
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-<?php $edition['content'][1]['fixed'] = ob_get_clean();
-
-ob_start(); ?>
-    <tr>
-        <td>
-            <label title="Entrez une valeur entre 0 et 100">
-                Luminosité du fichier :
-                <input type="number" id="bright" name="bright" 
-                value="<?= htmlspecialchars($_SESSION['editDataScene']['bright']) ?>" 
-                step="1" min="0" max="100" required>%
-            </label>
-        </td>
-        <td>
-            <label>
-                Couleur de fond du fichier :
-                <input type="color" id="fileName" name="fileName" 
-                value="<?= htmlspecialchars($_SESSION['editDataScene']['backgroundColor']) ?>">
-            </label>
-        </td>
-    </tr>
-    <tr><td colspan="2"><br></td></tr>
-    <tr>
-        <td>
-            <table id="shapeSelection">
-                <tr>
-                    <td class="listSelection">
-                        Choisissez une forme :<br>
-                        <select>
-                            <optgroup label="Formes simples">
-                                <option>Sphère</option>
-                                <option>Cube</option>
-                            </optgroup>
-                            <optgroup label="Formes avancées" disabled>
-                                <option>Pyramide</option><!--peut préciser nb de faces-->
-                            </optgroup>
-                            <optgroup label="Formes complexes" disabled>
-                                <option>(Courbes)</option>
-                            </optgroup>
-                        </select>
-                        <input type="submit" value="Confirmer">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="listSelection">
-                        <div style="max-height: <?= htmlspecialchars(20*($_SESSION['editDataFile']['dimY'] / $_SESSION['editDataFile']['dimX'])) ?>em">
-                            <?php foreach ($_SESSION['editDataScene']['shape'] as $figure) {
-                                if ($figure['id'] > 1) {
-                                    echo '<hr>';
-                                } ?>
-                                <style type="text/css">
-                                    #display<?= htmlspecialchars($figure['id']) ?>, #display<?= htmlspecialchars($figure['id']) ?> + label + table {
-                                        display: none;
-                                    }
-                                    #display<?= htmlspecialchars($figure['id']) ?>:checked + label + table {
-                                        display: initial;
-                                    }
-                                </style>
-
-                                <input type="checkbox" id="display<?= htmlspecialchars($figure['id']) ?>">
-                                <label for="display<?= htmlspecialchars($figure['id']) ?>">
-                                    <h3>Forme <?= htmlspecialchars($figure['id'].' : '.ucfirst($figure['name'])) ?></h3>
-                                </label>
-                                <table>
-                                    <tr>
-                                        <th colspan="2">Translation (X-Y-Z) :</th>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['editDataFile']['dimX']) ?>">
-                                                <input type="number" id="xPos" name="xPos" 
-                                                value="<?= htmlspecialchars($figure['pos']['xAxis']) ?>" 
-                                                step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['editDataFile']['dimX']) ?>" required>
-                                            </label>
-                                            -
-                                            <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['editDataFile']['dimY']) ?>">
-                                                <input type="number" id="yPos" name="yPos" 
-                                                value="<?= htmlspecialchars($figure['pos']['yAxis']) ?>" 
-                                                step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['editDataFile']['dimY']) ?>" required>
-                                            </label>
-                                            -
-                                            <label title="Entrez une valeur entre 0 et <?= htmlspecialchars($_SESSION['editDataFile']['dimZ']) ?>">
-                                                <input type="number" id="zPos" name="zPos" 
-                                                value="<?= htmlspecialchars($figure['pos']['zAxis']) ?>" 
-                                                step="<?= STEP_AXIS ?>" min="0" max="<?= htmlspecialchars($_SESSION['editDataFile']['dimZ']) ?>" required>
-                                            </label>
-                                        </td>
-                                    </tr>
-                                    <?php if ($figure['name'] != 'sphère') { ?>
-                                        <tr><td colspan="2"><br></td></tr>
-                                        <tr>
-                                            <th colspan="2">Rotation (X-Y-Z) :</th>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <label title="Entrez une valeur entre -90 et 90">
-                                                    <input type="number" id="xRot" name="xRot" 
-                                                    value="<?= htmlspecialchars($figure['rot']['xAxis']) ?>"
-                                                    step="1" min="-90" max="90" required disabled>
-                                                </label>
-                                                -
-                                                <label title="Entrez une valeur entre -90 et 90">
-                                                    <input type="number" id="yRot" name="yRot" 
-                                                    value="<?= htmlspecialchars($figure['rot']['yAxis']) ?>" 
-                                                    step="1" min="-90" max="90" required disabled>
-                                                </label>
-                                                -
-                                                <label title="Entrez une valeur entre -90 et 90">
-                                                    <input type="number" id="zRot" name="zRot" 
-                                                    value="<?= htmlspecialchars($figure['rot']['zAxis']) ?>" 
-                                                    step="1" min="-90" max="90" required disabled>
-                                                </label>
-                                            </td>
-                                        </tr>
-                                    <?php } ?>
-                                    <tr><td colspan="2"><br></td></tr>
-                                    <tr>
-                                        <th>Grossissement :</th>
-                                        <td>
-                                            <label title="Entrez une valeur entre <?= '-'.MAX_GROWTH ?> et <?= MAX_GROWTH ?>">
-                                                x<input type="number" id="growth" name="growth" 
-                                                value="<?= htmlspecialchars($figure['growth']) ?>" 
-                                                step="<?= STEP_GROWTH ?>" min="<?= '-'.MAX_GROWTH ?>" max="<?= MAX_GROWTH ?>" required disabled>
-                                            </label>
-                                        </td>
-                                    </tr>
-                                    <tr><td colspan="2"><br></td></tr>
-                                    <tr>
-                                        <th>Coloration :</th>
-                                        <td>
-                                            <input type="color" id="color" name="color" 
-                                            value="<?= htmlspecialchars($figure['color']) ?>">
-                                        </td>
-                                    </tr>
-                                    <tr><td colspan="2"><br></td></tr>
-                                </table>
-                            <?php } ?>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        <td>
-            <div id="gridFillable" style="height: <?= htmlspecialchars(25*($_SESSION['editDataFile']['dimY'] / $_SESSION['editDataFile']['dimX'])) ?>em;
-            background-size: <?= ($_SESSION['editDataFile']['dimX'] >= $_SESSION['editDataFile']['dimY'])? 'cover' : 'contain' ?>;">
-                <!--Ajoute objets avec des images de fond, que l'on déplace selon les axes x et y, ou des span modifiés en css?-->
-            </div>
-        </td>
-    </tr>
-<?php $edition['content'][2]['fillable'] = ob_get_clean();
-ob_start(); ?>
-    <table>
-        <tr>
-            <td>
-                <table>
-                    <tr>
-                        <td>
-                            Couleur de fond :
-                        </td>
-                        <td>
-                            <input type="color" value="<?= htmlspecialchars($_SESSION['editDataScene']['backgroundColor']) ?>" disabled>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Luminosité : 
-                        </td>
-                        <td>
-                            <?= htmlspecialchars($_SESSION['editDataScene']['bright']) ?>%
-                        </td>
-                    </tr>
-                </table>
-                <br>
-                <div class="listSelection" style="max-height: <?= htmlspecialchars(20*($_SESSION['editDataFile']['dimY'] / $_SESSION['editDataFile']['dimX'])) ?>em">
-                    <?php foreach ($_SESSION['editDataScene']['shape'] as $figure) { ?>
-                        <table class="fiche">
-                            <tr>
-                                <th colspan="2">
-                                    Forme <?= htmlspecialchars($figure['id'].' : '.ucfirst($figure['name'])) ?>
-                                </th>
-                            </tr>
-                            <tr><th colspan="2"><br></th></tr>
+if ($_SESSION['pageBlock'] > 1) {
+    ob_start(); ?>
+        <table>
+            <tr>
+                <td>
+                    Fichier : <?= htmlspecialchars($_SESSION['name'].'.'.$_SESSION['format']) ?>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                Dimensions du fichier :
+                            </td>
+                            <td>
+                                <?= htmlspecialchars($_SESSION['dimX'].' x '.$_SESSION['dimY']) ?> pixels
+                            </td>
+                        </tr>
+                        </tr>
+                            <td>
+                                Profondeur :
+                            </td>
+                            <td>
+                                <?= htmlspecialchars($_SESSION['dimZ']) ?> couches
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    <?php $edition['content']['fixed'][1] = ob_get_clean();
+}
+if ($_SESSION['pageBlock'] == 3) {
+    ob_start(); ?>
+        <table>
+            <tr>
+                <td>
+                    <div class="listSelection" style="max-height: <?= htmlspecialchars(22*($_SESSION['dimY'] / $_SESSION['dimX'])) ?>em">
+                        <table>
                             <tr>
                                 <td>
-                                    Translation :
+                                    Couleur de fond :
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($figure['pos']['xAxis'].' ; '.$figure['pos']['yAxis'].' ; '.$figure['pos']['zAxis']) ?>
-                                </td>
-                            </tr>
-                            <?php if ($figure['name'] != 'sphère') { ?>
-                                <tr>
-                                    <td>
-                                        Rotation :
-                                    </td>
-                                    <td>
-                                        <?= htmlspecialchars($figure['rot']['xAxis'].' ; '.$figure['rot']['yAxis'].' ; '.$figure['rot']['zAxis']) ?>
-                                    </td>
-                                </tr>
-                            <?php } ?>
-                            <tr>
-                                <td>
-                                    Grossissement :
-                                </td>
-                                <td>
-                                    x<?= htmlspecialchars($figure['growth']) ?>
+                                    <input type="color" value="<?= htmlspecialchars($_SESSION['backgroundColor']) ?>" disabled>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    Coloration :
+                                    Luminosité : 
                                 </td>
                                 <td>
-                                    <input type="color" value="<?= htmlspecialchars($figure['color']) ?>" disabled>
+                                    <?= htmlspecialchars($_SESSION['brightScene']) ?>%
                                 </td>
                             </tr>
                         </table>
-                        <br>
-                    <?php } ?>
-                </div>
-            </td>
-            <td>
-                <div id="gridFixed" style="height: <?= htmlspecialchars(25*($_SESSION['editDataFile']['dimY'] / $_SESSION['editDataFile']['dimX'])) ?>em;
-                background-size: <?= ($_SESSION['editDataFile']['dimX'] >= $_SESSION['editDataFile']['dimY'])? 'cover' : 'contain' ?>;
-                background-color: <?= htmlspecialchars($_SESSION['editDataScene']['backgroundColor']) ?>">
-                    <!--Ajoute objets avec des images de fond, que l'on déplace selon les axes x et y, ou des span modifiés en css?-->
-                </div>
-            </td>
-        </tr>
-    </table>
-<?php $edition['content'][2]['fixed'] = ob_get_clean();
-
-ob_start(); ?>
-    <tr>
-        <td>
-            <label>
-                Choisissez une retouche :<br>
-                <select>
-                    <option>Luminosité</option>
-                    <option>Filtre lumineux</option>
-                </select>
-            </label>
-            <input type="submit" value="Confirmer">
-        </td>
-        <td>
-            (fichier final)
-        </td>
-    </tr>
-<?php $edition['content'][3]['fillable'] = ob_get_clean();
-
-
-//fragments de code du template
-ob_start(); ?>
-    <table>
-        <thead>
-            <tr>
-                <th>
-                    Édition d'image ou de vidéo
-                </th>
-            </tr>
-            <tr>
+                        <?php if (isset($_SESSION['shape']) && count($_SESSION['shape']) > 0) {
+                            foreach ($_SESSION['shape'] as $shape) { ?>
+                                <br>
+                                <table class="fiche">
+                                    <tr>
+                                        <th colspan="2">
+                                            Objet <?= htmlspecialchars($shape['id'].' : '.$shape['name']) ?>
+                                        </th>
+                                    </tr>
+                                    <tr><th colspan="2"><br></th></tr>
+                                    <tr>
+                                        <td>
+                                            Couleur :
+                                        </td>
+                                        <td>
+                                            <input type="color" value="<?= htmlspecialchars($shape['color']) ?>" disabled>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr><td colspan="2"><br></td></tr>
+                                    <tr>
+                                        <td><?= ($shape['name'] == 'Sphère')? 'Centre' : 'Premier sommet' ?> :</td>
+                                        <td>
+                                            <?= htmlspecialchars($shape['pos']['xAxis'].'-'.$shape['pos']['yAxis'].'-'.$shape['pos']['zAxis']) ?>
+                                        </td>
+                                    </tr>
+                                    <tr><td colspan="2"><br></td></tr>
+                                    <?php if ($shape['name'] == 'Sphère') { ?>
+                                        <tr>
+                                            <td>Rayon :</td>
+                                            <td><?= htmlspecialchars($shape['radius']) ?></td>
+                                        </tr>
+                                    <?php } 
+                                    else { ?>
+                                        <tr>
+                                            <td>Dimensions :</td>
+                                            <td>
+                                                <?= htmlspecialchars($shape['dim']['xAxis'].'-'.$shape['dim']['yAxis'])?>
+                                                <?php if ($shape['name'] != 'Surface') echo htmlspecialchars('-'.$shape['dim']['zAxis']) ?>
+                                            </td>
+                                        </tr>
+                                        <tr><td colspan="2"><br></td></tr>
+                                        <tr>
+                                            <td>Rotation :</td>
+                                            <td>
+                                                <?= (empty($shape['rot']['xAxis']))? 0 : htmlspecialchars($shape['rot']['xAxis']) ?>
+                                                -
+                                                <?= (empty($shape['rot']['yAxis']))? 0 : htmlspecialchars($shape['rot']['yAxis']) ?>
+                                                -
+                                                <?= (empty($shape['rot']['zAxis']))? 0 : htmlspecialchars($shape['rot']['zAxis']) ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </table>
+                            <?php }
+                        } ?>
+                    </div>
+                </td>
                 <td>
-                    (Survolez les champs numériques pour connaître leur amplitude)
+                    <div id="gridFixed" style="height: <?= htmlspecialchars(25*($_SESSION['dimY'] / $_SESSION['dimX'])) ?>em;
+                    background-size: <?= ($_SESSION['dimX'] >= $_SESSION['dimY'])? 'cover' : 'contain' ?>;
+                    background-color: <?= htmlspecialchars($_SESSION['backgroundColor']) ?>">
+                        <!--Ajoute objets avec des images de fond, que l'on déplace selon les axes x et y, ou des span modifiés en css?-->
+                    </div>
                 </td>
             </tr>
-        </thead>
-        <tbody>
-            <?php $i = 1;
-            while ($i < 4 && $edition['display'][$i]) {
-                if ($i == 3 || !$edition['display'][$i+1]) { ?>
-                    <tr>
-                        <td>
-                            <fieldset>
-                                <legend><?= $edition['legend'][$i] ?></legend>
-                                <form method="post" action="index.php?action=edit">
-                                    <input type="hidden" name="script" value="<?= htmlspecialchars($edition['script'][$i]) ?>">
-                                    <table>
-                                        <?= $edition['content'][$i]['fillable'] ?>
-                                        <tr><td colspan="2"><br><hr></td></tr>
-                                        <tr>
-                                            <td>
-                                                <label>
-                                                    <input type="checkbox" id="nextStep" name="nextStep" value="validation">
-                                                    <?= ($i != 3) ? 'Passer à l\'étape suivante' : 'Conserver les données' ?>
-                                                </label>
-                                            </td>
-                                            <td>
-                                                <input type="submit" value="<?= ($i != 3) ? 'Actualiser' : 'Nouveau fichier' ?>">
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </form>
-                            </fieldset>
-                        </td>
-                    </tr>
-                <?php }
-                else {
-                        if ($i == 1) { ?>
+        </table>
+    <?php $edition['content']['fixed'][2] = ob_get_clean();
+}
+
+switch ($_SESSION['pageBlock']) {
+    case 1:
+        $edition['display'][1] = true;
+        $edition['display'][2] = false;
+        $edition['display'][3] = false;
+
+        $edition['script'] = 'fileConfig';
+
+        function definition($axis) { ?>
+            <select id="dim<?= $axis ?>File" name="dim<?= $axis ?>File">
+                <?php for ($i = 1; $i <= RESOLUTION_LEVELS; $i++) {
+                    $pixels = 256*$i;
+
+                    echo '<option';
+                    if ($_SESSION['dim'.$axis] == $pixels) {
+                        echo ' selected';
+                    }
+                    echo '>'.$pixels.'</option>';
+                } ?>
+            </select>
+        <?php }
+        ob_start(); ?>
+            <tr>
+                <td>
+                    <label>
+                        Nom du fichier :
+                        <input type="text" id="fileName" name="fileName" maxlength="<?= LENGTH_NAME ?>" 
+                        value="<?= htmlspecialchars($_SESSION['name']) ?>" required>
+                    </label>
+                    <br><br>
+                    <table>
+                        <tr>
+                            <td>
+                                Dimensions du fichier :
+                            </td>
+                            <td>
+                                <?php definition('X') ?> x <?php definition('Y') ?> pixels
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Profondeur de la scène :
+                            </td>
+                            <td>
+                                <label title="Entrez une valeur entre 1 et <?= MAX_Z_IMG ?>">
+                                    <input type="number" class="number" name="dimZFile" 
+                                    value="<?= htmlspecialchars($_SESSION['dimZ']) ?>"
+                                    step="1" min="1" max="<?= MAX_Z_IMG ?>" required> couches
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td id="typeFile">
+                    Type de fichier :
+                    <label>
+                        <input type="radio" id="picture" name="typeFile" value="picture" checked required>
+                        Image
+                    </label>
+
+                    <input type="radio" id="video" name="typeFile" value="video" required disabled>
+                    <label for="video" id="buttonVideo">
+                        Animation
+                    </label>
+                    <table>
+                        <tr>
+                            <td>
+                                Durée en secondes :
+                            </td>
+                            <td>
+                                <input type="number" name="duration" 
+                                value="<?= htmlspecialchars($_SESSION['video']['duration']) ?>" 
+                                step="1" min="1" max="<?= MAX_DURATION ?>" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Images par seconde :
+                            </td>
+                            <td>
+                                <input type="number" name="frequency" 
+                                value="<?= htmlspecialchars($_SESSION['video']['frequency']) ?>" 
+                                step="1" min="1" max="60" required>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        <?php $edition['content']['fillable'] = ob_get_clean();
+    break;
+    case 2:
+        $edition['display'][1] = true;
+        $edition['display'][2] = true;
+        $edition['display'][3] = false;
+
+        $edition['script'] = 'sceneConfig';
+
+        function shapeForm($shape, $data) { ?>
+            <tr>
+                <td><?= htmlspecialchars($data['titre']) ?></td>
+                <td>
+                    <?php $listAxis = array('x', 'y');
+                    if (!($data['categorie'] == 'dim' && ($shape['name'] == 'Surface' || $shape['name'] == 'Sphère'))) $listAxis[] = 'z';
+
+                    foreach ($listAxis as $axis) { ?>
+                        <label title="Entrez une valeur<?= $data['legend'] ?>">
+                            <input type="number" class="number" name="<?= htmlspecialchars($data['categorie'].strtoupper($axis).$shape['id']) ?>" 
+                            value="<?= htmlspecialchars($shape[''.$data['categorie'].''][''.$axis.'Axis']) ?>" step="<?= STEP_AXIS ?>" 
+                            min="<?= htmlspecialchars($data['min']) ?>" max="<?= htmlspecialchars($data['max']) ?>" required
+                            <?php if (isset($data['disable'])) echo 'disabled' ?>>
+                        </label>
+                    <?php } ?>
+                </td>
+            </tr>
+        <?php }
+        ob_start(); ?>
+            <tr>
+                <td>
+                    <label title="Entrez une valeur entre 0 et 100">
+                        Luminosité du fichier :
+                        <input type="number" id="bright" name="bright" 
+                        value="<?= htmlspecialchars($_SESSION['brightScene']) ?>" 
+                        step="1" min="0" max="100" required>%
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        Couleur de fond du fichier :
+                        <input type="color" id="backgroundColor" name="backgroundColor" 
+                        value="<?= htmlspecialchars($_SESSION['backgroundColor']) ?>">
+                    </label>
+                </td>
+            </tr>
+            <tr><td colspan="2"><br></td></tr>
+            <tr>
+                <td>
+                    <table id="shapeSelection">
+                        <tr>
+                            <td class="listSelection">
+                                Choisissez un objet :<br>
+                                <select id="shape" name="shape">
+                                    <option>Aucun</option>
+                                    <optgroup label="Objets 2D">
+                                        <option>Surface</option>
+                                        <option disabled>Cercle</option>
+                                    <optgroup label="Objets 3D simples">
+                                        <option>Pavé</option>
+                                        <option>Sphère</option>
+                                    </optgroup>
+                                    <optgroup label="Objets 3D avancés" disabled>
+                                        <option>Ellipsoïde</option>
+                                        <option>"canette"</option>
+                                        <option>Pyramide</option>
+                                    </optgroup>
+                                    <optgroup label="Objets personnalisés" disabled>
+                                        <option>Polyèdre</option>
+                                    </optgroup>
+                                </select>
+                                <input type="submit" name="confirmShape" value="Confirmer">
+                            </td>
+                        </tr>
+                        <?php if (isset($_SESSION['shape'])) { ?>
                             <tr>
                                 <td>
-                                    <br><br>
-                                    <table id="fixed">
-                        <?php }
-                        else { ?>
-                                        <tr>
-                                            <td colspan="3"><hr></td>
-                                        </tr>
-                        <?php } ?>
-                                        <tr>
-                                            <th>
-                                                <?= htmlspecialchars($edition['legend'][$i]) ?>
-                                            </th>
-                                            <td>
-                                                <?= $edition['content'][$i]['fixed'] ?>
-                                            </td>
-                                        </tr>
-                                        
-                        <?php if ($i == 2 || ($i == 1 && !$edition['display'][3])) { ?>
-                                        <tr>
-                                            <td colspan="3"><br></td>
-                                        </tr>
-                                    </table>
+                                    <div class="listSelection" style="max-height: <?= htmlspecialchars(20*($_SESSION['dimY'] / $_SESSION['dimX'])) ?>em">
+                                        <?php foreach ($_SESSION['shape'] as $shape) {
+                                            if ($shape['id'] > 1) {
+                                                echo '<hr>';
+                                            } ?>
+                                            <style type="text/css">
+                                                #display<?= htmlspecialchars($shape['id']) ?>, #display<?= htmlspecialchars($shape['id']) ?> + label + table {
+                                                    display: none;
+                                                }
+                                                #display<?= htmlspecialchars($shape['id']) ?>:checked + label + table {
+                                                    display: initial;
+                                                }
+                                            </style>
+
+                                            <input type="hidden" name="name<?= htmlspecialchars($shape['id']) ?>" value="<?= htmlspecialchars($shape['name']) ?>">
+                                            <input type="checkbox" id="display<?= htmlspecialchars($shape['id']) ?>">
+                                            <label for="display<?= htmlspecialchars($shape['id']) ?>">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <h3>Objet <?= htmlspecialchars($shape['id']) ?></h3>
+                                                        </td>
+                                                        <td>
+                                                            <h3><?= htmlspecialchars($shape['name']) ?></h3>
+                                                        </td>
+                                                        <td>
+                                                            <button name="delete_<?= htmlspecialchars($shape['id']) ?>" value="true">Supprimer</button>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </label>
+                                            <table>
+                                                <?php if ($shape['name'] == 'Sphère' || $shape['name'] == 'Surface') { ?>
+                                                    <tr>
+                                                        <td>Couleur de l'objet</td>
+                                                        <td>
+                                                            <input type="color" class="color" name="color<?= htmlspecialchars($shape['id']) ?>" 
+                                                            value="<?= htmlspecialchars($shape['color']) ?>">
+                                                        </td>
+                                                    </tr>
+                                                <?php }
+                                                else {
+                                                    $face = array('devant', 'derrière', 'gauche', 'droite', 'dessus', 'dessous');
+                                                    for ($i = 0; $i < 6; $i++) { ?>
+                                                        <tr>
+                                                            <td>Couleur de <?= htmlspecialchars($face[$i]) ?></td>
+                                                            <td>
+                                                                <input type="color" class="color" name="color<?= htmlspecialchars($shape['id'].'_face'.$i) ?>" 
+                                                                value="<?= htmlspecialchars($shape['faces'][$i]['color']) ?>">
+                                                            </td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                <?php } 
+
+                                                echo '<tr><td colspan="2"><br></td></tr>';
+
+                                                $formData = array('legend' => '', 'min' => '', 'max' => '');
+
+                                                $formData['titre'] = ($shape['name'] == 'Sphère')? 'Position du centre (X-Y-Z)' : 'Position du premier sommet (X-Y-Z)';
+                                                $formData['categorie'] = 'pos';
+                                                shapeForm($shape, $formData); 
+
+                                                echo '<tr><td colspan="2"><br></td></tr>';
+
+                                                if ($shape['name'] == 'Sphère') { ?>
+                                                    <tr>
+                                                        <td>Rayon</td>
+                                                        <td>
+                                                            <label title="Entrez une valeur">
+                                                                <input type="number" class="number" name="radius<?= htmlspecialchars($shape['id']) ?>" 
+                                                                value="<?= htmlspecialchars($shape['radius']) ?>" step="<?= STEP_AXIS ?>" required>
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+                                                <?php } 
+                                                else { 
+                                                    $formData['titre'] = ($shape['name'] != 'Surface')? 'Dimensions (X-Y-Z)' : 'Dimensions (X-Y)';
+                                                    $formData['categorie'] = 'dim';
+                                                    shapeForm($shape, $formData);
+
+                                                    echo '<tr><td colspan="2"><br></td></tr>';
+
+                                                    $formData['titre'] = 'Rotation (X-Y-Z)';
+                                                    $formData['categorie'] = 'rot';
+                                                    $formData['legend'] = ' entre -90 et 90';
+                                                    $formData['min'] = -90;
+                                                    $formData['max'] = 90;
+                                                    $formData['disable'] = true;
+                                                    shapeForm($shape, $formData);
+                                                }
+
+                                                echo '<tr><td colspan="2"><br></td></tr>'; ?>
+                                            </table>
+                                        <?php } ?>
+                                    </div>
                                 </td>
                             </tr>
-                        <?php }
-                    }
-                $i++;
-            } ?>
-        </tbody>
-    </table>
-<?php $template['content'] = ob_get_clean();
+                        <?php } ?>
+                    </table>
+                </td>
+                <td>
+                    <div id="gridFillable" style="height: <?= htmlspecialchars(25*($_SESSION['dimY'] / $_SESSION['dimX'])) ?>em;
+                    background-size: <?= ($_SESSION['dimX'] >= $_SESSION['dimY'])? 'cover' : 'contain' ?>;">
+                        <!--Ajoute objets avec des images de fond, que l'on déplace selon les axes x et y, ou des span modifiés en css?-->
+                    </div>
+                </td>
+            </tr>
+        <?php $edition['content']['fillable'] = ob_get_clean();
+    break;
+    case 3:
+        $edition['display'][1] = true;
+        $edition['display'][2] = true;
+        $edition['display'][3] = true;
 
+        $edition['script'] = 'patchConfig';
+
+        ob_start(); ?>
+            <tr>
+                <td>
+                    <label>
+                        Choisissez une retouche :<br>
+                        <select>
+                            <option>Luminosité</option>
+                            <option>Filtre lumineux</option>
+                        </select>
+                    </label>
+                    <input type="submit" value="Confirmer">
+                </td>
+                <td>
+                    <img src="../link/preview.bmp" alt="Smiley face" width="100%">
+                </td>
+            </tr>
+        <?php $edition['content']['fillable'] = ob_get_clean();
+    break;
+}
 
 //remplissage du template
 require('View/Template.php');
