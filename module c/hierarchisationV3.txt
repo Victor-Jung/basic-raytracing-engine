@@ -8,13 +8,13 @@ HIERARCHISATION DES EVOLUTIONS
     objectif 05 :    lumière 2 ;     objet 3 ;     matière 2 ;    image 1 ;
     objectif 06 :    lumière 2 ;     objet 3 ;     matière 2 ;    image 2 ; => fin évolutions images majeures
 
-    objectif 07 :    lumière 3 ;     objet 3 ;     matière 2 ;
-    objectif 08 :    lumière 3 ;     objet 3 ;     matière 3 ;
-    objectif 09 :    lumière 3 ;     objet 4 ;     matière 3 ;
-    objectif 10 :    lumière 4 ;     objet 4 ;     matière 3 ;
-    objectif 11 :    lumière 4 ;     objet 4 ;     matière 4 ;
-    objectif 12 :    lumière 5 ;     objet 4 ;     matière 4 ; => fin évolutions lumières majeures
-    objectif 13 :                    objet 5 ;     matière 4 ; => fin évolutions objets majeures
+    objectif 07 :    lumière 2 ;     objet 4 ;     matière 2 ;
+    objectif 08 :    lumière 2 ;     objet 5 ;     matière 2 ; => fin évolutions objets majeures
+    objectif 09 :    lumière 3 ;                   matière 2 ;
+    objectif 10 :    lumière 3 ;                   matière 3 ;
+    objectif 11 :    lumière 4 ;                   matière 3 ;
+    objectif 12 :    lumière 4 ;                   matière 4 ;
+    objectif 13 :    lumière 5 ;                   matière 4 ; => fin évolutions lumières majeures
     objectif 14 :                                  matière 5 ; => fin évolutions matières majeures
     objectif 15 :    vidéo 1 ;
     objectif 16 :    vidéo 2 ;
@@ -120,7 +120,7 @@ LISTE DES EVOLUTIONS MAJEURES
                     ajout des ombres
                     réflexion (lumière diffuse)
                     réfraction
-        - objet lv 4 : (fin)
+        - objet lv 5 : (fin)
                     plusieurs formes
                     + simples, avancées ou complexes (ellipsoïdes)
                     vue 3d

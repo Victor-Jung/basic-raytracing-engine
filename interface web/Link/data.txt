@@ -1,285 +1,6 @@
 
 Name:
-temporaire
-Height:
-768
-Width:
-768
-Brightness:
-1
-Background-color:
-	r:
-	128
-	g:
-	212
-	b:
-	255
-LightPosition:
-	x:
-	-3
-	y:
-	5
-	z:
-	3
-ViewerPosition:
-	x:
-	-10
-	y:
-	-3
-	z:
-	-2
-Polyhedron:
-1
-Polyedron1:
-	NumberOfFaces:
-	1
-		Face1:
-			Color:
-				r:
-				0
-				g:
-				0
-				b:
-				0
-			Numberofpeaks:
-			4
-			x1:
-			767
-			y1:
-			767
-			z1:
-			767
-			x2:
-			768
-			y2:
-			767
-			z2:
-			767
-			x3:
-			768
-			y3:
-			768
-			z3:
-			767
-			x4:
-			767
-			y4:
-			768
-			z4:
-			767
-Polyedron2:
-	NumberOfFaces:
-	6
-		Face1:
-			Color:
-				r:
-				0
-				g:
-				0
-				b:
-				0
-			Numberofpeaks:
-			4
-			x1:
-			767
-			y1:
-			767
-			z1:
-			100
-			x2:
-			768
-			y2:
-			767
-			z2:
-			100
-			x3:
-			768
-			y3:
-			768
-			z3:
-			100
-			x4:
-			767
-			y4:
-			768
-			z4:
-			100
-		Face2:
-			Color:
-				r:
-				0
-				g:
-				0
-				b:
-				0
-			Numberofpeaks:
-			4
-			x1:
-			767
-			y1:
-			767
-			z1:
-			101
-			x2:
-			768
-			y2:
-			767
-			z2:
-			101
-			x3:
-			768
-			y3:
-			768
-			z3:
-			101
-			x4:
-			767
-			y4:
-			768
-			z4:
-			101
-		Face3:
-			Color:
-				r:
-				0
-				g:
-				0
-				b:
-				0
-			Numberofpeaks:
-			4
-			x1:
-			767
-			y1:
-			767
-			z1:
-			100
-			x2:
-			767
-			y2:
-			767
-			z2:
-			101
-			x3:
-			767
-			y3:
-			768
-			z3:
-			101
-			x4:
-			767
-			y4:
-			768
-			z4:
-			100
-		Face4:
-			Color:
-				r:
-				0
-				g:
-				0
-				b:
-				0
-			Numberofpeaks:
-			4
-			x1:
-			768
-			y1:
-			767
-			z1:
-			100
-			x2:
-			768
-			y2:
-			767
-			z2:
-			101
-			x3:
-			768
-			y3:
-			768
-			z3:
-			101
-			x4:
-			768
-			y4:
-			768
-			z4:
-			100
-		Face5:
-			Color:
-				r:
-				0
-				g:
-				0
-				b:
-				0
-			Numberofpeaks:
-			4
-			x1:
-			767
-			y1:
-			767
-			z1:
-			100
-			x2:
-			768
-			y2:
-			767
-			z2:
-			100
-			x3:
-			768
-			y3:
-			767
-			z3:
-			101
-			x4:
-			767
-			y4:
-			767
-			z4:
-			101
-		Face6:
-			Color:
-				r:
-				0
-				g:
-				0
-				b:
-				0
-			Numberofpeaks:
-			4
-			x1:
-			767
-			y1:
-			768
-			z1:
-			100
-			x2:
-			768
-			y2:
-			768
-			z2:
-			100
-			x3:
-			768
-			y3:
-			768
-			z3:
-			101
-			x4:
-			767
-			y4:
-			768
-			z4:
-			101
-NumberOfSpheres:
-1
-Object1:
-
-Name:
-temporaire
+Notice:  Undefined index: name in /media/sf_CIR_63/projet fin d&#39;année/github/sprintf/interface web/View/vEdition.php on line 138
 Height:
 768
 Width:
@@ -312,7 +33,7 @@ Polyhedron:
 NumberOfSpheres:
 0
 Name:
-temporaire
+Notice:  Undefined index: name in /media/sf_CIR_63/projet fin d&#39;année/github/sprintf/interface web/View/vEdition.php on line 138
 Height:
 768
 Width:
@@ -345,18 +66,117 @@ Polyhedron:
 NumberOfSpheres:
 0
 Name:
-temporaire
+Notice:  Undefined index: name in /media/sf_CIR_63/projet fin d&#39;année/github/sprintf/interface web/View/vEdition.php on line 138
 Height:
-768
+1280
 Width:
 768
 Brightness:
+1
+Background-color:
+	r:
+	255
+	g:
+	128
+	b:
+	135
+LightPosition:
+	x:
+	-3
+	y:
+	5
+	z:
+	3
+ViewerPosition:
+	x:
+	-10
+	y:
+	-3
+	z:
+	-2
+Polyhedron:
 0
+NumberOfSpheres:
+0
+Name:
+Notice:  Undefined index: name in /media/sf_CIR_63/projet fin d&#39;année/github/sprintf/interface web/View/vEdition.php on line 138
+Height:
+1280
+Width:
+768
+Brightness:
+1
+Background-color:
+	r:
+	255
+	g:
+	128
+	b:
+	135
+LightPosition:
+	x:
+	-3
+	y:
+	5
+	z:
+	3
+ViewerPosition:
+	x:
+	-10
+	y:
+	-3
+	z:
+	-2
+Polyhedron:
+0
+NumberOfSpheres:
+0
+Name:
+Notice:  Undefined index: name in /media/sf_CIR_63/projet fin d&#39;année/github/sprintf/interface web/View/vEdition.php on line 138
+Height:
+1280
+Width:
+768
+Brightness:
+1
+Background-color:
+	r:
+	255
+	g:
+	128
+	b:
+	135
+LightPosition:
+	x:
+	-3
+	y:
+	5
+	z:
+	3
+ViewerPosition:
+	x:
+	-10
+	y:
+	-3
+	z:
+	-2
+Polyhedron:
+0
+NumberOfSpheres:
+0
+Name:
+Notice:  Undefined index: name in /media/sf_CIR_63/projet fin d&#39;année/github/sprintf/interface web/View/vEdition.php on line 138
+Height:
+1280
+Width:
+768
+Brightness:
+1
 Background-color:
 	r:
 	128
 	g:
-	212
+	174
 	b:
 	255
 LightPosition:
@@ -378,9 +198,9 @@ Polyhedron:
 NumberOfSpheres:
 0
 Name:
-temporaire
+Notice:  Undefined index: name in /media/sf_CIR_63/projet fin d&#39;année/github/sprintf/interface web/View/vEdition.php on line 138
 Height:
-768
+1280
 Width:
 768
 Brightness:
@@ -389,9 +209,75 @@ Background-color:
 	r:
 	128
 	g:
-	212
-	b:
 	255
+	b:
+	150
+LightPosition:
+	x:
+	-3
+	y:
+	5
+	z:
+	3
+ViewerPosition:
+	x:
+	-10
+	y:
+	-3
+	z:
+	-2
+Polyhedron:
+0
+NumberOfSpheres:
+0
+Name:
+Notice:  Undefined index: name in /media/sf_CIR_63/projet fin d&#39;année/github/sprintf/interface web/View/vEdition.php on line 138
+Height:
+1280
+Width:
+768
+Brightness:
+1
+Background-color:
+	r:
+	128
+	g:
+	255
+	b:
+	150
+LightPosition:
+	x:
+	-3
+	y:
+	5
+	z:
+	3
+ViewerPosition:
+	x:
+	-10
+	y:
+	-3
+	z:
+	-2
+Polyhedron:
+0
+NumberOfSpheres:
+0
+Name:
+Notice:  Undefined index: name in /media/sf_CIR_63/projet fin d&#39;année/github/sprintf/interface web/View/vEdition.php on line 138
+Height:
+1280
+Width:
+768
+Brightness:
+1
+Background-color:
+	r:
+	128
+	g:
+	255
+	b:
+	150
 LightPosition:
 	x:
 	-3

@@ -6,6 +6,7 @@ function Edition($listWarning) {
         //changement de bloc
         if (isset($_SESSION['pageBlock'], $_POST['nextStep']) && $_POST['nextStep']) {
             if ($_SESSION['pageBlock'] < 3) {
+                /*
                 if ($_SESSION['pageBlock'] == 2) {
                     //creee fichiers textes
                     $file = fopen('link/data.txt', 'a');
@@ -24,7 +25,7 @@ function Edition($listWarning) {
                                                     $detailFile['dimY'], 
                                                     ($detailScene['brightScene'] / 100));
                     //part 1
-                    $background = hex2rgb($_SESSION['backgroundColor']);
+                    $background = hex2rgb($_SESSION['scene']['color']);
                     $fileContent['title'][1] = array('Background-color:'."\r"."\n"."\t",
                                                     "\t",
                                                     "\t", 
@@ -85,124 +86,124 @@ function Edition($listWarning) {
 
                                 switch ($shape['name']) {
                                     case 'Surface':
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['z'] = $shape['pos']['z'];
                                         
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['z'] = $shape['pos']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['z'] = $shape['pos']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['z'] = $shape['pos']['z'];
                                     break;
                                     case 'Pavé': 
                                         //premiere face (devant : z fixe)
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][1]['z'] = $shape['pos']['z'];
                                         
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][2]['z'] = $shape['pos']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][3]['z'] = $shape['pos']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][1]['peaks'][4]['z'] = $shape['pos']['z'];
 
                                         //seconde face (derriere : z fixe)
-                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][1]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][1]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][1]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][1]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][1]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][1]['z'] = $shape['pos']['z'] + $shape['dim']['z'];
                                         
-                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][2]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][2]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][2]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][2]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][2]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][2]['z'] = $shape['pos']['z'] + $shape['dim']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][3]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][3]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][3]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][3]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][3]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][3]['z'] = $shape['pos']['z'] + $shape['dim']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][4]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][4]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][4]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][4]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][4]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][2]['peaks'][4]['z'] = $shape['pos']['z'] + $shape['dim']['z'];
 
                                         //troisieme face (gauche : x fixe)
-                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][1]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][1]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][1]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][1]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][1]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][1]['z'] = $shape['pos']['z'];
                                         
-                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][2]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][2]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][2]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][2]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][2]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][2]['z'] = $shape['pos']['z'] + $shape['dim']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][3]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][3]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][3]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][3]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][3]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][3]['z'] = $shape['pos']['z'] + $shape['dim']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][4]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][4]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][4]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][4]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][4]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][3]['peaks'][4]['z'] = $shape['pos']['z'];
 
                                         //quatieme face (droite : x fixe)
-                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][1]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][1]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][1]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][1]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][1]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][1]['z'] = $shape['pos']['z'];
                                     
-                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][2]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][2]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][2]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][2]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][2]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][2]['z'] = $shape['pos']['z'] + $shape['dim']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][3]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][3]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][3]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][3]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][3]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][3]['z'] = $shape['pos']['z'] + $shape['dim']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][4]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][4]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][4]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][4]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][4]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][4]['peaks'][4]['z'] = $shape['pos']['z'];
 
                                         //cinquieme face (dessus : y fixe)
-                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][1]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][1]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][1]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][1]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][1]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][1]['z'] = $shape['pos']['z'];
                                         
-                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][2]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][2]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][2]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][2]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][2]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][2]['z'] = $shape['pos']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][3]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][3]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][3]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][3]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][3]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][3]['z'] = $shape['pos']['z'] + $shape['dim']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][4]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][4]['y'] = $shape['pos']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][4]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][4]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][4]['y'] = $shape['pos']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][5]['peaks'][4]['z'] = $shape['pos']['z'] + $shape['dim']['z'];
 
                                         //sixieme face (dessous : y fixe)
-                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][1]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][1]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][1]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][1]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][1]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][1]['z'] = $shape['pos']['z'];
                                         
-                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][2]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][2]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][2]['z'] = $shape['pos']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][2]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][2]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][2]['z'] = $shape['pos']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][3]['x'] = $shape['pos']['xAxis'] + $shape['dim']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][3]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][3]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][3]['x'] = $shape['pos']['x'] + $shape['dim']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][3]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][3]['z'] = $shape['pos']['z'] + $shape['dim']['z'];
 
-                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][4]['x'] = $shape['pos']['xAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][4]['y'] = $shape['pos']['yAxis'] + $shape['dim']['yAxis'];
-                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][4]['z'] = $shape['pos']['zAxis'] + $shape['dim']['zAxis'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][4]['x'] = $shape['pos']['x'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][4]['y'] = $shape['pos']['y'] + $shape['dim']['y'];
+                                        $polyhedron[$nbPoly-1]['faces'][6]['peaks'][4]['z'] = $shape['pos']['z'] + $shape['dim']['z'];
 
                                     break;
                                 }
@@ -295,6 +296,7 @@ function Edition($listWarning) {
                     
                     //createTextFiles(); -> les fichiers objets
                 }
+                */
                 $_SESSION['pageBlock']++;
             }
             else {
@@ -312,16 +314,15 @@ function Edition($listWarning) {
         if (!isset($_SESSION['pageBlock'])) {
             $_SESSION['pageBlock'] = 1;
 
-            $_SESSION['name'] = 'temporaire';
-            $_SESSION['format'] = 'BMP';
-            $_SESSION['dimX'] = 768;
-            $_SESSION['dimY'] = 768;
-            $_SESSION['dimZ'] = MAX_Z_IMG;
-            $_SESSION['video']['duration'] = MAX_DURATION;
-            $_SESSION['video']['frequency'] = 1;
+            $_SESSION['file']['name'] = 'temporaire';
+            $_SESSION['file']['video']['selected'] = false;
+            $_SESSION['file']['dim']['x'] = 768;
+            $_SESSION['file']['dim']['y'] = 768;
+            $_SESSION['file']['video']['duration'] = MAX_DURATION;
+            $_SESSION['file']['video']['frequency'] = 1;
 
-            $_SESSION['brightScene'] = 100;
-            $_SESSION['backgroundColor'] = '#80D4FF';
+            $_SESSION['scene']['light'][0]['bright'] = 100;
+            $_SESSION['scene']['color'] = '#80D4FF';
             //ajouter aux formulaires
             $_SESSION['lightPosition']['x'] = -3;
             $_SESSION['lightPosition']['y'] = 5;

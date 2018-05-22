@@ -71,11 +71,6 @@
                             Édition d'image ou de vidéo
                         </th>
                     </tr>
-                    <tr>
-                        <td>
-                            (Survolez les champs numériques pour connaître leur amplitude)
-                        </td>
-                    </tr>
                 </thead>
                 <tbody>
                     <?php $i = 1;

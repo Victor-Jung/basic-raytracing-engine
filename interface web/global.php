@@ -2,7 +2,7 @@
 define('RESOLUTION_LEVELS', 16);
 define('LENGTH_NAME', 20);
 define('MAX_DURATION', 5*60);
-define('MAX_Z_IMG', 100);
+define('MAX_Z_IMG', 1000);
 define('STEP_AXIS', 1);
 
 
