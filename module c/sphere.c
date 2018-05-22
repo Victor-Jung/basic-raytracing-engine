@@ -50,7 +50,7 @@ void* doesCollideSphere (sSphere sphere, sParamEqua lightRay){
 		return intersectionPoint;
 
 	}
-	else if(delta = 0){
+	else if(delta == 0){
 		sPos* intersectionPoint = NULL;
 		intersectionPoint = (sPos*) malloc(sizeof(sPos));
 
