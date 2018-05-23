@@ -1,0 +1,61 @@
+﻿$_SESSION
+		['pageBlock'] (1-3)
+		['file']
+			['name']
+			['dim'] (z = 1000)
+					['x']
+					['y']
+			['video'] (later)
+					['selected'] (boolean)
+					['duration']
+					['frequency']
+			['saveData'] (boolean) (objectif semaine : si true, enregistrer un second fichier texte) (utilise reusedata)
+			[effects] (booleans)
+					['shadows']
+					['reflection']
+					['refraction']
+	*				['anti-aliasing']
+		['scene']
+			['color']
+			['viewer'] (position)
+						['x']
+						['y']
+						['z']
+			['light']
+					[idLight] (later)
+							['bright'] (%)
+							['pos']
+									['x']
+									['y']
+									['z']
+		['ellipsoid']
+					[idEllipsoid]
+								['name'] (cercle-sphère-ellispoïde)
+								['color']
+								['pos'] (center)
+										['x']
+										['y']
+										['z']
+								['rad']
+										['x']
+										['y'] (later)
+										['z'] (later)
+								['rot'] (later)
+										['x']
+										['y']
+										['z']
+		['polyhedron']
+						[idPolyhedron]
+									['name'] (surface-pavé-polyèdre)
+									['face']
+											[idFace]
+													['color']
+													['peak']
+															[idPeak](position)
+																	['x']
+																	['y']
+																	['z']
+													['rot'] (later)
+															['x']
+															['y']
+															['z']
