@@ -1,0 +1,5 @@
+﻿  structure.c
+c:\bureau\c\structure.c(51): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
+c:\bureau\c\structure.c(155): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+  ProjetEx.vcxproj -> C:\Bureau\C\x64\Debug\ProjetEx.exe
+  ProjetEx.vcxproj -> C:\Bureau\C\x64\Debug\ProjetEx.pdb (Partial PDB)
