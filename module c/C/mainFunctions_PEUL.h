@@ -9,3 +9,6 @@ int isInTheShadow(sPos pos, sParam param);
 
 void* doesCollideSphere(sParam param);
 sPlanEqua makeTangentPlanFromSphere(sPos collisionPoint, sPos centerOfSphere);
+
+void* doesCollideEllipse (sParam param);
+sPlanEqua makeTangentPlanFromEllipse(sEllipse ellipse, sPos collisionPoint);

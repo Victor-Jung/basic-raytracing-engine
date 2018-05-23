@@ -109,7 +109,7 @@ int loadFromFile(sParam *param) {
 		if (!strcmp(line, "Name:")) {
 			i++;
 			fscanf(f, "%s", line);
-			param->image.name = _strdup(line);
+			param->image.name = strdup(line);
 		}
 		else if (!strcmp(line, "Height:")) {
 			i++;
@@ -345,6 +345,84 @@ int loadFromFile(sParam *param) {
 				fscanf(f, "%s", line);
 				i++;
 				param->sphere[j].r = atof(line);
+			}
+		}
+		else if (!strcmp(line, "NumberOfEllipse:")) {
+			i++;
+			fscanf(f, "%s", line);
+			param->nbEllipse = atoi(line);
+			param->ellipse = (sEllipse*)malloc(param->nbEllipse * sizeof(sEllipse));
+			for (int j = 0; j < param->nbEllipse; j++) {
+				i++;
+				fscanf(f, "%s", line); 
+				char buffer[2];
+				sprintf(buffer, "%d", j + 1);
+				char searched[sizeName];
+				strcpy(searched, "Ellipse");
+				strcat(searched, buffer);
+				strcat(searched, ":");
+				if (strcmp(searched, line)) {
+					return 0;
+				}
+				fscanf(f, "%s", line);
+				i++;
+				if (strcmp(line, "Color:")) {
+					return 0;
+				}
+				fscanf(f, "%s", line);
+				i++;
+				for (int k = 0; k < 3; k++) {
+					if (!strcmp(line, "r:")) {
+						fscanf(f, "%s", line);
+						i++;
+						param->sphere[j].color.r = atoi(line);
+					}
+					if (!strcmp(line, "g:")) {
+						fscanf(f, "%s", line);
+						i++;
+						param->sphere[j].color.g = atoi(line);
+					}
+					if (!strcmp(line, "b:")) {
+						fscanf(f, "%s", line);
+						i++;
+						param->sphere[j].color.b = atoi(line);
+					}
+					fscanf(f, "%s", line);
+					i++;
+					if (strcmp(line, "r:") && strcmp(line, "g:") && strcmp(line, "b:") && strcmp(line, "a:") && strcmp(line, "b2:") && strcmp(line, "c:") && strcmp(line, "alpha:")  && strcmp(line, "beta:") && strcmp(line, "gamma:")) {
+						return 0;
+					}
+				}
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				param->ellipse[j].a = atof(line);
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				param->ellipse[j].b = atof(line);
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				param->ellipse[j].c = atof(line);
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				param->ellipse[j].alpha = atof(line);
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				param->ellipse[j].beta = atof(line);
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				param->ellipse[j].gamma = atof(line);
 			}
 		}
 		else { 

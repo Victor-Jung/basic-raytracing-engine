@@ -90,7 +90,7 @@ sParamEqua reflectedRay (sParamEqua incidentRay, sFace face){
 	return reflectedRay;
 }
 
-double* calcAngleWithSnellDescartes (double teta[2], sPos orientationVectorIncidentRay, sPos normalisedVector, double refractiveIndexA, double refractiveIndexB){
+double* calcAngleWithSnellDescartes (double teta[], sPos orientationVectorIncidentRay, sPos normalisedVector, double refractiveIndexA, double refractiveIndexB){
 	double scalarProduct = 0;
 
 //calcule de teta 1

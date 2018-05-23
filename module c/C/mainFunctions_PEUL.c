@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <math.h>
 #include "mainFunctions.h"
 #include "mainFunctions_PEUL.h"
-#define PI 3,1415926535
+#define PI 3.1415926535
 
 sParamEqua calcParamEquaBetweenTwoPos(sPos pos, sPos light) { //le nom de la fonction est explicite :) 
 	sPos vectorLightToPos;
@@ -139,67 +140,6 @@ double *listingTimes_PEUL(sParam param, sPos posObj, double *t) { // liste les v
 }
 
 
-void* doesCollideSphere_PEUL(sParam param) {
-	for (int iSphere = 0; iSphere < param.nbSpheres; iSphere++) {
-		double alpha, beta, gamma, delta;
-		double t = 0;
-		//equation de la sphere devient (A²+B²+C²)t² + 2(A(a-x0) + B(b-y0) + C(c-z0))t + (x0-2a)x0 + (y0-2b)y0 + (z0-2c)z0 + a² + b² + c² - r² = 0
-		//								  alpha					beta								gamma
-		//reverifier les calculs 
-		alpha = pow(param.light.paramEqua.x[0], 2) + pow(param.light.paramEqua.y[0], 2) + pow(param.light.paramEqua.z[0], 2);
-		beta = (2 * param.light.paramEqua.x[0] * param.light.paramEqua.x[1]) - (2 * param.light.paramEqua.x[0] * param.sphere[iSphere].center.x) + (2 * param.light.paramEqua.y[0] * param.light.paramEqua.y[1]) - (2 * param.light.paramEqua.y[0] * param.sphere[iSphere].center.y) + (2 * param.light.paramEqua.z[0] * param.light.paramEqua.z[1]) - (2 * param.light.paramEqua.z[0] * param.sphere[iSphere].center.z);
-		gamma = (pow(param.light.paramEqua.x[1], 2) - 2 * param.light.paramEqua.x[1] * param.sphere[iSphere].center.x + pow(param.sphere[iSphere].center.x, 2)) + (pow(param.light.paramEqua.y[1], 2) - 2 * param.light.paramEqua.y[1] * param.sphere[iSphere].center.y + pow(param.sphere[iSphere].center.y, 2)) + (pow(param.light.paramEqua.z[1], 2) - 2 * param.light.paramEqua.z[1] * param.sphere[iSphere].center.z + pow(param.sphere[iSphere].center.z, 2)) - pow(param.sphere[iSphere].r, 2);
-		//résolution de polynôme de second degré
-		delta = pow(beta, 2) - (4 * alpha*gamma);
-
-		if (delta > 0.01) {
-			double t1 = 0, t2 = 0;
-
-			sPosSphere* intersectionPoint = NULL;
-			intersectionPoint = (sPosSphere*)malloc(sizeof(sPosSphere));
-			intersectionPoint->position = (sPos*)malloc(sizeof(sPos));
-			t1 = (-beta - sqrt(delta)) / (2 * alpha);
-			t2 = (-beta + sqrt(delta)) / (2 * alpha);
-
-			if (t1 >= t2 && t2 > 0) {
-				t = t2;
-			}
-			else if (t1 > 0) {
-				t = t1;
-			}
-			else if (t2 > 0) {
-				t = t2;
-			}
-			else {
-				return false;
-			}
-
-			intersectionPoint->position->x = param.light.paramEqua.x[0] * t + param.light.paramEqua.x[1];
-			intersectionPoint->position->y = param.light.paramEqua.y[0] * t + param.light.paramEqua.y[1];
-			intersectionPoint->position->z = param.light.paramEqua.z[0] * t + param.light.paramEqua.z[1];
-			intersectionPoint->iSphere = iSphere;
-			return intersectionPoint;
-
-		}
-		else if (delta > -0.01) {
-			sPosSphere* intersectionPoint = NULL;
-			intersectionPoint = (sPosSphere*)malloc(sizeof(sPosSphere));
-			intersectionPoint->position = (sPos*)malloc(sizeof(sPos));
-
-			t = -beta / (2 * alpha);
-
-			intersectionPoint->position->x = param.light.paramEqua.x[0] * t + param.light.paramEqua.x[1];
-			intersectionPoint->position->y = param.light.paramEqua.y[0] * t + param.light.paramEqua.y[1];
-			intersectionPoint->position->z = param.light.paramEqua.z[0] * t + param.light.paramEqua.z[1];
-			intersectionPoint->iSphere = iSphere;
-
-			return intersectionPoint;
-
-		}
-	}
-	return false;
-}
-
 int isInTheShadow(sPos pos, sParam param) {
 	sParamEqua paramEquaLightToPos;
 	double t = 0;
@@ -309,6 +249,85 @@ sPlanEqua makeTangentPlanFromSphere(sPos collisionPoint, sPos centerOfSphere) {
 	tangentPlan.c = radiusVector.z;
 
 	tangentPlan.d = (tangentPlan.a*collisionPoint.x + tangentPlan.b*collisionPoint.y + tangentPlan.c*collisionPoint.z) * (-1);
+
+	return tangentPlan;
+}
+
+void* doesCollideEllipse (sParam param){
+	for (int iEllipse = 0; iEllipse < param.nbEllipse; iEllipse++){
+		double F, G, H, delta;
+		double t = 0;
+
+		F = pow(param.ellipse[iEllipse].beta * param.ellipse[iEllipse].gamma * param.light.paramEqua.x[0],2) + pow(param.ellipse[iEllipse].gamma * param.ellipse[iEllipse].alpha * param.light.paramEqua.y[0],2) + pow(param.ellipse[iEllipse].alpha * param.ellipse[iEllipse].beta * param.light.paramEqua.z[0],2);
+		G = 2 * pow(param.ellipse[iEllipse].beta * param.ellipse[iEllipse].gamma,2) * param.light.paramEqua.x[0] * param.light.paramEqua.x[1] - 2 * pow(param.ellipse[iEllipse].beta * param.ellipse[iEllipse].gamma,2) * param.light.paramEqua.x[0] * param.ellipse[iEllipse].a + 2 * pow(param.ellipse[iEllipse].alpha * param.ellipse[iEllipse].gamma,2) * param.light.paramEqua.y[0] * param.light.paramEqua.y[1] - 2 * pow(param.ellipse[iEllipse].alpha * param.ellipse[iEllipse].gamma,2) * param.light.paramEqua.y[0] * param.ellipse[iEllipse].b + 2 * pow(param.ellipse[iEllipse].beta * param.ellipse[iEllipse].alpha,2) * param.light.paramEqua.z[0] * param.light.paramEqua.z[1] - 2 * pow(param.ellipse[iEllipse].beta * param.ellipse[iEllipse].alpha,2) * param.light.paramEqua.z[0] * param.ellipse[iEllipse].b;
+		H = pow(param.ellipse[iEllipse].beta * param.ellipse[iEllipse].gamma * param.ellipse[iEllipse].a,2) + pow(param.ellipse[iEllipse].beta * param.ellipse[iEllipse].gamma * param.light.paramEqua.x[1],2) - 2 * pow(param.ellipse[iEllipse].beta * param.ellipse[iEllipse].gamma,2) * param.ellipse[iEllipse].a * param.light.paramEqua.x[1] + pow(param.ellipse[iEllipse].alpha * param.ellipse[iEllipse].gamma * param.ellipse[iEllipse].b,2) + pow(param.ellipse[iEllipse].alpha * param.ellipse[iEllipse].gamma * param.light.paramEqua.y[1],2) - 2 * pow(param.ellipse[iEllipse].alpha * param.ellipse[iEllipse].gamma,2) * param.ellipse[iEllipse].b * param.light.paramEqua.y[1] + pow(param.ellipse[iEllipse].beta * param.ellipse[iEllipse].alpha * param.ellipse[iEllipse].b,2) + pow(param.ellipse[iEllipse].beta * param.ellipse[iEllipse].alpha * param.light.paramEqua.y[1],2) - 2 * pow(param.ellipse[iEllipse].beta * param.ellipse[iEllipse].alpha,2) * param.ellipse[iEllipse].b * param.light.paramEqua.z[1] - pow(param.ellipse[iEllipse].alpha*param.ellipse[iEllipse].beta*param.ellipse[iEllipse].gamma,2);
+	//résolution de polynôme de second degré
+		delta = pow(G,2) - 4*F*H;
+
+		if(delta > 0.01){
+			double t1 = 0, t2 = 0;
+
+			sPosEllipse* intersectionPoint = NULL;
+			intersectionPoint = (sPosEllipse*)malloc(sizeof(sPosEllipse));
+			intersectionPoint->position = (sPos*)malloc(sizeof(sPos));
+
+			t1 = (-G - sqrt(delta))/2*F;
+			t2 = (-G + sqrt(delta))/2*F;
+
+			if (t1 >= t2 && t2 > 0) {
+				t = t2;
+			}
+			else if (t1 > 0) {
+				t = t1;
+			}
+			else if (t2 > 0) {
+				t = t2;
+			}
+			// else {
+			// 	return false;
+			// }
+			if(t != 0){
+				intersectionPoint->position->x = param.light.paramEqua.x[0] * t + param.light.paramEqua.x[1];
+				intersectionPoint->position->y = param.light.paramEqua.y[0] * t + param.light.paramEqua.y[1];
+				intersectionPoint->position->z = param.light.paramEqua.z[0] * t + param.light.paramEqua.z[1];
+				intersectionPoint->iEllipse = iEllipse;
+				return intersectionPoint;				
+			}
+
+		}
+		else if(delta > -0.01){
+			sPosEllipse* intersectionPoint = NULL;
+			intersectionPoint = (sPosEllipse*)malloc(sizeof(sPosEllipse));
+			intersectionPoint->position = (sPos*)malloc(sizeof(sPos));
+		
+
+			t = -G / 2*F;
+
+			intersectionPoint->position->x = param.light.paramEqua.x[0] * t + param.light.paramEqua.x[1];
+			intersectionPoint->position->y = param.light.paramEqua.y[0] * t + param.light.paramEqua.y[1];
+			intersectionPoint->position->z = param.light.paramEqua.z[0] * t + param.light.paramEqua.z[1];
+			intersectionPoint->iEllipse = iEllipse;
+			return intersectionPoint;
+		}
+	}
+	return false;
+}
+
+
+sPlanEqua makeTangentPlanFromEllipse(sEllipse ellipse, sPos collisionPoint){
+	sPlanEqua tangentPlan;
+	sPos gradientVectorAtCollisionPoint;
+
+	gradientVectorAtCollisionPoint.x = 2*(collisionPoint.x - ellipse.a)/pow(ellipse.alpha,2);
+	gradientVectorAtCollisionPoint.y = 2*(collisionPoint.y - ellipse.b)/pow(ellipse.beta,2);
+	gradientVectorAtCollisionPoint.z = 2*(collisionPoint.z - ellipse.c)/pow(ellipse.gamma,2);
+
+	tangentPlan.a = gradientVectorAtCollisionPoint.x;
+	tangentPlan.b = gradientVectorAtCollisionPoint.y;
+	tangentPlan.c = gradientVectorAtCollisionPoint.z;
+
+	tangentPlan.d = (-1)*(tangentPlan.a*collisionPoint.x + tangentPlan.b*collisionPoint.y + tangentPlan.c*collisionPoint.z);
+
 
 	return tangentPlan;
 }

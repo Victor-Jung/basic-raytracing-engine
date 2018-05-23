@@ -7,7 +7,7 @@
 #include <string.h>
 #include "mainFunctions_PEUL.h"
 #define ALIASING 1
-#define PI 3,1415926535
+#define PI 3.1415926535
 #define MORE
 
 int compare(double const *a, double const *b) { //fonction de comparaison entre 2 double
@@ -171,6 +171,7 @@ int createImage(sPos posLight, sParam param) {
 	int cptPoly = -1;
 	int cptFace = -1;
 	int cptSphere = -1;
+	int cptEllipse = -1;
 	for (int w = 1; w <= param.image.width; w++) {
 		for (int h = 1; h <= param.image.height; h++) {
 			double *t = NULL;
@@ -179,10 +180,11 @@ int createImage(sPos posLight, sParam param) {
 			//showTab(t);
 			sPosFace *posPointObjet = NULL;
 			sPosSphere *posPointSphere = NULL;
+			sPosEllipse *posPointEllipse = NULL;
 			sColor p;
 			float lightFactor = param.light.lightFactor;
-			if ((posPointObjet = doesCollide(param, t)) || (posPointSphere = doesCollideSphere(param))) {
-				if (posPointObjet && !posPointSphere) {
+			if ((posPointObjet = doesCollide(param, t)) || (posPointSphere = doesCollideSphere(param)) || (posPointEllipse = doesCollideSphere(param))) {
+				if (posPointObjet && !posPointSphere && !posPointEllipse) {
 					cptPoly = posPointObjet->iPoly;
 					cptFace = posPointObjet->iFace;
 					if (isInTheShadow(*(posPointObjet->position), param)) {
@@ -193,7 +195,7 @@ int createImage(sPos posLight, sParam param) {
 					p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
 					setcolor(I, w - 1, h - 1, p);
 				}
-				else if (posPointSphere && !posPointObjet) {
+				else if (posPointSphere && !posPointObjet && !posPointEllipse) {
 					cptSphere = posPointSphere->iSphere;
 					if (isInTheShadow(*(posPointSphere->position), param)) {
 						lightFactor -= 0.3;
@@ -203,7 +205,17 @@ int createImage(sPos posLight, sParam param) {
 					p.b = param.sphere[cptSphere].color.b * lightFactor;
 					setcolor(I, w - 1, h - 1, p);
 				}
-				else if (posPointSphere != NULL && posPointObjet != NULL) {
+				else if (posPointEllipse && !posPointSphere && !posPointObjet){
+					cptEllipse = posPointEllipse->iEllipse;
+					if (isInTheShadow(*(posPointEllipse->position), param)) {
+						lightFactor -= 0.3;
+					}
+					p.r = param.ellipse[cptEllipse].color.r * lightFactor;
+					p.g = param.ellipse[cptEllipse].color.g * lightFactor;
+					p.b = param.ellipse[cptEllipse].color.b * lightFactor;
+					setcolor(I, w - 1, h - 1, p);
+				}
+				else if (posPointSphere != NULL && posPointObjet != NULL && posPointEllipse == NULL) {
 					if (posPointObjet->position->x > posPointSphere->position->x) {
 						p.r = param.sphere[cptSphere].color.r * lightFactor;
 						p.g = param.sphere[cptSphere].color.g * lightFactor;
@@ -217,21 +229,58 @@ int createImage(sPos posLight, sParam param) {
 						setcolor(I, w - 1, h - 1, p);
 					}
 				}
-				else if (posPointObjet == NULL) {
-					p.r = param.sphere[cptSphere].color.r * lightFactor;
-					p.g = param.sphere[cptSphere].color.g * lightFactor;
-					p.b = param.sphere[cptSphere].color.b * lightFactor;
-					setcolor(I, w - 1, h - 1, p);
+				else if (posPointObjet == NULL && posPointSphere != NULL && posPointEllipse != NULL) {
+					if (posPointEllipse->position->x > posPointSphere->position->x) {
+						p.r = param.sphere[cptSphere].color.r * lightFactor;
+						p.g = param.sphere[cptSphere].color.g * lightFactor;
+						p.b = param.sphere[cptSphere].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
+					else {
+						p.r = param.ellipse[cptEllipse].color.r * lightFactor;
+						p.g = param.ellipse[cptEllipse].color.g * lightFactor;
+						p.b = param.ellipse[cptEllipse].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
+				}
+				else if(posPointSphere == NULL && posPointEllipse != NULL && posPointObjet != NULL){
+					if (posPointObjet->position->x > posPointEllipse->position->x) {
+						p.r = param.ellipse[cptEllipse].color.r * lightFactor;
+						p.g = param.ellipse[cptEllipse].color.g * lightFactor;
+						p.b = param.ellipse[cptEllipse].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
+					else {
+						p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
+						p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
+						p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
 				}
 				else {
-					p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
-					p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
-					p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
-					setcolor(I, w - 1, h - 1, p);
+					if(posPointObjet->position->x < posPointEllipse->position->x && posPointObjet->position->x < posPointSphere->position->x){
+						p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
+						p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
+						p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
+					else if(posPointEllipse->position->x < posPointObjet->position->x && posPointEllipse->position->x < posPointSphere->position->x){
+						p.r = param.ellipse[cptEllipse].color.r * lightFactor;
+						p.g = param.ellipse[cptEllipse].color.g * lightFactor;
+						p.b = param.ellipse[cptEllipse].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
+					else{
+						p.r = param.sphere[cptSphere].color.r * lightFactor;
+						p.g = param.sphere[cptSphere].color.g * lightFactor;
+						p.b = param.sphere[cptSphere].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
 				}
 				free(posPointSphere);
 				free(t);
 				free(posPointObjet);
+				free(posPointEllipse);
 			}
 			else {
 				p.r = param.image.background.r;
