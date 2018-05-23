@@ -1,0 +1,88 @@
+﻿
+Name:
+cube
+Height:
+512
+Width:
+512
+Background-color:
+	r:
+	41
+	g:
+	178
+	b:
+	230
+Brightness:
+1
+LightPosition:
+	x:
+	-3
+	y:
+	4.75
+	z:
+	2
+ViewerPosition:
+	x:
+	-18
+	y:
+	-3
+	z:
+	1
+Polyhedron:
+1
+Polyhedron1:
+	NumberOfFaces:
+	1
+		Face1:
+			Color:
+				r:
+				0
+				g:
+				0
+				b:
+				0
+			Numberofpeaks:
+			4
+			x1:
+			5
+			y1:
+			-5
+			z1:
+			4
+			x2:
+			5
+			y2:
+			5
+			z2:
+			4
+			x3:
+			8
+			y3:
+			5
+			z3:
+			4
+			x4:
+			8
+			y4:
+			-5
+			z4:
+			4
+NumberOfSpheres:
+1
+Sphere1:
+	Color:
+		r:
+		255
+		g:
+		0
+		b:
+		0
+	Center:
+		x:
+		0
+		y:
+		0
+		z:
+		-5
+	Radius:
+		2
