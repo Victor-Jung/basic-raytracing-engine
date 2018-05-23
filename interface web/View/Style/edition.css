@@ -29,10 +29,10 @@ section > table > thead th {
     display: inline-block;
 }
 
-.listSelection {
+#allEllis, #allPolys {
     overflow-y: scroll;
     padding: 0 1em;
-    max-height: 24em;
+    max-height: 20em;
 }
 
 

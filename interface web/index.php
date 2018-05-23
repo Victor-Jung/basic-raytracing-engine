@@ -32,7 +32,8 @@ try {
 
         //bloc 2
         if ($_POST['script'] == 'sceneConfig') {
-            //comptage des objets
+            //comptage des objets variables
+            $nbLight = (!isset($_SESSION['scene']['light']))? 0 : count($_SESSION['scene']['light']);
             $nbEllipsoid = (!isset($_SESSION['ellipsoid']))? 0 : count($_SESSION['ellipsoid']);
             $nbPolyhedron = (!isset($_SESSION['polyhedron']))? 0 : count($_SESSION['polyhedron']);
 
@@ -41,38 +42,41 @@ try {
                 //entrees fixes
                 {
                     $_SESSION['scene']['color']                 = isset($_POST['sceneColor'])   ? filter_input(INPUT_POST, 'sceneColor',    FILTER_SANITIZE_STRING) : false ;
-                    $_SESSION['scene']['light'][0]['bright']    = isset($_POST['bright'])       ? filter_input(INPUT_POST, 'bright',        FILTER_VALIDATE_FLOAT)  : false ;
-                    $_SESSION['scene']['light'][0]['pos']['x']  = isset($_POST['lightX'])       ? filter_input(INPUT_POST, 'lightX',        FILTER_VALIDATE_INT)    : false ;
-                    $_SESSION['scene']['light'][0]['pos']['y']  = isset($_POST['lightY'])       ? filter_input(INPUT_POST, 'lightY',        FILTER_VALIDATE_INT)    : false ;
-                    $_SESSION['scene']['light'][0]['pos']['z']  = isset($_POST['lightZ'])       ? filter_input(INPUT_POST, 'lightZ',        FILTER_VALIDATE_INT)    : false ;
                     $_SESSION['scene']['viewer']['x']           = isset($_POST['viewerX'])      ? filter_input(INPUT_POST, 'viewerX',       FILTER_VALIDATE_INT)    : false ;
                     $_SESSION['scene']['viewer']['y']           = isset($_POST['viewerY'])      ? filter_input(INPUT_POST, 'viewerY',       FILTER_VALIDATE_INT)    : false ;
                     $_SESSION['scene']['viewer']['z']           = isset($_POST['viewerZ'])      ? filter_input(INPUT_POST, 'viewerZ',       FILTER_VALIDATE_INT)    : false ;
-                    
-                    $_SESSION['file']['effects']['shadows']     = isset($_POST['shadows'])      ? filter_input(INPUT_POST, 'shadows',       FILTER_VALIDATE_INT) : 0 ;
-                    $_SESSION['file']['effects']['reflection']  = isset($_POST['reflection'])   ? filter_input(INPUT_POST, 'reflection',    FILTER_VALIDATE_INT) : 0 ;
-                    $_SESSION['file']['effects']['refraction']  = isset($_POST['refraction'])   ? filter_input(INPUT_POST, 'refraction',    FILTER_VALIDATE_INT) : 0 ;
+
+                    $_SESSION['file']['effects']['shadows']     = isset($_POST['shadows'])      ? filter_input(INPUT_POST, 'shadows',       FILTER_VALIDATE_INT)    : 0 ;
+                    $_SESSION['file']['effects']['reflection']  = isset($_POST['reflection'])   ? filter_input(INPUT_POST, 'reflection',    FILTER_VALIDATE_INT)    : 0 ;
+                    $_SESSION['file']['effects']['refraction']  = isset($_POST['refraction'])   ? filter_input(INPUT_POST, 'refraction',    FILTER_VALIDATE_INT)    : 0 ;
 
 
-                    if (!$_SESSION['scene']['color'] || !verifHexaColor($_SESSION['scene']['color']))  {
-                        $listWarning[] = 'couleur de fond de la scène';
-                    }
-                    if (!$_SESSION['scene']['light'][0]['bright'])      $listWarning[] = 'luminosité de la scène';
-                    if (!$_SESSION['scene']['light'][0]['pos']['x'])    $listWarning[] = 'Position x de la lumière';
-                    if (!$_SESSION['scene']['light'][0]['pos']['y'])    $listWarning[] = 'Position y de la lumière';
-                    if (!$_SESSION['scene']['light'][0]['pos']['z'])    $listWarning[] = 'Position z de la lumière';
-                    if (!$_SESSION['scene']['viewer']['x'])             $listWarning[] = 'Position x de l\'observateur';
-                    if (!$_SESSION['scene']['viewer']['y'])             $listWarning[] = 'Position y de l\'observateur';
-                    if (!$_SESSION['scene']['viewer']['z'])             $listWarning[] = 'Position z de l\'observateur';
+                    if (!$_SESSION['scene']['color'] || !verifHexaColor($_SESSION['scene']['color']))   $listWarning[] = 'couleur de la scène';
+                    if (!$_SESSION['scene']['viewer']['x'])                                             $listWarning[] = 'Position x de l\'observateur';
+                    if (!$_SESSION['scene']['viewer']['y'])                                             $listWarning[] = 'Position y de l\'observateur';
+                    if (!$_SESSION['scene']['viewer']['z'])                                             $listWarning[] = 'Position z de l\'observateur';
 
                     if (is_null($_SESSION['file']['effects']['shadows']))       $listWarning[] = 'Choix des ombres';
                     if (is_null($_SESSION['file']['effects']['reflection']))    $listWarning[] = 'Choix de la réflexion';
                     if (is_null($_SESSION['file']['effects']['refraction']))    $listWarning[] = 'Choix de la réfraction';
                 }
 
-                /*
                 //entrees variables
                 {
+                    for ($light = 0; $light < $nbLight; $light++) {
+                        $_SESSION['scene']['light'][$light]['bright']   = isset($_POST['bright'])   ? filter_input(INPUT_POST, 'bright', FILTER_VALIDATE_FLOAT) : false ;
+                        $_SESSION['scene']['light'][$light]['pos']['x'] = isset($_POST['lightX'])   ? filter_input(INPUT_POST, 'lightX', FILTER_VALIDATE_INT)   : false ;
+                        $_SESSION['scene']['light'][$light]['pos']['y'] = isset($_POST['lightY'])   ? filter_input(INPUT_POST, 'lightY', FILTER_VALIDATE_INT)   : false ;
+                        $_SESSION['scene']['light'][$light]['pos']['z'] = isset($_POST['lightZ'])   ? filter_input(INPUT_POST, 'lightZ', FILTER_VALIDATE_INT)   : false ;
+
+                        if (!$_SESSION['scene']['light'][$light]['bright'])     $listWarning[] = 'luminosité de la scène';
+                        if (!$_SESSION['scene']['light'][$light]['pos']['x'])   $listWarning[] = 'Position x de la lumière';
+                        if (!$_SESSION['scene']['light'][$light]['pos']['y'])   $listWarning[] = 'Position y de la lumière';
+                        if (!$_SESSION['scene']['light'][$light]['pos']['z'])   $listWarning[] = 'Position z de la lumière';
+                    }
+
+
+                /*
                     $i = 0;
                     while ($i < $nbEllipsoid) {
                         $i++;
@@ -190,8 +194,8 @@ try {
                         if ($_SESSION['shape'][$i]['rot']['z'] === false) $listWarning[] = 'objet '.$i.' : rotation Z';
                         *//*
                     }
-                }
                 */
+                }
             }
 
             //initialisation d objet

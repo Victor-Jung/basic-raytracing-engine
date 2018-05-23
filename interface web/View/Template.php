@@ -5,10 +5,10 @@
         <title>
             <?= htmlspecialchars($template['pageName']) ?>
         </title>
-        <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
         <link href="View/Style/global.css" rel="stylesheet">
         <link href="View/Style/edition.css" rel="stylesheet">
         <link href="View/Style/geometry.css" rel="stylesheet">
+        <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
     </head>
     
     <body>

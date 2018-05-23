@@ -370,179 +370,160 @@ switch ($_SESSION['pageBlock']) {
                     </div>
                 </td>
             </tr>
-            <tr><td colspan="2"><br><hr><br></td></tr>
             <tr>
-                <td colspan="2" class="listSelection">
-                    Choisissez un objet :
-                    <select id="shape" name="shape">
-                        <option selected>Aucun</option>
-                        <option>Ellipsoïde</option>
-                        <option>Polyèdre</option>
-                    </select>
-                    <input type="submit" name="confirmShape" value="Confirmer">
+                <td colspan="2">
+                    <br><hr><br>
                 </td>
             </tr>
-            <tr><td colspan="2"><br></td></tr>
             <tr>
                 <td>
-                    Ellipsoïdes
-                    <?php if (isset($_SESSION['ellipsoid'])) { ?>
-                        <div class="listSelection">
-                            <?php
-                            $i = 0;
-                            foreach ($_SESSION['ellipsoid'] as $shape) {
-                                $i++;
-                                if ($i > 1) echo '<hr>'; ?>
-                                <style type="text/css">
-                                    #displayElli<?= htmlspecialchars($i) ?>, #displayElli<?= htmlspecialchars($i) ?> + label + table {
-                                        display: none;
-                                    }
-                                    #displayElli<?= htmlspecialchars($i) ?>:checked + label + table {
-                                        display: initial;
-                                    }
-                                </style>
-
-                                <input type="hidden" name="name<?= htmlspecialchars($i) ?>" value="<?= htmlspecialchars($shape['name']) ?>">
-                                <input type="checkbox" id="displayElli<?= htmlspecialchars($i) ?>">
-                                <label for="displayElli<?= htmlspecialchars($i) ?>">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <h3>Ellipsoïde <?= htmlspecialchars($i) ?></h3>
-                                            </td>
-                                            <td>
-                                                <h3><?= htmlspecialchars($shape['name']) ?></h3>
-                                            </td>
-                                            <td>
-                                                <button name="delete_<?= htmlspecialchars($i) ?>" value="true">Supprimer</button>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </label>
-                                <table>
-                                    <tr>
-                                        <td>Couleur</td>
-                                        <td>
-                                            <input type="color" class="color" name="color<?= htmlspecialchars($i) ?>" 
-                                            value="<?= htmlspecialchars($shape['color']) ?>">
-                                        </td>
-                                    </tr>
-                                    <tr><td colspan="2"><br></td></tr>
-                                    <tr>
-                                        <td>Coordonnées du centre</td>
-                                        <td>
-                                            <input type="number" class="number" name="posX<?= htmlspecialchars($i) ?>" 
-                                            value="<?= htmlspecialchars($shape['pos']['x']) ?>" step="<?= STEP_AXIS ?>" required>
-
-                                            <input type="number" class="number" name="posY<?= htmlspecialchars($i) ?>" 
-                                            value="<?= htmlspecialchars($shape['pos']['y']) ?>" step="<?= STEP_AXIS ?>" required>
-
-                                            <input type="number" class="number" name="posZ<?= htmlspecialchars($i) ?>" 
-                                            value="<?= htmlspecialchars($shape['pos']['z']) ?>" step="<?= STEP_AXIS ?>" required>
-                                        </td>
-                                    </tr>
-                                    <tr><td colspan="2"><br></td></tr>
-                                    <tr>
-                                        <td>Rayons</td>
-                                        <td>
-                                            <input type="number" class="number" name="radX<?= htmlspecialchars($i) ?>" 
-                                            value="<?= htmlspecialchars($shape['rad']['x']) ?>" step="<?= STEP_AXIS ?>" required>
-
-                                            <input type="number" class="number" name="radY<?= htmlspecialchars($i) ?>" 
-                                            value="<?= htmlspecialchars($shape['rad']['y']) ?>" step="<?= STEP_AXIS ?>" required>
-
-                                            <input type="number" class="number" name="radZ<?= htmlspecialchars($i) ?>" 
-                                            value="<?= htmlspecialchars($shape['rad']['z']) ?>" step="<?= STEP_AXIS ?>" required>
-                                        </td>
-                                    </tr>
-                                    <tr><td colspan="2"><br></td></tr>
-                                    <tr>
-                                        <td>Rotation</td>
-                                        <td>
-                                            <input type="number" class="number" name="rotX<?= htmlspecialchars($i) ?>" 
-                                            value="<?= htmlspecialchars($shape['rot']['x']) ?>" step="<?= STEP_AXIS ?>" required>
-
-                                            <input type="number" class="number" name="rotY<?= htmlspecialchars($i) ?>" 
-                                            value="<?= htmlspecialchars($shape['rot']['y']) ?>" step="<?= STEP_AXIS ?>" required>
-
-                                            <input type="number" class="number" name="rotZ<?= htmlspecialchars($i) ?>" 
-                                            value="<?= htmlspecialchars($shape['rot']['z']) ?>" step="<?= STEP_AXIS ?>" required>
-                                        </td>
-                                    </tr>
-                                </table>
-                            <?php } ?>
-                        </div>
-                    <?php } ?>
+                    Nombre d'ellipsoïdes : <select id="selectElli" name="selectElli"></select>
                 </td>
                 <td>
-                    Polyèdres
-                    <?php if (isset($_SESSION['polyhedron'])) {
-                        $idPoly = 0; ?>
-                        <div class="listSelection">
-                            <?php foreach ($_SESSION['polyhedron'] as $shape) {
-                                $idPoly++;
-                                if ($idPoly > 1) {
-                                    echo '<hr>';
-                                } ?>
-                                <style type="text/css">
-                                    #displayPoly<?= htmlspecialchars($idPoly) ?>, #displayPoly<?= htmlspecialchars($idPoly) ?> + label + div {
-                                        display: none;
+                    Nombre de polyèdres: <select id="selectPoly" name="selectPoly"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="allEllis">
+                        <script>
+                            $(document).ready(function() {
+                                var texte = "";
+                                var nbElli = 0;
+                                //On initialise les tableaux
+                                
+                                for(var i = 0; i<=10; i++){
+                                    texte+="<option>"+i+"</option>"; //creation des premieres options
+                                }
+                                
+                                $("#selectElli").html(texte);
+                                
+                                $("#selectElli").on("change", load);
+                                
+                                function load(){
+                                    loadPoly();
+                                    loadFace();
+                                }
+                                
+                                function loadPoly(){
+                                    nbElli = $("#selectElli").val();
+                                    texte = $("#allEllis").val();
+                                    if(texte==undefined){
+                                        texte=" ";
                                     }
-                                    #displayPoly<?= htmlspecialchars($idPoly) ?>:checked + label + div {
-                                        display: initial;
+                                    if(nbElli==0){
+                                        $("#allEllis").html("");
                                     }
-                                </style>
-
-                                <input type="hidden" name="name<?= htmlspecialchars($idPoly) ?>" value="<?= htmlspecialchars($shape['name']) ?>">
-                                <input type="checkbox" id="displayPoly<?= htmlspecialchars($idPoly) ?>">
-                                <label for="displayPoly<?= htmlspecialchars($idPoly) ?>">
-                                    <h3><?= htmlspecialchars($shape['name']) ?> <?= htmlspecialchars($idPoly) ?> - <button name="delete_<?= htmlspecialchars($idPoly) ?>" value="true">Supprimer</button></h3>
-                                </label>
-                                <div>
-                                    Choisissez le nombre de faces :
-                                    <select id="<?= htmlspecialchars('poly'.$idPoly) ?>" name="<?= htmlspecialchars('poly'.$idPoly) ?>">_face+$idFace
-                                        <?php for ($nbFace = 1; $nbFace <= 10; $nbFace++) {
-                                            echo '<option>'.$nbFace.'</option>';
-                                        } ?>
-                                    </select>
-                                    <div id="<?= htmlspecialchars('showPoly'.$idPoly) ?>">
-                                        <script>
-                                            $("#poly"+htmlspecialchars($idPoly)).on("change", load);	
-                                            function load(){
-                                                    alert("ok");
-                                                var nbFaces = $("#poly"+htmlspecialchars($idPoly)).val();
-                                                var texte="<table>";
-                                                $("#showPoly"+htmlspecialchars($idPoly)).text("");
-                                                for(var facePoly=1; facePoly<=nbFaces; facePoly++){
-                                                    texte += "<tr id=\"poly"+htmlspecialchars($idPoly)+"_face"+facePoly+"\">";
-                                                    texte += "<td>Color</td>";
-                                                    texte += "</tr>";
-                                                }
-                                                texte += "</table>";
-                                                $("#show").html(texte);
+                                    for(var i=1; i <= nbElli; i++){
+                                        texte += "<div id='elli"+i+"'><p>----Elli"+i+"</p>";
+                                        texte+="</div>";
+                                        $("#allEllis").html(texte);
+                                    }
+                                }		
+                                load();
+                            });
+                        </script>
+                    </div>
+                </td>
+                <td>
+                    <div id="allPolys">
+                        <script>
+                            $(document).ready(function() {
+                                var texte = "";
+                                var nbPoly = 0;
+                                var nbFaces = new Array(10);
+                                var nbPeaks = new Array(10);
+                                for(var i=0; i<10;i++){
+                                    nbPeaks[i] = new Array(10);
+                                }
+                                //On initialise les tableaux
+                                
+                                for(var i = 0; i<=10; i++){
+                                    texte+="<option>"+i+"</option>"; //creation des premieres options
+                                }
+                                
+                                $("#selectPoly").html(texte);
+                                
+                                $("#selectPoly").on("change", load);
+                                
+                                function load(){
+                                    loadPoly();
+                                    loadFace();
+                                }
+                                
+                                function loadPoly(){
+                                    nbPoly = $("#selectPoly").val();
+                                    texte = $("#allPolys").val();
+                                    if(texte==undefined){
+                                        texte=" ";
+                                    }
+                                    if(nbPoly==0){
+                                        $("#allPolys").html("");
+                                    }
+                                    for(var i=1; i <= nbPoly; i++){
+                                        texte += "<div id='poly"+i+"'><p>----Poly"+i+" <select id='selectFace"+i+"' name='selectFace"+i+"' class='selectFace'></p>";
+                                        for(var j=1; j<=10; j++){
+                                            texte+="<option";
+                                            if(j==nbFaces[i]){
+                                                texte+=" selected";
                                             }
-                                        </script>
-                                    </div>
-                                </div>
-
-                                <div>selecteur nombre de poly</div>
-                                <div>
-                                    affichage des poly
-                                    <div>selecteur nombre de faces</div>
-                                    <div>
-                                        affichage des faces
-                                        <div> selecteur nombre de sommets</div>
-                                        <div>
-                                            affichage des sommets
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-                            <?php } ?>
-                        </div>
-                    <?php } ?>
+                                            texte+=">"+j+"</option>";
+                                        }
+                                        texte+="</select><div id='allFaces"+i+"'></div>";
+                                        texte+="</div>";
+                                        $("#allPolys").html(texte);
+                                    }
+                                    $(".selectFace").on("change", loadFace);
+                                }		
+                                load();	//Premier chargement
+                                
+                                function loadFace(){
+                                    for(var i=1; i<=nbPoly; i++){
+                                        texte = $("#allFaces"+i).val();
+                                        if(texte==undefined){
+                                            texte=" ";
+                                        }
+                                        nbFaces[i] = $("#selectFace"+i).val();
+                                        for(var j=1; j<=nbFaces[i]; j++){
+                                            texte += "<div id='face"+j+"'><p>--------Face"+j+" <select id='selectPeak"+i+j+"' name='selectPeak"+i+j+"' class='selectPeak'></p>";
+                                            for(var k=1; k<=10; k++){
+                                                texte+="<option";
+                                                if(k==nbPeaks[i][j]){
+                                                    texte+=" selected";
+                                                }
+                                                texte+=">"+k+"</option>";
+                                            }
+                                            texte+="</select><div id='allPeaks"+i+j+"'>";
+                                            texte+="</div></div>";
+                                        }
+                                        $("#allFaces"+i).html(texte);
+                                    }
+                                    $(".selectPeak").on("change", loadPeak);
+                                    loadPeak();
+                                }
+                                
+                                function loadPeak(){
+                                    var j=1;
+                                    var k = 1;
+                                    for(var i=1; i<=nbPoly; i++){
+                                        texte = $("#allPeaks"+i+j).val();
+                                        if(texte==undefined){
+                                            texte=" ";
+                                        }
+                                        nbFaces[i] = $("#selectFace"+i).val();
+                                        for(j=1; j<=nbFaces[i]; j++){
+                                            texte = $("#allPeaks"+i+j).val();
+                                            nbPeaks[i][j] = $("#selectPeak"+i+j).val();
+                                            for(var l=1; l<=nbPeaks[i][j]; l++){
+                                                texte+= "<p>------------Sommet"+l+"</p>";
+                                            };
+                                            $("#allPeaks"+i+j).html(texte);
+                                        }
+                                    }
+                                }
+                            });
+                        </script>
+                    </div>
                 </td>
             </tr>
         <?php $edition['content']['fillable'] = ob_get_clean();
