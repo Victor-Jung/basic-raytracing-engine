@@ -3,33 +3,13 @@
 #include<stdlib.h>
 #include<string.h>
 #include "mainFunctions.h"
+#define FPF //FPF = (Frame Per Frame)
+//#define ANIMATION
 
 int main() {
-	/*int i, j;
-	unsigned int height = 1000, width = 1000;
-	sFile* I = newBMP(width, height);
-	for (i = 0; i<width; i++)
-	{
-		for (j = 0; j<height; j++)
-		{
-			sColor p;
-			p.r = 255;
-			p.g = 255-i*j*cos(j*i);
-			p.b = 255*sin(i*j);
-			setcolor(I, i, j, p);
-		}
-	}
-	//sFile* I = Charger("test.bmp");
-	sColor p;
-	p.r = 255;
-	p.g = 255;
-	p.b = 255;
-	setcolor(I, 20, 52, p);
-	setcolor(I, 75, 24, p);
-	setcolor(I, 215, 127, p);
-	saveBMP(I, "test.bmp");
-	deleteBMP(I);
-	return 0;*/
+
+#ifdef FPF
+
 	sParam param;
 	if (!loadFromFile(&param)) {
 		//remove("data.txt");
@@ -38,10 +18,40 @@ int main() {
 	}
 	//remove("data.txt");
 	showStruct(param);
-	if (createImage(param.lightSource, param)) {
+	if (createImage(param.lightSource, param, 0)) {
 		freeAll(&param);
 		return 1;
 	}
 	return 0;
+
+#endif
+
+#ifdef ANIMATION
+
+	sParam *param = (sParam*)malloc(sizeof(sParam));
+	//sParam param;
+	int nbOfFrames = 2;
+
+
+	if (!loadFromFile(param)) { //on charge les paramètres
+		freeAll(&param);
+		return 0;
+	}
+
+	for(int CPT = 1; CPT <= nbOfFrames; CPT++) {
+
+		if (!createImage(param->lightSource, *param, CPT)) {
+			return 0;
+		}
+
+		//on modifie qq paramètres pour comme déplacer la caméra pour créer le mouvement
+
+		param->viewerPos.z -= 2*CPT; //translation du sol et de l'observateur
+		for (int i = 0; i < param->poly[0].face[10].nbPeaks; i++) {
+			param->poly[0].face[10].peak[i].z -= 2; //face 11 = sol
+		}
+		//biblio pour ffmpeg : libavformat et libavcodec ainsi que ffmpegSourceCode
+	}
+#endif
 }
 

@@ -8,7 +8,8 @@
 #include "mainFunctions_PEUL.h"
 #define ALIASING 1
 #define PI 3,1415926535
-#define MORE
+#define INTENSITY 90 //donne le nombre maximum d'unité où la lumière va se propager, si le rendu est trop sombre
+#define MORE		 //il faut augmenter la valeur et vice versa.
 
 int compare(double const *a, double const *b) { //fonction de comparaison entre 2 double
 	if (floor(*a) > floor(*b)) {
@@ -166,7 +167,12 @@ sColor pixelAvg(sColor pixel, sFile *imageStart, sFile *imageEnd, int w, int h, 
 	}
 }
 
-int createImage(sPos posLight, sParam param) {
+double distBetweenTwoPoints(sPos pos1, sPos pos2) {
+	double dist = sqrt(pow(pos2.x - pos1.x,2) + pow(pos2.y - pos1.y, 2) + pow(pos2.z - pos1.z, 2));
+	return dist;
+}
+
+int createImage(sPos posLight, sParam param, int CPT) {
 	sFile* I = newBMP(param.image.width, param.image.height);
 	int cptPoly = -1;
 	int cptFace = -1;
@@ -179,15 +185,20 @@ int createImage(sPos posLight, sParam param) {
 			//showTab(t);
 			sPosFace *posPointObjet = NULL;
 			sPosSphere *posPointSphere = NULL;
+			double distance = 0;
 			sColor p;
 			float lightFactor = param.light.lightFactor;
-			if ((posPointObjet = doesCollide(param, t)) || (posPointSphere = doesCollideSphere(param))) {
+			posPointObjet = doesCollide(param, t);
+			posPointSphere = doesCollideSphere(param);
+			if (posPointSphere != NULL || posPointObjet != NULL) {
 				if (posPointObjet && !posPointSphere) {
 					cptPoly = posPointObjet->iPoly;
 					cptFace = posPointObjet->iFace;
 					if (isInTheShadow(*(posPointObjet->position), param)) {
 						lightFactor -= 0.3;
 					}
+					distance = distBetweenTwoPoints(param.lightSource, *(posPointObjet->position));
+					lightFactor *= ((INTENSITY - distance) / INTENSITY);
 					p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
 					p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
 					p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
@@ -198,6 +209,8 @@ int createImage(sPos posLight, sParam param) {
 					if (isInTheShadow(*(posPointSphere->position), param)) {
 						lightFactor -= 0.3;
 					}
+					distance = distBetweenTwoPoints(param.lightSource, *(posPointSphere->position));
+					lightFactor *= ((INTENSITY - distance) / INTENSITY);
 					p.r = param.sphere[cptSphere].color.r * lightFactor;
 					p.g = param.sphere[cptSphere].color.g * lightFactor;
 					p.b = param.sphere[cptSphere].color.b * lightFactor;
@@ -205,12 +218,16 @@ int createImage(sPos posLight, sParam param) {
 				}
 				else if (posPointSphere != NULL && posPointObjet != NULL) {
 					if (posPointObjet->position->x > posPointSphere->position->x) {
+						distance = distBetweenTwoPoints(param.lightSource, *(posPointSphere->position));
+						lightFactor *= ((INTENSITY - distance) / INTENSITY);
 						p.r = param.sphere[cptSphere].color.r * lightFactor;
 						p.g = param.sphere[cptSphere].color.g * lightFactor;
 						p.b = param.sphere[cptSphere].color.b * lightFactor;
 						setcolor(I, w - 1, h - 1, p);
 					}
 					else {
+						distance = distBetweenTwoPoints(param.lightSource, *(posPointObjet->position));
+						lightFactor *= ((INTENSITY - distance) / INTENSITY);
 						p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
 						p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
 						p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
@@ -243,6 +260,8 @@ int createImage(sPos posLight, sParam param) {
 	}
 	char nameI[50];
 	char nameJ[50];
+	char cptS[3];
+	sprintf(cptS, "%d", CPT);
 	///
 	sFile* J = newBMP(param.image.width, param.image.height);
 	sColor p;
@@ -254,11 +273,11 @@ int createImage(sPos posLight, sParam param) {
 		}
 	}
 	///
-	strcpy(nameI, param.image.name);
+	strcpy(nameI, cptS);
 	strcat(nameI, ".bmp");
 	saveBMP(I, nameI);
-	strcpy(nameJ, param.image.name);
-	strcat(nameJ, "2.bmp");
+	strcpy(nameJ, cptS);
+	strcat(nameJ, "AA.bmp");
 	saveBMP(J, nameJ);
 	deleteBMP(I);
 	deleteBMP(J);
