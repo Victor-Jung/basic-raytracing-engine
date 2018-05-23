@@ -24,21 +24,51 @@ if ($_SESSION['pageBlock'] == 3) {
                         <table>
                             <tr>
                                 <td>
-                                    Couleur de fond :
+                                    Position observateur :
                                 </td>
                                 <td>
-                                    <input type="color" value="<?= htmlspecialchars($_SESSION['scene']['color']) ?>" disabled>
+                                    <?= htmlspecialchars($_SESSION['scene']['viewer']['x']
+                                    .';'.$_SESSION['scene']['viewer']['y']
+                                    .';'.$_SESSION['scene']['viewer']['z']) ?>
                                 </td>
+                            </tr>
+                            <tr><td colspan="2"><hr></td></tr>
+                            <tr>
+                                <th colspan="2">
+                                    Source lumineuse
+                                </th>
                             </tr>
                             <tr>
                                 <td>
-                                    Luminosité : 
+                                    Puissance :
                                 </td>
                                 <td>
                                     <?= htmlspecialchars($_SESSION['scene']['light'][0]['bright']) ?>%
                                 </td>
                             </tr>
+                            <tr>
+                                <td>
+                                    Position :
+                                </td>
+                                <td>
+                                    <?= htmlspecialchars($_SESSION['scene']['light'][0]['pos']['x']
+                                    .';'.$_SESSION['scene']['light'][0]['pos']['y']
+                                    .';'.$_SESSION['scene']['light'][0]['pos']['z']) ?>
+                                </td>
+                            </tr>
+                            <tr><td colspan="2"><hr></td></tr>
+                            <tr>
+                                <td>
+                                    Effets de lumière :
+                                </td>
+                                <td>
+                                    <?= $_SESSION['file']['effects']['shadows']? 'Ombres<br>' : '' ?>
+                                    <?= $_SESSION['file']['effects']['reflection']? 'Réflexion<br>' : '' ?>
+                                    <?= $_SESSION['file']['effects']['refraction']? 'Réfraction<br>' : '' ?>
+                                </td>
+                            </tr>
                         </table>
+
                         <?php if (isset($_SESSION['ellipsoid']) && count($_SESSION['ellipsoid']) > 0) {
                             $i = 0;
                             foreach ($_SESSION['ellipsoid'] as $shape) {
@@ -185,11 +215,13 @@ switch ($_SESSION['pageBlock']) {
                 </td>
                 <td id="video">
                     Type de fichier :
-                    <input type="radio" id="picture" name="video" value="false" checked required>
+                    <input type="radio" id="picture" name="video" value="0"
+                    <?= (!$_SESSION['file']['video']['selected'])? 'checked' : '' ?> required>
                     <label for="picture">
                         Image
                     </label>
-                    <input type="radio" id="video" name="video" value="true" required>
+                    <input type="radio" id="video" name="video" value="1"
+                    <?= ($_SESSION['file']['video']['selected'])? 'checked' : '' ?> required>
                     <label id="buttonVideo" for="video">
                         Animation
                     </label>
@@ -231,31 +263,104 @@ switch ($_SESSION['pageBlock']) {
                 <td>
                     <table>
                         <tr>
+                            <td colspan="2">
+                                <h3>Fond</h3>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>
-                                Couleur de fond du fichier :
+                                Couleur :
                             </td>
                             <td>
                                 <label>
-                                    <input type="color" id="backgroundColor" name="backgroundColor" 
+                                    <input type="color" id="sceneColor" name="sceneColor" 
                                     value="<?= htmlspecialchars($_SESSION['scene']['color']) ?>">
                                 </label>
                             </td>
                         </tr>
                         <tr><td colspan="2"><hr></td></tr>
                         <tr>
+                            <td colspan="2">
+                                <h3>Observateur</h3>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>
-                                Puissance de la source lumineuse :
+                                Position :
                             </td>
                             <td>
-                                <label title="Entrez une valeur entre 0 et 100">
-                                    <input type="number" id="bright" name="bright" 
-                                    value="<?= htmlspecialchars($_SESSION['scene']['light'][0]['bright']) ?>" 
-                                    step="1" min="0" max="100" required>
-                                </label>
+                                <input type="number" class="smallNumber" name="viewerX" 
+                                value="<?= htmlspecialchars($_SESSION['scene']['viewer']['x']) ?>" 
+                                step="1" required>
+                                -
+                                <input type="number" class="smallNumber" name="viewerY" 
+                                value="<?= htmlspecialchars($_SESSION['scene']['viewer']['y']) ?>" 
+                                step="1" required>
+                                -
+                                <input type="number" class="smallNumber" name="viewerZ" 
+                                value="<?= htmlspecialchars($_SESSION['scene']['viewer']['z']) ?>" 
+                                step="1" required>
                             </td>
                         </tr>
                         <tr><td colspan="2"><hr></td></tr>
-                        <tr><td colspan="2">reste des options</td></tr>
+                        <tr>
+                            <td colspan="2">
+                                <h3>Source lumineuse</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Puissance :
+                            </td>
+                            <td>
+                                <input type="number" class="smallNumber" name="bright" 
+                                value="<?= htmlspecialchars($_SESSION['scene']['light'][0]['bright']) ?>" 
+                                step="0.5" min="0" max="100" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Position :
+                            </td>
+                            <td>
+                                <input type="number" class="smallNumber" name="lightX" 
+                                value="<?= htmlspecialchars($_SESSION['scene']['light'][0]['pos']['x']) ?>" 
+                                step="1" required>
+                                -
+                                <input type="number" class="smallNumber" name="lightY" 
+                                value="<?= htmlspecialchars($_SESSION['scene']['light'][0]['pos']['y']) ?>" 
+                                step="1" required>
+                                -
+                                <input type="number" class="smallNumber" name="lightZ" 
+                                value="<?= htmlspecialchars($_SESSION['scene']['light'][0]['pos']['z']) ?>" 
+                                step="1" required>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"><hr></td></tr>
+                        <tr>
+                            <td colspan="2">
+                                <h3>Effets de lumière</h3>
+                                <table class="tab3col">
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" id="shadows" name="shadows" value="1" 
+                                            <?= $_SESSION['file']['effects']['shadows']? 'checked' : '' ?>>
+                                            <label for="shadows">Ombres</label>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" id="reflection" name="reflection" value="1"
+                                            <?= $_SESSION['file']['effects']['reflection']? 'checked' : '' ?>>
+                                            <label for="reflection">Réflexion</label>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" id="refraction" name="refraction" value="1"
+                                            <?= $_SESSION['file']['effects']['refraction']? 'checked' : '' ?>>
+                                            <label for="refraction">Réfraction</label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
                     </table> 
                 </td>
                 <td>
@@ -270,16 +375,9 @@ switch ($_SESSION['pageBlock']) {
                 <td colspan="2" class="listSelection">
                     Choisissez un objet :
                     <select id="shape" name="shape">
-                        <option>Aucun</option>
-                        <optgroup label="Polyèdres">
-                            <option>Surface</option>
-                            <option>Pavé</option>
-                            <option disabled>Polyèdre</option>
-                        <optgroup label="Ellipsoïdes">
-                            <option disabled>Disque</option>
-                            <option>Sphère</option>
-                            <option disabled>Ellipsoïde</option>
-                        </optgroup>
+                        <option selected>Aucun</option>
+                        <option>Ellipsoïde</option>
+                        <option>Polyèdre</option>
                     </select>
                     <input type="submit" name="confirmShape" value="Confirmer">
                 </td>
@@ -378,80 +476,70 @@ switch ($_SESSION['pageBlock']) {
                 </td>
                 <td>
                     Polyèdres
-                    <?php if (isset($_SESSION['polyhedron'])) { ?>
-                        <div class="listSelection" style="max-height: <?= htmlspecialchars(20*($_SESSION['file']['dim']['y'] / $_SESSION['file']['dim']['x'])) ?>em">
+                    <?php if (isset($_SESSION['polyhedron'])) {
+                        $idPoly = 0; ?>
+                        <div class="listSelection">
                             <?php foreach ($_SESSION['polyhedron'] as $shape) {
-                                if ($i > 1) {
+                                $idPoly++;
+                                if ($idPoly > 1) {
                                     echo '<hr>';
                                 } ?>
                                 <style type="text/css">
-                                    #displayPoly<?= htmlspecialchars($i) ?>, #displayPoly<?= htmlspecialchars($i) ?> + label + table {
+                                    #displayPoly<?= htmlspecialchars($idPoly) ?>, #displayPoly<?= htmlspecialchars($idPoly) ?> + label + div {
                                         display: none;
                                     }
-                                    #displayPoly<?= htmlspecialchars($i) ?>:checked + label + table {
+                                    #displayPoly<?= htmlspecialchars($idPoly) ?>:checked + label + div {
                                         display: initial;
                                     }
                                 </style>
 
-                                <input type="hidden" name="name<?= htmlspecialchars($i) ?>" value="<?= htmlspecialchars($shape['name']) ?>">
-                                <input type="checkbox" id="displayPoly<?= htmlspecialchars($i) ?>">
-                                <label for="displayPoly<?= htmlspecialchars($i) ?>">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <h3>Polyèdre <?= htmlspecialchars($i) ?></h3>
-                                            </td>
-                                            <td>
-                                                <h3><?= htmlspecialchars($shape['name']) ?></h3>
-                                            </td>
-                                            <td>
-                                                <button name="delete_<?= htmlspecialchars($i) ?>" value="true">Supprimer</button>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                <input type="hidden" name="name<?= htmlspecialchars($idPoly) ?>" value="<?= htmlspecialchars($shape['name']) ?>">
+                                <input type="checkbox" id="displayPoly<?= htmlspecialchars($idPoly) ?>">
+                                <label for="displayPoly<?= htmlspecialchars($idPoly) ?>">
+                                    <h3><?= htmlspecialchars($shape['name']) ?> <?= htmlspecialchars($idPoly) ?> - <button name="delete_<?= htmlspecialchars($idPoly) ?>" value="true">Supprimer</button></h3>
                                 </label>
-                                <?php foreach($shape['face'] as $face) { ?>
-                                    <table>
-                                        <tr>
-                                            <td>Couleur</td>
-                                            <td>
-                                                <input type="color" class="color" name="color<?= htmlspecialchars($i) ?>" 
-                                                value="<?= htmlspecialchars($shape['color']) ?>">
-                                            </td>
-                                        </tr>
-                                        <?php $j = 0;
-                                        foreach($face['peak'] as $peak) {
-                                            $j++; ?>
-                                            <tr>
-                                                <td>Coordonnées du point <?= htmlspecialchars($j) ?></td>
-                                                <td>
-                                                    <input type="number" class="number" name="posX<?= htmlspecialchars($i.'-'.$j) ?>" 
-                                                    value="<?= htmlspecialchars($shape['pos']['x']) ?>" step="<?= STEP_AXIS ?>" required>
+                                <div>
+                                    Choisissez le nombre de faces :
+                                    <select id="<?= htmlspecialchars('poly'.$idPoly) ?>" name="<?= htmlspecialchars('poly'.$idPoly) ?>">_face+$idFace
+                                        <?php for ($nbFace = 1; $nbFace <= 10; $nbFace++) {
+                                            echo '<option>'.$nbFace.'</option>';
+                                        } ?>
+                                    </select>
+                                    <div id="<?= htmlspecialchars('showPoly'.$idPoly) ?>">
+                                        <script>
+                                            $("#poly"+htmlspecialchars($idPoly)).on("change", load);	
+                                            function load(){
+                                                    alert("ok");
+                                                var nbFaces = $("#poly"+htmlspecialchars($idPoly)).val();
+                                                var texte="<table>";
+                                                $("#showPoly"+htmlspecialchars($idPoly)).text("");
+                                                for(var facePoly=1; facePoly<=nbFaces; facePoly++){
+                                                    texte += "<tr id=\"poly"+htmlspecialchars($idPoly)+"_face"+facePoly+"\">";
+                                                    texte += "<td>Color</td>";
+                                                    texte += "</tr>";
+                                                }
+                                                texte += "</table>";
+                                                $("#show").html(texte);
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
 
-                                                    <input type="number" class="number" name="posY<?= htmlspecialchars($i.'-'.$j) ?>" 
-                                                    value="<?= htmlspecialchars($shape['pos']['y']) ?>" step="<?= STEP_AXIS ?>" required>
+                                <div>selecteur nombre de poly</div>
+                                <div>
+                                    affichage des poly
+                                    <div>selecteur nombre de faces</div>
+                                    <div>
+                                        affichage des faces
+                                        <div> selecteur nombre de sommets</div>
+                                        <div>
+                                            affichage des sommets
+                                        </div>
+                                    </div>
+                                </div>
 
-                                                    <input type="number" class="number" name="posZ<?= htmlspecialchars($i.'-'.$j) ?>" 
-                                                    value="<?= htmlspecialchars($shape['pos']['z']) ?>" step="<?= STEP_AXIS ?>" required>
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
-                                        <tr><td colspan="2"><br></td></tr>
-                                        <tr>
-                                            <td>Rotation</td>
-                                            <td>
-                                                <input type="number" class="number" name="rotX<?= htmlspecialchars($i) ?>" 
-                                                value="<?= htmlspecialchars($shape['rot']['x']) ?>" step="<?= STEP_AXIS ?>" required>
 
-                                                <input type="number" class="number" name="rotY<?= htmlspecialchars($i) ?>" 
-                                                value="<?= htmlspecialchars($shape['rot']['y']) ?>" step="<?= STEP_AXIS ?>" required>
 
-                                                <input type="number" class="number" name="rotZ<?= htmlspecialchars($i) ?>" 
-                                                value="<?= htmlspecialchars($shape['rot']['z']) ?>" step="<?= STEP_AXIS ?>" required>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                <?php } ?>
                             <?php } ?>
                         </div>
                     <?php } ?>
@@ -472,14 +560,15 @@ switch ($_SESSION['pageBlock']) {
                     <label>
                         Choisissez une retouche :<br>
                         <select>
-                            <option>Luminosité</option>
+                            <option>Aucune</option>
+                            <option>Anti-aliasing</option>
                             <option>Filtre lumineux</option>
                         </select>
                     </label>
                     <input type="submit" value="Confirmer">
                 </td>
                 <td>
-                    <img src="../link/preview.bmp" alt="Smiley face" width="100%">
+                    <img src="../link/preview.bmp" alt="Fichier produit" width="100%">
                 </td>
             </tr>
         <?php $edition['content']['fillable'] = ob_get_clean();

@@ -6,7 +6,25 @@ define('MAX_Z_IMG', 1000);
 define('STEP_AXIS', 1);
 
 
-//fonctions
+function initialSession() {
+    $_SESSION['pageBlock'] = 1;
+
+    $_SESSION['file']['name'] = 'temporaire';
+    $_SESSION['file']['dim']['x'] = 768;
+    $_SESSION['file']['dim']['y'] = 768;
+    $_SESSION['file']['video']['selected'] = 0;
+    $_SESSION['file']['video']['duration'] = MAX_DURATION;
+    $_SESSION['file']['video']['frequency'] = 1;
+    $_SESSION['file']['effects']['shadows'] = 1;
+    $_SESSION['file']['effects']['reflection'] = 0;
+    $_SESSION['file']['effects']['refraction'] = 0;
+
+    $_SESSION['scene']['color'] = '#2680AD';
+    $_SESSION['scene']['light'][0]['bright'] = 100;
+    $_SESSION['scene']['light'][0]['pos'] = array('x' => 1, 'y' => 1, 'z' => 1);
+    $_SESSION['scene']['viewer'] = array('x' => 1, 'y' => 1, 'z' => 1);
+}
+
 function hex2rgb($hex) {
     $hex = str_replace("#", "", $hex);
  

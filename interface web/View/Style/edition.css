@@ -42,9 +42,16 @@ section > table > thead th {
     margin: auto;
 }
 
-.number, #bright, #growth {
+.number {
     width: 60px;
 }
+.smallNumber {
+    width: 44px;
+}
+.tab3col > tbody > tr > td {
+    width: 30%;
+}
+
 
 #fixed>tbody>tr>th {
     border-right: 1px solid black;
@@ -64,10 +71,12 @@ section > table > thead th {
     width: 20em;
 }
 
-#reuseData, #reuseData + label {
+#reuseData, #reuseData + label,
+#saveData, #saveData + label {
     display: none;
 }
 
-#nextStep:checked ~ #reuseData, #nextStep:checked ~ #reuseData + label  {
+#nextStep:checked ~ #reuseData, #nextStep:checked ~ #reuseData + label,
+#nextStep:checked ~ #saveData, #nextStep:checked ~ #saveData + label  {
     display: initial;
 }

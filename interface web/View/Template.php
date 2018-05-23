@@ -5,6 +5,7 @@
         <title>
             <?= htmlspecialchars($template['pageName']) ?>
         </title>
+        <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
         <link href="View/Style/global.css" rel="stylesheet">
         <link href="View/Style/edition.css" rel="stylesheet">
         <link href="View/Style/geometry.css" rel="stylesheet">
@@ -12,28 +13,28 @@
     
     <body>
         <!--
-            <div style="max-height: 300px; overflow-y: scroll">
+            <div style="max-height: 300px; overflow-y: scroll; text-align: left;">
                 <table>
                     <tr>
                         <td>
-                            Session
+                            file
+                        </td>
+                        <td>
+                            scene
                         </td>
                         <td>
                             Post
                         </td>
-                        <td>
-                            Formes
-                        </td>
                     </tr>
                     <tr>
                         <td>
-                            <pre>< ?= print_r($_SESSION) ?></pre>
+                            <pre>< ?= print_r($_SESSION['file']) ?></pre>
+                        </td>
+                        <td>
+                            <pre>< ?= print_r($_SESSION['scene']) ?></pre>
                         </td>
                         <td>
                             <pre>< ?php if (isset($_POST)) print_r($_POST) ?></pre>
-                        </td>
-                        <td>
-                            <pre>< ?php if (isset($_SESSION['shape'])) print_r($_SESSION['shape']) ?></pre>
                         </td>
                     </tr>
                 </table>
@@ -118,16 +119,17 @@
                                         <tr><td colspan="2"><br><hr></td></tr>
                                         <tr>
                                             <td>
-                                                <input type="checkbox" id="nextStep" name="nextStep" value="true">
+                                                <input type="checkbox" id="nextStep" name="nextStep" value="1">
                                                 <label for="nextStep">
                                                     <?= ($i != 3) ? 'Passer à l\'étape suivante' : 'Nouveau fichier' ?>
                                                 </label>
                                                 <?php if ($i == 3) { ?>
                                                     <br>
-                                                    <input type="checkbox" id="reuseData" name="reuseData" value="true">
-                                                    <label for="reuseData">
-                                                        <?= 'Conserver les données' ?>
-                                                    </label>
+                                                    <input type="checkbox" id="reuseData" name="reuseData" value="1">
+                                                    <label for="reuseData">Réutiliser les données</label>
+                                                    <br>
+                                                    <input type="checkbox" id="saveData" name="saveData" value="1">
+                                                    <label for="saveData">Conserver les données</label>
                                                 <?php } ?>
                                             </td>
                                             <td>
