@@ -183,7 +183,7 @@ int createImage(sPos posLight, sParam param) {
 			sPosEllipse *posPointEllipse = NULL;
 			sColor p;
 			float lightFactor = param.light.lightFactor;
-			if ((posPointObjet = doesCollide(param, t)) || (posPointSphere = doesCollideSphere(param)) || (posPointEllipse = doesCollideSphere(param))) {
+			if ((posPointObjet = doesCollide(param, t)) || (posPointSphere = doesCollideSphere(param)) || (posPointEllipse = doesCollideEllipse(param))) {
 				if (posPointObjet && !posPointSphere && !posPointEllipse) {
 					cptPoly = posPointObjet->iPoly;
 					cptFace = posPointObjet->iFace;

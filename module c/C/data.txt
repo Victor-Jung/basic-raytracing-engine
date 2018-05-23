@@ -16,14 +16,14 @@ Brightness:
 1
 LightPosition:
 	x:
-	6.5
+	0
 	y:
-	-5
+	0
 	z:
-	10
+	50
 ViewerPosition:
 	x:
-	-18
+	-30
 	y:
 	-3
 	z:
@@ -81,9 +81,50 @@ Sphere1:
 		x:
 		6.5
 		y:
-		0
+		-10
 		z:
-		-2
+		-10
 	Radius:
 		6
-
+NumberOfEllipse:
+2
+Ellipse1:
+	Color:
+		r:
+		255
+		g:
+		255
+		b:
+		30
+	A:
+	5
+	B:
+	0
+	C:
+	-10
+	alpha:
+	3
+	beta:
+	5
+	gamma:
+	7
+Ellipse2:
+	Color:
+		r:
+		20
+		g:
+		100
+		b:
+		165
+	A:
+	0
+	B:
+	0
+	C:
+	0
+	alpha:
+	18
+	beta:
+	15
+	gamma:
+	5

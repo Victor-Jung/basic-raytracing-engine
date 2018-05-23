@@ -94,6 +94,12 @@ void showStruct(sParam param) {
 		printf("	Center:\n		x : %f\n		y : %f\n		z : %f\n", param.sphere[i].center.x, param.sphere[i].center.y, param.sphere[i].center.z);
 		printf("	Radius : %f\n", param.sphere[i].r);
 	}
+	printf("Number of ellipses : %d\n", param.nbEllipse);
+	for (int i = 0; i < param.nbEllipse; i++) {
+		printf("	Color:\n		r : %d\n		g : %d\n		b : %d\n", param.ellipse[i].color.r, param.ellipse[i].color.g, param.ellipse[i].color.b);
+		printf("	Center:\n		x : %f\n		y : %f\n		z : %f\n", param.ellipse[i].a, param.ellipse[i].b, param.ellipse[i].c);
+		printf("	Radius :\n 		a : %f\n 		b : %f\n		c : %f\n", param.ellipse[i].alpha, param.ellipse[i].beta, param.ellipse[i].gamma);
+	}
 }
 
 int loadFromFile(sParam *param) {
@@ -375,26 +381,24 @@ int loadFromFile(sParam *param) {
 					if (!strcmp(line, "r:")) {
 						fscanf(f, "%s", line);
 						i++;
-						param->sphere[j].color.r = atoi(line);
+						param->ellipse[j].color.r = atoi(line);
 					}
 					if (!strcmp(line, "g:")) {
 						fscanf(f, "%s", line);
 						i++;
-						param->sphere[j].color.g = atoi(line);
+						param->ellipse[j].color.g = atoi(line);
 					}
 					if (!strcmp(line, "b:")) {
 						fscanf(f, "%s", line);
 						i++;
-						param->sphere[j].color.b = atoi(line);
+						param->ellipse[j].color.b = atoi(line);
 					}
 					fscanf(f, "%s", line);
 					i++;
-					if (strcmp(line, "r:") && strcmp(line, "g:") && strcmp(line, "b:") && strcmp(line, "a:") && strcmp(line, "b2:") && strcmp(line, "c:") && strcmp(line, "alpha:")  && strcmp(line, "beta:") && strcmp(line, "gamma:")) {
+					if (strcmp(line, "r:") && strcmp(line, "g:") && strcmp(line, "b:") && strcmp(line, "A:")) {
 						return 0;
 					}
 				}
-				fscanf(f, "%s", line);
-				i++;
 				fscanf(f, "%s", line);
 				i++;
 				param->ellipse[j].a = atof(line);
