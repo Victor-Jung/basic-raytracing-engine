@@ -5,47 +5,48 @@
         <title>
             <?= htmlspecialchars($template['pageName']) ?>
         </title>
-        <link href="View/Style/global.css" rel="stylesheet">
-        <link href="View/Style/edition.css" rel="stylesheet">
-        <link href="View/Style/geometry.css" rel="stylesheet">
-        <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <link href="View/Ressources/global.css" rel="stylesheet">
+        <link href="View/Ressources/edition.css" rel="stylesheet">
+        <link href="View/Ressources/geometry.css" rel="stylesheet">
+        <script src="View/Ressources/jquery-3.1.1.min.js"></script>
+        <link rel="icon" type="image/png" href="View/Ressources/icone.ico"/>
     </head>
     
     <body>
-        <!--
+        
             <div style="max-height: 300px; overflow-y: scroll; text-align: left;">
                 <table>
                     <tr>
                         <td>
-                            file
-                        </td>
-                        <td>
-                            scene
+                            ellipses
                         </td>
                         <td>
                             Post
                         </td>
+                        <td>
+                            polyèdres
+                        </td>
                     </tr>
                     <tr>
                         <td>
-                            <pre>< ?= print_r($_SESSION['file']) ?></pre>
+                            <pre><?= print_r($_SESSION['ellipsoid']) ?></pre>
                         </td>
                         <td>
-                            <pre>< ?= print_r($_SESSION['scene']) ?></pre>
+                            <pre><?php if (isset($_POST)) print_r($_POST) ?></pre>
                         </td>
                         <td>
-                            <pre>< ?php if (isset($_POST)) print_r($_POST) ?></pre>
+                            <pre><?= print_r($_SESSION['polyhedron']) ?></pre>
                         </td>
                     </tr>
                 </table>
             </div>
-        -->
+        
         <header>
-            <h1>Modélisation d'images en ray tracing - étape <?= $_SESSION['pageBlock'] ?></h1>
+            <h1>Modélisation d'images en ray tracing - étape <?= $_SESSION['pageBlock']+1 ?></h1>
         </header>
 
         <menu class="alert">
-            <li <?php if (isset($template['listWarning'])) echo 'style="font-weight: bold"' ?>>
+            <li <?= isset($template['listWarning'])? 'style="font-weight: bold"' : '' ?>>
                 Notification
                 <ul>
                     <li style="font-weight: initial">
@@ -74,10 +75,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $i = 1;
+                    <?php $pageBlock = 0;
                     if (isset($edition['content']['fixed'])) {
                         foreach ($edition['content']['fixed'] as $content) {
-                            if ($i == 1) { ?>
+                            if ($pageBlock == 0) { ?>
                                 <tr>
                                     <td>
                                         <br><br>
@@ -90,14 +91,14 @@
                             <?php } ?>
                                             <tr>
                                                 <th>
-                                                    <?= htmlspecialchars($edition['legend'][$i]) ?>
+                                                    <?= htmlspecialchars($edition['legend'][$pageBlock]) ?>
                                                 </th>
                                                 <td>
                                                     <?= $content ?>
                                                 </td>
                                             </tr>
                                             
-                            <?php if ($i == 2 || ($i == 1 && !$edition['display'][3])) { ?>
+                            <?php if ($pageBlock == 1 || ($pageBlock == 0 && !$edition['display'][2])) { ?>
                                             <tr>
                                                 <td colspan="3"><br></td>
                                             </tr>
@@ -105,36 +106,36 @@
                                     </td>
                                 </tr>
                             <?php }
-                            $i++;
+                            $pageBlock++;
                         }
                     } ?>
                     <tr>
                         <td>
                             <fieldset>
-                                <legend><?= $edition['legend'][$i] ?></legend>
+                                <legend><?= $edition['legend'][$pageBlock] ?></legend>
                                 <form method="post" action="index.php">
                                     <input type="hidden" name="script" value="<?= htmlspecialchars($edition['script']) ?>">
                                     <table>
                                         <?= $edition['content']['fillable'] ?>
                                         <tr><td colspan="2"><br><hr></td></tr>
                                         <tr>
-                                            <td>
-                                                <input type="checkbox" id="nextStep" name="nextStep" value="1">
-                                                <label for="nextStep">
-                                                    <?= ($i != 3) ? 'Passer à l\'étape suivante' : 'Nouveau fichier' ?>
-                                                </label>
-                                                <?php if ($i == 3) { ?>
-                                                    <br>
+                                            <?php if ($pageBlock == 2) { ?>
+                                                <td>
                                                     <input type="checkbox" id="reuseData" name="reuseData" value="1">
                                                     <label for="reuseData">Réutiliser les données</label>
                                                     <br>
                                                     <input type="checkbox" id="saveData" name="saveData" value="1">
                                                     <label for="saveData">Conserver les données</label>
-                                                <?php } ?>
-                                            </td>
-                                            <td>
-                                                <input type="submit" value="Actualiser">
-                                            </td>
+                                                </td>
+                                                <td>
+                                                    <input type="submit" value="Nouveau fichier">
+                                                </td>
+                                            <?php } 
+                                            else { ?>
+                                                <td colspan="2">
+                                                    <input type="submit" value="Suivant">
+                                                </td>
+                                            <?php } ?>
                                         </tr>
                                     </table>
                                 </form>

@@ -1,6 +1,6 @@
 <?php
 //fragments de code de la page
-if ($_SESSION['pageBlock'] > 1) {
+if ($_SESSION['pageBlock'] > 0) {
     ob_start(); ?>
         <table>
             <tr>
@@ -15,7 +15,7 @@ if ($_SESSION['pageBlock'] > 1) {
         </table>
     <?php $edition['content']['fixed'][1] = ob_get_clean();
 }
-if ($_SESSION['pageBlock'] == 3) {
+if ($_SESSION['pageBlock'] == 2) {
     ob_start(); ?>
         <table>
             <tr>
@@ -169,11 +169,8 @@ if ($_SESSION['pageBlock'] == 3) {
 }
 
 switch ($_SESSION['pageBlock']) {
-    case 1:
-        $edition['display'][1] = true;
-        $edition['display'][2] = false;
-        $edition['display'][3] = false;
-
+    case 0:
+        $edition['display'] = array(true, false, false);
         $edition['script'] = 'fileConfig';
 
         function definition($axis) { ?>
@@ -202,7 +199,77 @@ switch ($_SESSION['pageBlock']) {
                                 value="<?= htmlspecialchars($_SESSION['file']['name']) ?>" required>
                             </td>
                         </tr>
-                        <tr><td><br></td></tr>
+                        <tr>
+                            <td colspan="2">
+                                <br><hr><br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" id="video">
+                                Type de fichier :
+                                <input type="radio" id="picture" name="video" value="0"
+                                <?= (!$_SESSION['file']['video']['selected'])? 'checked' : '' ?> required>
+                                <label for="picture">
+                                    Image
+                                </label>
+
+                                <input type="radio" id="video" name="video" value="1"
+                                <?= ($_SESSION['file']['video']['selected'])? 'checked' : '' ?> required>
+                                <label id="buttonVideo" for="video">
+                                    Animation
+                                </label>
+                                <table>
+                                    <tr>
+                                        <td colspan="2">
+                                            <br>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Durée en secondes :
+                                        </td>
+                                        <td>
+                                            <input type="number" class="number" name="duration" 
+                                            value="<?= htmlspecialchars($_SESSION['file']['video']['duration']) ?>" 
+                                            step="1" min="1" max="<?= MAX_DURATION ?>" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Images par seconde :
+                                        </td>
+                                        <td>
+                                            <input type="number" class="number" name="frequency" 
+                                            value="<?= htmlspecialchars($_SESSION['file']['video']['frequency']) ?>" 
+                                            step="1" min="1" max="60" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Déplacement caméra :
+                                        </td>
+                                        <td>
+                                            <input type="number" class="xSmallNumber" name="moveX" 
+                                            value="<?= htmlspecialchars($_SESSION['file']['video']['move']['x']) ?>" 
+                                            step="1" required>
+                                            -
+                                            <input type="number" class="xSmallNumber" name="moveY" 
+                                            value="<?= htmlspecialchars($_SESSION['file']['video']['move']['y']) ?>" 
+                                            step="1" required>
+                                            -
+                                            <input type="number" class="xSmallNumber" name="moveZ" 
+                                            value="<?= htmlspecialchars($_SESSION['file']['video']['move']['z']) ?>" 
+                                            step="1" required>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <br><hr><br>
+                            </td>
+                        </tr>
                         <tr>
                             <td>
                                 Dimensions du fichier :
@@ -213,80 +280,11 @@ switch ($_SESSION['pageBlock']) {
                         </tr>
                     </table>
                 </td>
-                <td id="video">
-                    Type de fichier :
-                    <input type="radio" id="picture" name="video" value="0"
-                    <?= (!$_SESSION['file']['video']['selected'])? 'checked' : '' ?> required>
-                    <label for="picture">
-                        Image
-                    </label>
-                    <input type="radio" id="video" name="video" value="1"
-                    <?= ($_SESSION['file']['video']['selected'])? 'checked' : '' ?> required>
-                    <label id="buttonVideo" for="video">
-                        Animation
-                    </label>
-                    <table>
-                        <tr>
-                            <td>
-                                Durée en secondes :
-                            </td>
-                            <td>
-                                <input type="number" name="duration" 
-                                value="<?= htmlspecialchars($_SESSION['file']['video']['duration']) ?>" 
-                                step="1" min="1" max="<?= MAX_DURATION ?>" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Images par seconde :
-                            </td>
-                            <td>
-                                <input type="number" name="frequency" 
-                                value="<?= htmlspecialchars($_SESSION['file']['video']['frequency']) ?>" 
-                                step="1" min="1" max="60" required>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        <?php $edition['content']['fillable'] = ob_get_clean();
-    break;
-    case 2:
-        $edition['display'][1] = true;
-        $edition['display'][2] = true;
-        $edition['display'][3] = false;
-
-        $edition['script'] = 'sceneConfig';
-
-        ob_start(); ?>
-            <tr>
                 <td>
                     <table>
                         <tr>
-                            <td colspan="2">
-                                <h3>Fond</h3>
-                            </td>
-                        </tr>
-                        <tr>
                             <td>
-                                Couleur :
-                            </td>
-                            <td>
-                                <label>
-                                    <input type="color" id="sceneColor" name="sceneColor" 
-                                    value="<?= htmlspecialchars($_SESSION['scene']['color']) ?>">
-                                </label>
-                            </td>
-                        </tr>
-                        <tr><td colspan="2"><hr></td></tr>
-                        <tr>
-                            <td colspan="2">
-                                <h3>Observateur</h3>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Position :
+                                Position caméra :
                             </td>
                             <td>
                                 <input type="number" class="smallNumber" name="viewerX" 
@@ -302,25 +300,14 @@ switch ($_SESSION['pageBlock']) {
                                 step="1" required>
                             </td>
                         </tr>
-                        <tr><td colspan="2"><hr></td></tr>
                         <tr>
                             <td colspan="2">
-                                <h3>Source lumineuse</h3>
+                                <br>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                Puissance :
-                            </td>
-                            <td>
-                                <input type="number" class="smallNumber" name="bright" 
-                                value="<?= htmlspecialchars($_SESSION['scene']['light'][0]['bright']) ?>" 
-                                step="0.5" min="0" max="100" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Position :
+                                Position de la lumière :
                             </td>
                             <td>
                                 <input type="number" class="smallNumber" name="lightX" 
@@ -336,45 +323,57 @@ switch ($_SESSION['pageBlock']) {
                                 step="1" required>
                             </td>
                         </tr>
-                        <tr><td colspan="2"><hr></td></tr>
                         <tr>
-                            <td colspan="2">
-                                <h3>Effets de lumière</h3>
-                                <table class="tab3col">
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox" id="shadows" name="shadows" value="1" 
-                                            <?= $_SESSION['file']['effects']['shadows']? 'checked' : '' ?>>
-                                            <label for="shadows">Ombres</label>
-                                        </td>
-                                        <td>
-                                            <input type="checkbox" id="reflection" name="reflection" value="1"
-                                            <?= $_SESSION['file']['effects']['reflection']? 'checked' : '' ?>>
-                                            <label for="reflection">Réflexion</label>
-                                        </td>
-                                        <td>
-                                            <input type="checkbox" id="refraction" name="refraction" value="1"
-                                            <?= $_SESSION['file']['effects']['refraction']? 'checked' : '' ?>>
-                                            <label for="refraction">Réfraction</label>
-                                        </td>
-                                    </tr>
-                                </table>
+                            <td>
+                                Puissance de la lumière :
+                            </td>
+                            <td>
+                                <input type="number" class="number" name="bright" 
+                                value="<?= htmlspecialchars($_SESSION['scene']['light'][0]['bright']) ?>" 
+                                step="0.5" min="0" max="100" required>%
                             </td>
                         </tr>
-                    </table> 
-                </td>
-                <td>
-                    <div id="grid" style="height: <?= htmlspecialchars(25*($_SESSION['file']['dim']['y'] / $_SESSION['file']['dim']['x'])) ?>em;
-                    background-color: <?= $_SESSION['scene']['color'] ?>;">
-                        <!--Ajoute objets avec des images de fond, que l'on déplace selon les axes x et y, ou des span modifiés en css?-->
-                    </div>
+                        <tr>
+                            <td colspan="2">
+                                <br><hr><br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Couleur de fond :
+                            </td>
+                            <td>
+                                <input type="color" id="sceneColor" name="sceneColor" 
+                                value="<?= htmlspecialchars($_SESSION['scene']['color']) ?>">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" id="shadows" name="shadows" value="1" 
+                                <?= $_SESSION['file']['effects']['shadows']? 'checked' : '' ?>>
+                                <label for="shadows">Ombres</label>
+                            </td>   
+                            <td>
+                                <input type="checkbox" id="aliasing" name="aliasing" value="1"
+                                <?= $_SESSION['file']['effects']['aliasing']? 'checked' : '' ?>>
+                                <label for="aliasing">Anti-Aliasing</label>
+                            </td>   
+                        </tr>
+                    </table>
                 </td>
             </tr>
-            <tr>
-                <td colspan="2">
-                    <br><hr><br>
-                </td>
-            </tr>
+        <?php $edition['content']['fillable'] = ob_get_clean();
+    break;
+    case 1:
+        $edition['display'] = array(true, true, false);
+        $edition['script'] = 'sceneConfig';
+
+        ob_start(); ?>
             <tr>
                 <td>
                     Nombre d'ellipsoïdes : <select id="selectElli" name="selectElli"></select>
@@ -385,60 +384,77 @@ switch ($_SESSION['pageBlock']) {
             </tr>
             <tr>
                 <td>
-                    <div id="allEllis">
+                    <div id="allElli">
                         <script>
                             $(document).ready(function() {
                                 var texte = "";
                                 var nbElli = 0;
-                                //On initialise les tableaux
                                 
-                                for(var i = 0; i<=10; i++){
-                                    texte+="<option>"+i+"</option>"; //creation des premieres options
+                                for(var i = 0; i<=6; i++){
+                                    texte+="<option>"+i+"</option>"; //creation des options
                                 }
                                 
                                 $("#selectElli").html(texte);
+                                $("#selectElli").on("change", loadElli);
                                 
-                                $("#selectElli").on("change", load);
-                                
-                                function load(){
-                                    loadPoly();
-                                    loadFace();
-                                }
-                                
-                                function loadPoly(){
+                                function loadElli(){
                                     nbElli = $("#selectElli").val();
-                                    texte = $("#allEllis").val();
+                                    texte = $("#allElli").val();
                                     if(texte==undefined){
                                         texte=" ";
                                     }
                                     if(nbElli==0){
-                                        $("#allEllis").html("");
+                                        $("#allElli").html("");
                                     }
+                                    <?php $idElli = 0; ?>
                                     for(var i=1; i <= nbElli; i++){
-                                        texte += "<div id='elli"+i+"'><p>----Elli"+i+"</p>";
-                                        texte+="</div>";
-                                        $("#allEllis").html(texte);
+                                        <?php 
+                                            $idElli++;
+                                            if (!isset($_SESSION['ellipsoid'][$idElli])) {
+                                                $_SESSION['ellipsoid'][$idElli]['pos'] = array('x' => 1, 'y' => 1, 'z' => 1);
+                                                $_SESSION['ellipsoid'][$idElli]['rad'] = array('x' => 1, 'y' => 1, 'z' => 1);
+                                            }
+                                        ?>
+                                        texte+= '<br><hr><br>';
+                                        texte+= '<table><tr><td>';
+                                                    texte+= 'Couleur : ';
+                                                texte+= '</td><td>';
+                                                    texte+= '<input type="color" name="elli'+i+'_color" value="#ffffff">';
+                                            texte+= '</td></tr><tr><td>';
+                                                    texte+= 'Position du centre : ';
+                                                texte+= '</td><td>';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_xPos" value="'+<?= $_SESSION['ellipsoid'][$idElli]['pos']['x'] ?>+'"> - ';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_yPos" value="'+<?= $_SESSION['ellipsoid'][$idElli]['pos']['y'] ?>+'"> - ';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_zPos" value="'+<?= $_SESSION['ellipsoid'][$idElli]['pos']['z'] ?>+'">';
+                                            texte+= '</td></tr><tr><td>';
+                                                    texte+= 'Rayons : ';
+                                                texte+= '</td><td>';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_xRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['x'] ?>+'"> - ';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_yRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['y'] ?>+'"> - ';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_zRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['z'] ?>+'">';
+                                        texte+= '</td></tr></table>';
+                                        $("#allElli").html(texte);
                                     }
                                 }		
-                                load();
+                                loadElli();
                             });
                         </script>
                     </div>
                 </td>
                 <td>
-                    <div id="allPolys">
+                    <div id="allPoly">
                         <script>
                             $(document).ready(function() {
                                 var texte = "";
                                 var nbPoly = 0;
                                 var nbFaces = new Array(10);
                                 var nbPeaks = new Array(10);
-                                for(var i=0; i<10;i++){
+                                for(var i=0; i<5;i++){
                                     nbPeaks[i] = new Array(10);
                                 }
                                 //On initialise les tableaux
                                 
-                                for(var i = 0; i<=10; i++){
+                                for(var i = 0; i<=4; i++){
                                     texte+="<option>"+i+"</option>"; //creation des premieres options
                                 }
                                 
@@ -453,25 +469,28 @@ switch ($_SESSION['pageBlock']) {
                                 
                                 function loadPoly(){
                                     nbPoly = $("#selectPoly").val();
-                                    texte = $("#allPolys").val();
+                                    texte = $("#allPoly").val();
                                     if(texte==undefined){
                                         texte=" ";
                                     }
                                     if(nbPoly==0){
-                                        $("#allPolys").html("");
+                                        $("#allPoly").html("");
                                     }
                                     for(var i=1; i <= nbPoly; i++){
-                                        texte += "<div id='poly"+i+"'><p>----Poly"+i+" <select id='selectFace"+i+"' name='selectFace"+i+"' class='selectFace'></p>";
-                                        for(var j=1; j<=10; j++){
-                                            texte+="<option";
-                                            if(j==nbFaces[i]){
-                                                texte+=" selected";
-                                            }
-                                            texte+=">"+j+"</option>";
-                                        }
-                                        texte+="</select><div id='allFaces"+i+"'></div>";
-                                        texte+="</div>";
-                                        $("#allPolys").html(texte);
+                                        texte+= '<br><hr><br>';
+                                        texte+= '<table><tr><td>';
+                                                texte+= 'Faces du polyèdre '+i+' : <select id="selectFace'+i+'" name="selectFace'+i+'" class="selectFace">';
+                                                for(var j=1; j<=10; j++){
+                                                    texte+= '<option';
+                                                    if(j==nbFaces[i]){
+                                                        texte+= ' selected';
+                                                    }
+                                                    texte+= '>'+j+'</option>';
+                                                }
+                                                texte+= '</select>';
+                                            texte+= '</td></tr><tr><td id="allFaces'+i+'">';
+                                        texte+= '</td></tr></table>';
+                                        $("#allPoly").html(texte);
                                     }
                                     $(".selectFace").on("change", loadFace);
                                 }		
@@ -485,16 +504,27 @@ switch ($_SESSION['pageBlock']) {
                                         }
                                         nbFaces[i] = $("#selectFace"+i).val();
                                         for(var j=1; j<=nbFaces[i]; j++){
-                                            texte += "<div id='face"+j+"'><p>--------Face"+j+" <select id='selectPeak"+i+j+"' name='selectPeak"+i+j+"' class='selectPeak'></p>";
-                                            for(var k=1; k<=10; k++){
-                                                texte+="<option";
-                                                if(k==nbPeaks[i][j]){
-                                                    texte+=" selected";
-                                                }
-                                                texte+=">"+k+"</option>";
-                                            }
-                                            texte+="</select><div id='allPeaks"+i+j+"'>";
-                                            texte+="</div></div>";
+                                            texte+= '<br>';
+                                            texte+= '<table><tr><th>';
+                                                    texte+= 'face '+j;
+                                                texte+= '</th><td>';
+                                                    texte+= '<input type="color" name="poly'+i+'_face'+j+'_color" value="#ffffff">';
+                                                    texte+= ' | ';
+                                                    texte+= '<label><input type="checkbox" name="poly'+i+'_face'+j+'_reflexion" value="1">Réflexion</label>';
+                                                texte+= '</td></tr><tr><td>';
+                                                    texte+= 'Sommets :';
+                                                texte+= '</td><td>';
+                                                    texte+= '<select id="selectPeak'+i+'_'+j+'" name="selectPeak'+i+'_'+j+'" class="selectPeak">';
+                                                    for(var k=3; k<=9; k++){
+                                                        texte+="<option";
+                                                        if(k==nbPeaks[i][j]){
+                                                            texte+=" selected";
+                                                        }
+                                                        texte+=">"+k+"</option>";
+                                                    }
+                                                    texte+= '</select>';
+                                                texte+= '</td></tr><tr><td id="allPeaks'+i+'_'+j+'" colspan="2">';
+                                            texte+= '</td></tr></table>';
                                         }
                                         $("#allFaces"+i).html(texte);
                                     }
@@ -506,18 +536,24 @@ switch ($_SESSION['pageBlock']) {
                                     var j=1;
                                     var k = 1;
                                     for(var i=1; i<=nbPoly; i++){
-                                        texte = $("#allPeaks"+i+j).val();
+                                        texte = $("#allPeaks"+i+'_'+j).val();
                                         if(texte==undefined){
                                             texte=" ";
                                         }
                                         nbFaces[i] = $("#selectFace"+i).val();
                                         for(j=1; j<=nbFaces[i]; j++){
-                                            texte = $("#allPeaks"+i+j).val();
-                                            nbPeaks[i][j] = $("#selectPeak"+i+j).val();
+                                            texte = $("#allPeaks"+i+'_'+j).val();
+                                            nbPeaks[i][j] = $("#selectPeak"+i+'_'+j).val();
                                             for(var l=1; l<=nbPeaks[i][j]; l++){
-                                                texte+= "<p>------------Sommet"+l+"</p>";
+                                                texte+= '<table><tr><td>';
+                                                        texte+= 'Position du sommet '+l;
+                                                    texte+= '</td><td>';
+                                                        texte+= '<input type="number" class="xSmallNumber" name="poly'+i+'_face'+j+'_peak'+l+'_xPos" value="1"> - ';
+                                                        texte+= '<input type="number" class="xSmallNumber" name="poly'+i+'_face'+j+'_peak'+l+'_yPos" value="1"> - ';
+                                                        texte+= '<input type="number" class="xSmallNumber" name="poly'+i+'_face'+j+'_peak'+l+'_zPos" value="1">';
+                                                texte+= '</td></tr></table>';
                                             };
-                                            $("#allPeaks"+i+j).html(texte);
+                                            $("#allPeaks"+i+'_'+j).html(texte);
                                         }
                                     }
                                 }
@@ -528,28 +564,14 @@ switch ($_SESSION['pageBlock']) {
             </tr>
         <?php $edition['content']['fillable'] = ob_get_clean();
     break;
-    case 3:
-        $edition['display'][1] = true;
-        $edition['display'][2] = true;
-        $edition['display'][3] = true;
-
-        $edition['script'] = 'patchConfig';
+    case 2:
+        $edition['display'] = array(true, true, true);
+        $edition['script'] = '';
 
         ob_start(); ?>
             <tr>
-                <td>
-                    <label>
-                        Choisissez une retouche :<br>
-                        <select>
-                            <option>Aucune</option>
-                            <option>Anti-aliasing</option>
-                            <option>Filtre lumineux</option>
-                        </select>
-                    </label>
-                    <input type="submit" value="Confirmer">
-                </td>
-                <td>
-                    <img src="../link/preview.bmp" alt="Fichier produit" width="100%">
+                <td colspan="2">
+                    <img src="../link/preview.bmp" alt="Fichier produit" width="75%">
                 </td>
             </tr>
         <?php $edition['content']['fillable'] = ob_get_clean();

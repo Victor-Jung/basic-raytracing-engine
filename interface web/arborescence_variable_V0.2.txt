@@ -9,7 +9,11 @@
 					['selected'] (boolean)
 					['duration']
 					['frequency']
-			['saveData'] (boolean) (objectif semaine : si true, enregistrer un second fichier texte) (utilise reusedata)
+					['move']
+							['x']
+							['y']
+							['z']
+			['saveData'] (boolean)
 			[effects] (booleans)
 					['shadows']
 					['reflection']
@@ -30,7 +34,6 @@
 									['z']
 		['ellipsoid']
 					[idEllipsoid]
-								['name'] (cercle-sphère-ellispoïde)
 								['color']
 								['pos'] (center)
 										['x']
@@ -38,24 +41,22 @@
 										['z']
 								['rad']
 										['x']
-										['y'] (later)
-										['z'] (later)
-								['rot'] (later)
-										['x']
 										['y']
 										['z']
 		['polyhedron']
-						[idPolyhedron]
-									['name'] (surface-pavé-polyèdre)
-									['face']
-											[idFace]
-													['color']
-													['peak']
-															[idPeak](position)
-																	['x']
-																	['y']
-																	['z']
-													['rot'] (later)
-															['x']
-															['y']
-															['z']
+					[idPolyhedron]
+								[idFace]
+										['color']
+										['peak']
+												[idPeak](position)
+														['x']
+														['y']
+														['z']
+										['rot']
+												['x']
+												['y']
+												['z']
+
+
+
+
