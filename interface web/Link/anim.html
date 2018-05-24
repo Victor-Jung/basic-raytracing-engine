@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8"/>
+	<title>Votre image/vidéo</title>
+	<meta name="author" content="Paul Bucamp"/>
+	<script src="../View/Ressources/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="anim.js"></script>
+	<link rel="icon" type="image/png" href="../View/Ressources/icone.ico"/>
+	<style>
+		#video{
+			opacity: 0;
+		}
+		
+		#replay{
+			opacity: 0;
+		}
+	</style>
+</head>
+
+	<body>
+		<h1 id="load"></h1> <button id="replay" type="button">Replay</button>
+		FPS: <input id="fps" type="number" min="1" max="120" step="1" value="20"/>
+		<div id="video">
+		
+		</div>
+	</body>
+
+</html>
