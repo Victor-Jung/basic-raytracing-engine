@@ -2,9 +2,9 @@
 Name:
 cube
 Height:
-512
+1024
 Width:
-512
+1024
 Background-color:
 	r:
 	41
@@ -16,73 +16,133 @@ Brightness:
 1
 LightPosition:
 	x:
-	6.5
+	3
 	y:
-	-5
+	20
 	z:
 	10
 ViewerPosition:
 	x:
-	-18
+	-15
 	y:
-	-3
+	3
 	z:
-	1
+	3
 Polyhedron:
 1
 Polyhedron1:
 	NumberOfFaces:
-	1
-		Face1:
-			Color:
-				r:
-				0
-				g:
-				0
-				b:
-				0
-			Numberofpeaks:
-			4
+	2
+	Face1:
+		Color:
+			r:
+			80
+			g:
+			206
+			b:
+			80
+		isMirror:
+		1
+		Numberofpeaks:
+		4
 			x1:
-			5
+			10
 			y1:
-			-5
+			7
 			z1:
-			4
+			7
 			x2:
-			5
+			8
 			y2:
-			5
+			-7
 			z2:
-			4
+			7
 			x3:
 			8
 			y3:
-			5
+			-7
 			z3:
-			4
+			-7
 			x4:
-			8
+			10
 			y4:
-			-5
+			7
 			z4:
-			4
+			-7
+Face2:
+		Color:
+			r:
+			206
+			g:
+			206
+			b:
+			209
+		isMirror:
+		0
+		Numberofpeaks:
+		4
+			x1:
+			10.5
+			y1:
+			8
+			z1:
+			10
+			x2:
+			8
+			y2:
+			-8
+			z2:
+			10
+			x3:
+			8
+			y3:
+			-8
+			z3:
+			-10
+			x4:
+			10.5
+			y4:
+			8
+			z4:
+			-10
 NumberOfSpheres:
 1
 Sphere1:
 	Color:
 		r:
-		255
+		180
 		g:
-		0
+		155
 		b:
-		0
+		19
 	Center:
 		x:
-		6.5
+		2
 		y:
-		0
+		10
 		z:
-		-2
+		3
 	Radius:
-		6
+		2
+NumberOfEllipse:
+1
+Ellipse1:
+	Color:
+		r:
+		255
+		g:
+		255
+		b:
+		30
+	A:
+	2
+	B:
+	13
+	C:
+	1
+	alpha:
+	2
+	beta:
+	3
+	gamma:
+	5

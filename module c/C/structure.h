@@ -1,5 +1,6 @@
 #include "bmp.h"
 #include <stdio.h>
+#include <stdbool.h>
 
 typedef struct sFormula_ sFormula;
 struct sFormula_ {
@@ -40,6 +41,12 @@ struct sPosAndSphere_ {
 	int iSphere;
 };
 
+typedef struct sPosAndEllipse_ sPosEllipse;
+struct sPosAndEllipse_ {
+	sPos *position;
+	int iEllipse;
+};
+
 typedef struct sPlanEquation_ sPlanEqua;
 struct sPlanEquation_ {
 	double a;
@@ -54,6 +61,7 @@ struct sFace_ {
 	int nbPeaks;
 	sPos *peak;
 	sPlanEqua planEqua;
+	bool isMirror;
 };
 
 typedef struct sPolyhedron_ sPoly;
@@ -69,6 +77,21 @@ typedef struct sSphere_ sSphere;
 struct sSphere_ {
 	sPos center;
 	double r;
+	sColor color;
+};
+
+
+//equation d'une ellipse (x-a)²/alpha²  +  (y-b)²/beta²   +  (z-c)²/gamma²  =  1    alpha, beta et gamma donnent les longueurs des rayons dans les 3 directions,  (a,b,c) sont les coordonnées du centre de l'ellipse
+typedef struct sEllipse_ sEllipse;
+struct sEllipse_ {
+	double a;
+	double b;
+	double c;
+
+	double alpha;
+	double beta;
+	double gamma;
+
 	sColor color;
 };
 
@@ -99,9 +122,13 @@ struct sParam_ {
 	int nbSpheres;
 	sSphere *sphere;
 
+	int nbEllipse;
+	sEllipse *ellipse;
+
 	sPos lightSource;
 	sLight light;
 };
+
 
 int nbLine(FILE *f);
 

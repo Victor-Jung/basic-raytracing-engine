@@ -94,6 +94,12 @@ void showStruct(sParam param) {
 		printf("	Center:\n		x : %f\n		y : %f\n		z : %f\n", param.sphere[i].center.x, param.sphere[i].center.y, param.sphere[i].center.z);
 		printf("	Radius : %f\n", param.sphere[i].r);
 	}
+	printf("Number of ellipses : %d\n", param.nbEllipse);
+	for (int i = 0; i < param.nbEllipse; i++) {
+		printf("	Color:\n		r : %d\n		g : %d\n		b : %d\n", param.ellipse[i].color.r, param.ellipse[i].color.g, param.ellipse[i].color.b);
+		printf("	Center:\n		x : %f\n		y : %f\n		z : %f\n", param.ellipse[i].a, param.ellipse[i].b, param.ellipse[i].c);
+		printf("	Radius :\n 		a : %f\n 		b : %f\n		c : %f\n", param.ellipse[i].alpha, param.ellipse[i].beta, param.ellipse[i].gamma);
+	}
 }
 
 int loadFromFile(sParam *param) {
@@ -104,7 +110,7 @@ int loadFromFile(sParam *param) {
 	char line[100];
 	int sizeFile = nbLine(f); //on recupere le nombre de lignes du fichier
 	fscanf(f, "%s", line);
-	for(int i = 0; i < sizeFile; i++) {
+	for (int i = 0; i < sizeFile; i++) {
 		fscanf(f, "%s", line);
 		if (!strcmp(line, "Name:")) {
 			i++;
@@ -242,11 +248,18 @@ int loadFromFile(sParam *param) {
 								}
 								fscanf(f, "%s", line);
 								i++;
-								if (strcmp(line, "r:") && strcmp(line, "g:") && strcmp(line, "b:") && strcmp(line, "Numberofpeaks:")) {
+								if (strcmp(line, "r:") && strcmp(line, "g:") && strcmp(line, "b:") && strcmp(line, "isMirror:")) {
 									return 0;
 								}
 							}
 							param->poly[j].face[l].color = colorTmp;
+						}
+						if (!strcmp(line, "isMirror:")) {
+							fscanf(f, "%s", line);
+							i++;
+							param->poly[j].face[l].isMirror = atoi(line);
+							fscanf(f, "%s", line);
+							i++;
 						}
 						if (!strcmp(line, "Numberofpeaks:")) {
 							fscanf(f, "%s", line);
@@ -283,7 +296,7 @@ int loadFromFile(sParam *param) {
 			param->sphere = (sSphere*)malloc(param->nbSpheres * sizeof(sSphere));
 			for (int j = 0; j < param->nbSpheres; j++) {
 				i++;
-				fscanf(f, "%s", line); 
+				fscanf(f, "%s", line);
 				char buffer[2];
 				sprintf(buffer, "%d", j + 1);
 				char searched[sizeName];
@@ -331,12 +344,12 @@ int loadFromFile(sParam *param) {
 				i++;
 				fscanf(f, "%s", line);
 				i++;
-				param->sphere[j].center.y= atof(line);
+				param->sphere[j].center.y = atof(line);
 				fscanf(f, "%s", line);
 				i++;
 				fscanf(f, "%s", line);
 				i++;
-				param->sphere[j].center.z= atof(line);
+				param->sphere[j].center.z = atof(line);
 				fscanf(f, "%s", line);
 				i++;
 				if (strcmp(line, "Radius:")) {
@@ -347,8 +360,84 @@ int loadFromFile(sParam *param) {
 				param->sphere[j].r = atof(line);
 			}
 		}
-		else { 
-			return 0; 
+		else if (!strcmp(line, "NumberOfEllipse:")) {
+			i++;
+			fscanf(f, "%s", line);
+			param->nbEllipse = atoi(line);
+			param->ellipse = (sEllipse*)malloc(param->nbEllipse * sizeof(sEllipse));
+			for (int j = 0; j < param->nbEllipse; j++) {
+				i++;
+				fscanf(f, "%s", line);
+				char buffer[2];
+				sprintf(buffer, "%d", j + 1);
+				char searched[sizeName];
+				strcpy(searched, "Ellipse");
+				strcat(searched, buffer);
+				strcat(searched, ":");
+				if (strcmp(searched, line)) {
+					return 0;
+				}
+				fscanf(f, "%s", line);
+				i++;
+				if (strcmp(line, "Color:")) {
+					return 0;
+				}
+				fscanf(f, "%s", line);
+				i++;
+				for (int k = 0; k < 3; k++) {
+					if (!strcmp(line, "r:")) {
+						fscanf(f, "%s", line);
+						i++;
+						param->ellipse[j].color.r = atoi(line);
+					}
+					if (!strcmp(line, "g:")) {
+						fscanf(f, "%s", line);
+						i++;
+						param->ellipse[j].color.g = atoi(line);
+					}
+					if (!strcmp(line, "b:")) {
+						fscanf(f, "%s", line);
+						i++;
+						param->ellipse[j].color.b = atoi(line);
+					}
+					fscanf(f, "%s", line);
+					i++;
+					if (strcmp(line, "r:") && strcmp(line, "g:") && strcmp(line, "b:") && strcmp(line, "A:")) {
+						return 0;
+					}
+				}
+				fscanf(f, "%s", line);
+				i++;
+				param->ellipse[j].a = atof(line);
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				param->ellipse[j].b = atof(line);
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				param->ellipse[j].c = atof(line);
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				param->ellipse[j].alpha = atof(line);
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				param->ellipse[j].beta = atof(line);
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				param->ellipse[j].gamma = atof(line);
+			}
+		}
+		else {
+			return 0;
 		}
 	}
 	for (int i = 0; i < param->nbPolyhedrons; i++) {
