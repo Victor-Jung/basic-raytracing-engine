@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 function Edition($listWarning) {
     //gestion des blocs   
@@ -13,7 +13,7 @@ function Edition($listWarning) {
 
             if ($_SESSION['pageBlock'] >= 2) {
                 //creee fichiers textes
-                $file = fopen('link/data.txt', 'w');
+                $file = fopen('data.txt', 'w');
                 if ($_SESSION == 3 && isset($_POST['saveData']) && $_POST['saveData']) {
                     $file = fopen('link/'.$_SESSION['file']['name'].'.txt', 'w');
                 }
@@ -152,7 +152,7 @@ function Edition($listWarning) {
 */
                 fclose($file);
 
-                exec('Link\ProjetEx.exe');
+                exec("ProjetEx.exe");
             }
         }
     }
