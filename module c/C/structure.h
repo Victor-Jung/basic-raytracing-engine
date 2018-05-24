@@ -110,9 +110,19 @@ struct sLight_ {
 };
 
 
+typedef struct sVideo_ sVideo;
+struct sVideo_ {
+	bool isTrue;
+	int frames;
+	sPos movement;
+};
+
 typedef struct sParam_ sParam;
 struct sParam_ {
 	sImage image;
+	bool shadows;
+	bool antialiasing;
+	sVideo video;
 
 	sPos viewerPos;
 

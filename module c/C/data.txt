@@ -5,144 +5,223 @@ Height:
 1024
 Width:
 1024
+Shadows:
+1
+Antialiasing:
+1
+Video:
+1
+	NumberOfFrames:
+	20
+		x:
+		-0.1
+		y:
+		0.1
+		z:
+		-0.5
 Background-color:
 	r:
-	41
+	100
 	g:
-	178
+	100
 	b:
-	230
+	100
 Brightness:
 1
 LightPosition:
 	x:
-	3
+	4
 	y:
-	20
+	5
 	z:
-	10
+	17
 ViewerPosition:
 	x:
-	-15
+	-5
 	y:
 	3
 	z:
-	3
+	10
 Polyhedron:
 1
 Polyhedron1:
 	NumberOfFaces:
-	2
-	Face1:
-		Color:
-			r:
-			80
-			g:
-			206
-			b:
-			80
-		isMirror:
-		1
-		Numberofpeaks:
-		4
+	1
+		Face1:
+			Color:
+				r:
+				0
+				g:
+				0
+				b:
+				255
+			isMirror:
+			0
+			Numberofpeaks:
+			4
 			x1:
 			10
 			y1:
-			7
-			z1:
-			7
-			x2:
-			8
-			y2:
-			-7
-			z2:
-			7
-			x3:
-			8
-			y3:
-			-7
-			z3:
-			-7
-			x4:
-			10
-			y4:
-			7
-			z4:
-			-7
-Face2:
-		Color:
-			r:
-			206
-			g:
-			206
-			b:
-			209
-		isMirror:
-		0
-		Numberofpeaks:
-		4
-			x1:
-			10.5
-			y1:
-			8
-			z1:
-			10
-			x2:
-			8
-			y2:
-			-8
-			z2:
-			10
-			x3:
-			8
-			y3:
-			-8
-			z3:
 			-10
+			z1:
+			-8
+			x2:
+			10
+			y2:
+			10
+			z2:
+			-8
+			x3:
+			2
+			y3:
+			10
+			z3:
+			-8
 			x4:
-			10.5
+			2
 			y4:
-			8
-			z4:
 			-10
-NumberOfSpheres:
-1
-Sphere1:
-	Color:
-		r:
-		180
-		g:
-		155
-		b:
-		19
-	Center:
-		x:
-		2
-		y:
-		10
-		z:
-		3
-	Radius:
-		2
+			z4:
+			-8
 NumberOfEllipse:
-1
+7
 Ellipse1:
 	Color:
 		r:
-		255
+		120
 		g:
-		255
+		120
 		b:
-		30
+		200
 	A:
-	2
-	B:
-	13
-	C:
 	1
+	B:
+	2.5
+	C:
+	10.7
+	alpha:
+	0.1
+	beta:
+	0.4
+	gamma:
+	0.3
+Ellipse2:
+	Color:
+		r:
+		120
+		g:
+		120
+		b:
+		200
+	A:
+	1
+	B:
+	3.5
+	C:
+	10.7
+	alpha:
+	0.1
+	beta:
+	0.4
+	gamma:
+	0.3
+Ellipse3:
+	Color:
+		r:
+		50
+		g:
+		50
+		b:
+		50
+	A:
+	1
+	B:
+	3
+	C:
+	10.7
+	alpha:
+	0.1
+	beta:
+	1.3
+	gamma:
+	0.8
+Ellipse4:
+	Color:
+		r:
+		230
+		g:
+		230
+		b:
+		230
+	A:
+	10
+	B:
+	3
+	C:
+	3
+	alpha:
+	1
+	beta:
+	3
+	gamma:
+	7
+Ellipse5:
+	Color:
+		r:
+		230
+		g:
+		230
+		b:
+		230
+	A:
+	8
+	B:
+	3
+	C:
+	11.5
 	alpha:
 	2
 	beta:
+	3.5
+	gamma:
 	3
+Ellipse6:
+	Color:
+		r:
+		230
+		g:
+		230
+		b:
+		230
+	A:
+	10
+	B:
+	7
+	C:
+	4.5
+	alpha:
+	3
+	beta:
+	1.5
+	gamma:
+	5
+Ellipse7:
+	Color:
+		r:
+		230
+		g:
+		230
+		b:
+		230
+	A:
+	10
+	B:
+	-1
+	C:
+	4.5
+	alpha:
+	3
+	beta:
+	1.5
 	gamma:
 	5

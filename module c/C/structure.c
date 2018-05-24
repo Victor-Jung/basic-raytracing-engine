@@ -10,6 +10,7 @@ void freeAll(sParam *param) {
 	free(param->poly);
 	free(param->image.name);
 	free(param->sphere);
+	free(param->ellipse);
 }
 
 int nbLine(FILE* f) {
@@ -88,12 +89,6 @@ void showStruct(sParam param) {
 			}
 		}
 	}
-	printf("Number of spheres : %d\n", param.nbSpheres);
-	for (int i = 0; i < param.nbSpheres; i++) {
-		printf("	Color:\n		r : %d\n		g : %d\n		b : %d\n", param.sphere[i].color.r, param.sphere[i].color.g, param.sphere[i].color.b);
-		printf("	Center:\n		x : %f\n		y : %f\n		z : %f\n", param.sphere[i].center.x, param.sphere[i].center.y, param.sphere[i].center.z);
-		printf("	Radius : %f\n", param.sphere[i].r);
-	}
 	printf("Number of ellipses : %d\n", param.nbEllipse);
 	for (int i = 0; i < param.nbEllipse; i++) {
 		printf("	Color:\n		r : %d\n		g : %d\n		b : %d\n", param.ellipse[i].color.r, param.ellipse[i].color.g, param.ellipse[i].color.b);
@@ -127,6 +122,33 @@ int loadFromFile(sParam *param) {
 			fscanf(f, "%s", line);
 			param->image.width = atoi(line);
 		}
+		else if (!strcmp(line, "Video:")) {
+			i++;
+			fscanf(f, "%s", line);
+			param->video.isTrue = atoi(line);
+			if (param->video.isTrue) {
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				param->video.frames = atoi(line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				param->video.movement.x = atof(line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				param->video.movement.y = atof(line);
+				i++;
+				fscanf(f, "%s", line);
+				i++;
+				fscanf(f, "%s", line);
+				param->video.movement.z = atof(line);
+			}
+		}
 		else if (!strcmp(line, "Background-color:")) {
 			i++;
 			for (int j = 0; j < 3; j++) {
@@ -153,6 +175,16 @@ int loadFromFile(sParam *param) {
 			i++;
 			fscanf(f, "%s", line);
 			param->light.lightFactor = atof(line);
+		}
+		else if (!strcmp(line, "Shadows:")) {
+			i++;
+			fscanf(f, "%s", line);
+			param->shadows = atoi(line);
+		}
+		else if (!strcmp(line, "Antialiasing:")) {
+			i++;
+			fscanf(f, "%s", line);
+			param->antialiasing = atoi(line);
 		}
 		else if (!strcmp(line, "LightPosition:")) {
 			i++;
@@ -289,77 +321,6 @@ int loadFromFile(sParam *param) {
 				}
 			}
 		}
-		else if (!strcmp(line, "NumberOfSpheres:")) {
-			i++;
-			fscanf(f, "%s", line);
-			param->nbSpheres = atoi(line);
-			param->sphere = (sSphere*)malloc(param->nbSpheres * sizeof(sSphere));
-			for (int j = 0; j < param->nbSpheres; j++) {
-				i++;
-				fscanf(f, "%s", line);
-				char buffer[2];
-				sprintf(buffer, "%d", j + 1);
-				char searched[sizeName];
-				strcpy(searched, "Sphere");
-				strcat(searched, buffer);
-				strcat(searched, ":");
-				if (strcmp(searched, line)) {
-					return 0;
-				}
-				fscanf(f, "%s", line);
-				i++;
-				if (strcmp(line, "Color:")) {
-					return 0;
-				}
-				fscanf(f, "%s", line);
-				i++;
-				for (int k = 0; k < 3; k++) {
-					if (!strcmp(line, "r:")) {
-						fscanf(f, "%s", line);
-						i++;
-						param->sphere[j].color.r = atoi(line);
-					}
-					if (!strcmp(line, "g:")) {
-						fscanf(f, "%s", line);
-						i++;
-						param->sphere[j].color.g = atoi(line);
-					}
-					if (!strcmp(line, "b:")) {
-						fscanf(f, "%s", line);
-						i++;
-						param->sphere[j].color.b = atoi(line);
-					}
-					fscanf(f, "%s", line);
-					i++;
-					if (strcmp(line, "r:") && strcmp(line, "g:") && strcmp(line, "b:") && strcmp(line, "Center:")) {
-						return 0;
-					}
-				}
-				fscanf(f, "%s", line);
-				i++;
-				fscanf(f, "%s", line);
-				i++;
-				param->sphere[j].center.x = atof(line);
-				fscanf(f, "%s", line);
-				i++;
-				fscanf(f, "%s", line);
-				i++;
-				param->sphere[j].center.y = atof(line);
-				fscanf(f, "%s", line);
-				i++;
-				fscanf(f, "%s", line);
-				i++;
-				param->sphere[j].center.z = atof(line);
-				fscanf(f, "%s", line);
-				i++;
-				if (strcmp(line, "Radius:")) {
-					return 0;
-				}
-				fscanf(f, "%s", line);
-				i++;
-				param->sphere[j].r = atof(line);
-			}
-		}
 		else if (!strcmp(line, "NumberOfEllipse:")) {
 			i++;
 			fscanf(f, "%s", line);
@@ -445,5 +406,7 @@ int loadFromFile(sParam *param) {
 			param->poly[i].face[j].planEqua = planEqua(param, i, j);
 		}
 	}
+	param->nbSpheres = 0;
+	param->sphere = (sSphere*)malloc(0);
 	return 1;
 }
