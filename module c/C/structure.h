@@ -40,6 +40,12 @@ struct sPosAndSphere_ {
 	int iSphere;
 };
 
+typedef struct sPosAndEllipse_ sPosEllipse;
+struct sPosAndEllipse_ {
+	sPos *position;
+	int iEllipse;
+};
+
 typedef struct sPlanEquation_ sPlanEqua;
 struct sPlanEquation_ {
 	double a;
@@ -72,6 +78,21 @@ struct sSphere_ {
 	sColor color;
 };
 
+
+//equation d'une ellipse (x-a)²/alpha²  +  (y-b)²/beta²   +  (z-c)²/gamma²  =  1    alpha, beta et gamma donnent les longueurs des rayons dans les 3 directions,  (a,b,c) sont les coordonnées du centre de l'ellipse
+typedef struct sEllipse_ sEllipse;
+struct sEllipse_ {
+	double a;
+	double b;
+	double c;
+
+	double alpha;
+	double beta;
+	double gamma;
+
+	sColor color;
+};
+
 typedef struct sImage_ sImage;
 struct sImage_ {
 	char *name;
@@ -99,9 +120,13 @@ struct sParam_ {
 	int nbSpheres;
 	sSphere *sphere;
 
+	int nbEllipse;
+	sEllipse *ellipse;
+
 	sPos lightSource;
 	sLight light;
 };
+
 
 int nbLine(FILE *f);
 

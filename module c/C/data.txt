@@ -16,73 +16,41 @@ Brightness:
 1
 LightPosition:
 	x:
-	6.5
+	3
 	y:
-	-5
+	2
 	z:
 	10
 ViewerPosition:
 	x:
-	-18
+	-30
 	y:
-	-3
+	8
 	z:
-	1
+	7
 Polyhedron:
-1
-Polyhedron1:
-	NumberOfFaces:
-	1
-		Face1:
-			Color:
-				r:
-				0
-				g:
-				0
-				b:
-				0
-			Numberofpeaks:
-			4
-			x1:
-			5
-			y1:
-			-5
-			z1:
-			4
-			x2:
-			5
-			y2:
-			5
-			z2:
-			4
-			x3:
-			8
-			y3:
-			5
-			z3:
-			4
-			x4:
-			8
-			y4:
-			-5
-			z4:
-			4
+0
 NumberOfSpheres:
+0
+NumberOfEllipse:
 1
-Sphere1:
+Ellipse1:
 	Color:
 		r:
 		255
 		g:
-		0
+		255
 		b:
-		0
-	Center:
-		x:
-		6.5
-		y:
-		0
-		z:
-		-2
-	Radius:
-		6
+		30
+	A:
+	3
+	B:
+	-5
+	C:
+	-3
+	alpha:
+	5
+	beta:
+	5
+	gamma:
+	5

@@ -177,6 +177,7 @@ int createImage(sPos posLight, sParam param, int CPT) {
 	int cptPoly = -1;
 	int cptFace = -1;
 	int cptSphere = -1;
+	int cptEllipse = -1;
 	for (int w = 1; w <= param.image.width; w++) {
 		for (int h = 1; h <= param.image.height; h++) {
 			double *t = NULL;
@@ -185,66 +186,108 @@ int createImage(sPos posLight, sParam param, int CPT) {
 			//showTab(t);
 			sPosFace *posPointObjet = NULL;
 			sPosSphere *posPointSphere = NULL;
+			sPosEllipse *posPointEllipse = NULL;
 			double distance = 0;
 			sColor p;
 			float lightFactor = param.light.lightFactor;
 			posPointObjet = doesCollide(param, t);
-			posPointSphere = doesCollideSphere(param);
-			if (posPointSphere != NULL || posPointObjet != NULL) {
-				if (posPointObjet && !posPointSphere) {
+			posPointSphere = doesCollideSphere(param); 
+			//				distance = distBetweenTwoPoints(param.lightSource, *(posPointObjet->position));
+			//				lightFactor *= ((INTENSITY - distance) / INTENSITY);
+
+			if ((posPointObjet = doesCollide(param, t)) || (posPointSphere = doesCollideSphere(param)) || (posPointEllipse = doesCollideEllipse(param))) {
+				if (posPointObjet && !posPointSphere && !posPointEllipse) {
 					cptPoly = posPointObjet->iPoly;
 					cptFace = posPointObjet->iFace;
 					if (isInTheShadow(*(posPointObjet->position), param)) {
 						lightFactor -= 0.3;
 					}
-					distance = distBetweenTwoPoints(param.lightSource, *(posPointObjet->position));
-					lightFactor *= ((INTENSITY - distance) / INTENSITY);
 					p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
 					p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
 					p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
 					setcolor(I, w - 1, h - 1, p);
 				}
-				else if (posPointSphere && !posPointObjet) {
+				else if (posPointSphere && !posPointObjet && !posPointEllipse) {
 					cptSphere = posPointSphere->iSphere;
 					if (isInTheShadow(*(posPointSphere->position), param)) {
 						lightFactor -= 0.3;
 					}
-					distance = distBetweenTwoPoints(param.lightSource, *(posPointSphere->position));
-					lightFactor *= ((INTENSITY - distance) / INTENSITY);
 					p.r = param.sphere[cptSphere].color.r * lightFactor;
 					p.g = param.sphere[cptSphere].color.g * lightFactor;
 					p.b = param.sphere[cptSphere].color.b * lightFactor;
 					setcolor(I, w - 1, h - 1, p);
 				}
-				else if (posPointSphere != NULL && posPointObjet != NULL) {
+				else if (posPointEllipse && !posPointSphere && !posPointObjet) {
+					cptEllipse = posPointEllipse->iEllipse;
+					if (isInTheShadow(*(posPointEllipse->position), param)) {
+						lightFactor -= 0.3;
+					}
+					p.r = param.ellipse[cptEllipse].color.r * lightFactor;
+					p.g = param.ellipse[cptEllipse].color.g * lightFactor;
+					p.b = param.ellipse[cptEllipse].color.b * lightFactor;
+					setcolor(I, w - 1, h - 1, p);
+				}
+				else if (posPointSphere != NULL && posPointObjet != NULL && posPointEllipse == NULL) {
 					if (posPointObjet->position->x > posPointSphere->position->x) {
-						distance = distBetweenTwoPoints(param.lightSource, *(posPointSphere->position));
-						lightFactor *= ((INTENSITY - distance) / INTENSITY);
 						p.r = param.sphere[cptSphere].color.r * lightFactor;
 						p.g = param.sphere[cptSphere].color.g * lightFactor;
 						p.b = param.sphere[cptSphere].color.b * lightFactor;
 						setcolor(I, w - 1, h - 1, p);
 					}
 					else {
-						distance = distBetweenTwoPoints(param.lightSource, *(posPointObjet->position));
-						lightFactor *= ((INTENSITY - distance) / INTENSITY);
 						p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
 						p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
 						p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
 						setcolor(I, w - 1, h - 1, p);
 					}
 				}
-				else if (posPointObjet == NULL) {
-					p.r = param.sphere[cptSphere].color.r * lightFactor;
-					p.g = param.sphere[cptSphere].color.g * lightFactor;
-					p.b = param.sphere[cptSphere].color.b * lightFactor;
-					setcolor(I, w - 1, h - 1, p);
+				else if (posPointObjet == NULL && posPointSphere != NULL && posPointEllipse != NULL) {
+					if (posPointEllipse->position->x > posPointSphere->position->x) {
+						p.r = param.sphere[cptSphere].color.r * lightFactor;
+						p.g = param.sphere[cptSphere].color.g * lightFactor;
+						p.b = param.sphere[cptSphere].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
+					else {
+						p.r = param.ellipse[cptEllipse].color.r * lightFactor;
+						p.g = param.ellipse[cptEllipse].color.g * lightFactor;
+						p.b = param.ellipse[cptEllipse].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
+				}
+				else if (posPointSphere == NULL && posPointEllipse != NULL && posPointObjet != NULL) {
+					if (posPointObjet->position->x > posPointEllipse->position->x) {
+						p.r = param.ellipse[cptEllipse].color.r * lightFactor;
+						p.g = param.ellipse[cptEllipse].color.g * lightFactor;
+						p.b = param.ellipse[cptEllipse].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
+					else {
+						p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
+						p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
+						p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
 				}
 				else {
-					p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
-					p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
-					p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
-					setcolor(I, w - 1, h - 1, p);
+					if (posPointObjet->position->x < posPointEllipse->position->x && posPointObjet->position->x < posPointSphere->position->x) {
+						p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
+						p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
+						p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
+					else if (posPointEllipse->position->x < posPointObjet->position->x && posPointEllipse->position->x < posPointSphere->position->x) {
+						p.r = param.ellipse[cptEllipse].color.r * lightFactor;
+						p.g = param.ellipse[cptEllipse].color.g * lightFactor;
+						p.b = param.ellipse[cptEllipse].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
+					else {
+						p.r = param.sphere[cptSphere].color.r * lightFactor;
+						p.g = param.sphere[cptSphere].color.g * lightFactor;
+						p.b = param.sphere[cptSphere].color.b * lightFactor;
+						setcolor(I, w - 1, h - 1, p);
+					}
 				}
 				free(posPointSphere);
 				free(t);

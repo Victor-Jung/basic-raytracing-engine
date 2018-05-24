@@ -1,3 +1,5 @@
-﻿  main.c
+﻿  mainFunctions_PEUL.c
+c:\bureau\c\mainfunctions_peul.c(101): warning C4047: 'return' : les niveaux d'indirection de 'void *' et de 'int' sont différents
+c:\bureau\c\mainfunctions_peul.c(137): warning C4013: 'sort' non défini(e) ; extern retournant int pris par défaut
   ProjetEx.vcxproj -> C:\Bureau\C\x64\Debug\ProjetEx.exe
   ProjetEx.vcxproj -> C:\Bureau\C\x64\Debug\ProjetEx.pdb (Partial PDB)
