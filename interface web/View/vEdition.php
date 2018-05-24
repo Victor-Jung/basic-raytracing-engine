@@ -5,11 +5,93 @@ if ($_SESSION['pageBlock'] > 0) {
         <table>
             <tr>
                 <td>
-                    Fichier : <?= htmlspecialchars($_SESSION['file']['name'].'.') ?><?= (!$_SESSION['file']['video']['selected'])? 'BMP' : 'DVI' ?>
+                    <table>
+                        <tr>
+                            <td>
+                                Nom du fichier : <?= htmlspecialchars($_SESSION['file']['name']) ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Type de fichier : <?= (!$_SESSION['file']['video']['selected'])? 'Image' : 'Vidéo' ?>
+                                <?php if ($_SESSION['file']['video']['selected']) { ?>
+                                    <br>Durée en secondes : <?= htmlspecialchars($_SESSION['file']['video']['duration']) ?>
+                                    <br>Mouvement en x : <?= htmlspecialchars($_SESSION['file']['video']['move']['x']) ?>
+                                    <br>Mouvement en y : <?= htmlspecialchars($_SESSION['file']['video']['move']['y']) ?>
+                                    <br>Mouvement en z : <?= htmlspecialchars($_SESSION['file']['video']['move']['z']) ?>
+                                <?php } ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Dimensions du fichier : <?= htmlspecialchars($_SESSION['file']['dim']['x']) ?>x<?= htmlspecialchars($_SESSION['file']['dim']['y']) ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <?= $_SESSION['file']['effects']['shadows']? 'Ombres' : 'Pas d\'ombres' ?>
+                                <br>
+                                <?= $_SESSION['file']['effects']['aliasing']? 'Anti-aliasing' : 'Pas d\'anti-aliasing' ?>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
                 <td>
-                    Dimensions du fichier :
-                    <?= htmlspecialchars($_SESSION['file']['dim']['x'].' x '.$_SESSION['file']['dim']['y']) ?> pixels
+                    <table>
+                        <tr>
+                            <td>
+                                Position caméra x : <?= htmlspecialchars($_SESSION['scene']['viewer']['x']) ?>
+                                <br>
+                                Position caméra y : <?= htmlspecialchars($_SESSION['scene']['viewer']['y']) ?>
+                                <br>
+                                Position caméra z : <?= htmlspecialchars($_SESSION['scene']['viewer']['z']) ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Position x de la lumière : <?= htmlspecialchars($_SESSION['scene']['light'][0]['pos']['x']) ?>
+                                <br>
+                                Position y de la lumière : <?= htmlspecialchars($_SESSION['scene']['light'][0]['pos']['y']) ?>
+                                <br>
+                                Position z de la lumière : <?= htmlspecialchars($_SESSION['scene']['light'][0]['pos']['z']) ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Puissance de la lumière : <?= htmlspecialchars($_SESSION['scene']['light'][0]['bright']) ?>%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Couleur de fond : <input type="color" value="<?= htmlspecialchars($_SESSION['scene']['color']) ?>" disabled>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
         </table>
@@ -20,147 +102,86 @@ if ($_SESSION['pageBlock'] == 2) {
         <table>
             <tr>
                 <td>
-                    <div class="listSelection" style="max-height: <?= htmlspecialchars(22*($_SESSION['file']['dim']['y'] / $_SESSION['file']['dim']['x'])) ?>em">
-                        <table>
-                            <tr>
-                                <td>
-                                    Position observateur :
-                                </td>
-                                <td>
-                                    <?= htmlspecialchars($_SESSION['scene']['viewer']['x']
-                                    .';'.$_SESSION['scene']['viewer']['y']
-                                    .';'.$_SESSION['scene']['viewer']['z']) ?>
-                                </td>
-                            </tr>
-                            <tr><td colspan="2"><hr></td></tr>
-                            <tr>
-                                <th colspan="2">
-                                    Source lumineuse
-                                </th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Puissance :
-                                </td>
-                                <td>
-                                    <?= htmlspecialchars($_SESSION['scene']['light'][0]['bright']) ?>%
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Position :
-                                </td>
-                                <td>
-                                    <?= htmlspecialchars($_SESSION['scene']['light'][0]['pos']['x']
-                                    .';'.$_SESSION['scene']['light'][0]['pos']['y']
-                                    .';'.$_SESSION['scene']['light'][0]['pos']['z']) ?>
-                                </td>
-                            </tr>
-                            <tr><td colspan="2"><hr></td></tr>
-                            <tr>
-                                <td>
-                                    Effets :
-                                </td>
-                                <td>
-                                    <?= $_SESSION['file']['effects']['shadows']? 'Ombres<br>' : '' ?>
-                                    <?= $_SESSION['file']['effects']['aliasing']? 'Anti-aliasing<br>' : '' ?>
-                                </td>
-                            </tr>
-                        </table>
-<!--
-                        < ?php if (isset($_SESSION['ellipsoid']) && count($_SESSION['ellipsoid']) > 0) {
-                            $i = 0;
-                            foreach ($_SESSION['ellipsoid'] as $shape) {
-                                $i++; ?>
-                                <br>
-                                <table class="fiche">
-                                    <tr>
-                                        <th colspan="2">
-                                            Objet < ?= htmlspecialchars($i.' : '.$shape['name']) ?>
-                                        </th>
-                                    </tr>
-                                    <tr><th colspan="2"><br></th></tr>
-                                    <tr>
-                                        <td>
-                                            Couleur :
-                                        </td>
-                                        <td>
-                                            <input type="color" value="< ?= htmlspecialchars($shape['color']) ?>" disabled>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr><td colspan="2"><br></td></tr>
-                                    <tr>
-                                        <td>Centre :</td>
-                                        <td>
-                                            < ?= htmlspecialchars($shape['pos']['x'].'-'.$shape['pos']['y'].'-'.$shape['pos']['z']) ?>
-                                        </td>
-                                    </tr>
-                                    <tr><td colspan="2"><br></td></tr>
-                                    <tr>
-                                        <td>Rayon :</td>
-                                        <td>
-                                            < ?= htmlspecialchars($shape['rad']['x'].'-'.$shape['rad']['y'].'-'.$shape['rad']['z']) ?>    
-                                        </td>
-                                    </tr>
-                                    <tr><td colspan="2"><br></td></tr>
-                                    <tr>
-                                        <td>Rotation :</td>
-                                        <td>
-                                            < ?= (empty($shape['rot']['x']))? 0 : htmlspecialchars($shape['rot']['x']) ?>
-                                            -
-                                            < ?= (empty($shape['rot']['y']))? 0 : htmlspecialchars($shape['rot']['y']) ?>
-                                            -
-                                            < ?= (empty($shape['rot']['z']))? 0 : htmlspecialchars($shape['rot']['z']) ?>
-                                        </td>
-                                    </tr>
-                                </table>
-                            < ?php }
-                        }
-                        if (isset($_SESSION['polyhedron']) && count($_SESSION['polyhedron']) > 0) {
-                            $i = 0;
-                            foreach ($_SESSION['polyhedron'] as $shape) {
-                                $i++; ?>
-                                <br>
-                                <table class="fiche">
-                                    <tr>
-                                        <th colspan="2">
-                                            Objet < ?= htmlspecialchars($i.' : '.$shape['name']) ?>
-                                        </th>
-                                    </tr>
-                                    <tr><th colspan="2"><br></th></tr>
-                                    < ?php foreach($shape['face'] as $face) { ?>
-                                        <tr>
-                                            <td>
-                                                Couleur :
-                                            </td>
-                                            <td>
-                                                <input type="color" value="< ?= htmlspecialchars($face['color']) ?>" disabled>
-                                            </td>
-                                        </tr>
-                                        <tr><td colspan="2"><br></td></tr>
-                                        < ?php $j = 0;
-                                        foreach($face['peak'] as $peak) {
-                                            $j++; ?>
-                                            <tr>
-                                                <td colspan="2">
-                                                    Sommet < ?= htmlspecialchars($j) ?> : position 
-                                                    < ?= htmlspecialchars($peak['x'].'-'.$peak['y'].'-'.$peak['z']) ?>
-                                                </td>
-                                            </tr>
-                                        < ?php }
-                                    } ?>
-                                </table>
-                            < ?php }
-                        } ?>
--->
-                    </div>
+                    <?php if ($_POST['selectElli'] != 0) {
+                        $i = 0;
+                        foreach ($_SESSION['ellipsoid'] as $elli) {
+                            if ($i != 0) {
+                                echo '<br><hr><br>';
+                            }
+                            $i++; ?>
+                            <table>
+                                <tr>
+                                    <td>
+                                        Couleur : <input type="color" value="<?= htmlspecialchars($elli['color']) ?>" disabled>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Position x du centre : <?= $elli['pos']['x'] ?>
+                                        <br>
+                                        Position y du centre : <?= $elli['pos']['y'] ?>
+                                        <br>
+                                        Position z du centre : <?= $elli['pos']['z'] ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Rayon x : <?= $elli['rad']['x'] ?>
+                                        <br>
+                                        Rayon y : <?= $elli['rad']['y'] ?>
+                                        <br>
+                                        Rayon z : <?= $elli['rad']['z'] ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        <?php }
+                    } ?>
                 </td>
                 <td>
-                    <div id="grid" style="height: <?= htmlspecialchars(25*($_SESSION['file']['dim']['y'] / $_SESSION['file']['dim']['x'])) ?>em;
-                    background-color: <?= htmlspecialchars($_SESSION['scene']['color']) ?>">
-                        <!--Ajoute objets avec des images de fond, que l'on déplace selon les axes x et y, ou des span modifiés en css?-->
-                    </div>
+                    <?php $i = 0;
+                    foreach ($_SESSION['polyhedron'] as $poly) {
+                        if ($i != 0) {
+                            echo '<br><hr><br>';
+                        }
+                        $i++;
+                        $j = 0;
+                        foreach ($poly as $face) { 
+                            $j++; ?>
+                            <table>
+                                <tr>
+                                    <td>
+                                        Face <?= $j ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Couleur : <input type="color" value="<?= htmlspecialchars($face['color']) ?>" disabled><br>
+                                        Réflexion : <?= ($face['reflex'])? 'Oui' : 'Non' ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table>
+                                            <?php  $k = 0;
+                                            foreach ($face['peak'] as $peak) {
+                                                $k++; ?>
+                                                <tr>
+                                                    <td>
+                                                        Sommet <?= $k ?><br>
+                                                        Position x : <?= $peak['x'] ?>
+                                                        <br>
+                                                        Position y : <?= $peak['y'] ?>
+                                                        <br>
+                                                        Position z : <?= $peak['z'] ?>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        <?php }
+                    } ?>
                 </td>
             </tr>
         </table>
@@ -570,7 +591,7 @@ switch ($_SESSION['pageBlock']) {
         ob_start(); ?>
             <tr>
                 <td colspan="2">
-                    <img src="../link/<?= $_SESSION['file']['name'] ?>.bmp" alt="Fichier produit" width="75%">
+                    Fichier généré : affichage sur la fenêtre pop-up.
                 </td>
             </tr>
         <?php $edition['content']['fillable'] = ob_get_clean();

@@ -13,34 +13,6 @@
     </head>
     
     <body>
-        <!--
-            <div style="max-height: 300px; overflow-y: scroll; text-align: left;">
-                <table>
-                    <tr>
-                        <td>
-                            ellipses
-                        </td>
-                        <td>
-                            Post
-                        </td>
-                        <td>
-                            polyèdres
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <pre>< ?= print_r($_SESSION['ellipsoid']) ?></pre>
-                        </td>
-                        <td>
-                            <pre>< ?php if (isset($_POST)) print_r($_POST) ?></pre>
-                        </td>
-                        <td>
-                            <pre>< ?= print_r($_SESSION['polyhedron']) ?></pre>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        -->
         <header>
             <h1>Modélisation d'images en ray tracing - étape <?= $_SESSION['pageBlock']+1 ?></h1>
         </header>
@@ -63,7 +35,6 @@
                 </ul>
             </li>
         </menu>
-            
 
         <section>
             <table>
