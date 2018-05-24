@@ -45,7 +45,7 @@
 					[idPolyhedron]
 								[idFace]
 										['color']
-										['reflexion']
+										['reflex']
 										['peak']
 												[idPeak](position)
 														['x']

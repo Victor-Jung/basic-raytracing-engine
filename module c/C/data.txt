@@ -69,7 +69,7 @@ Polyhedron1:
 			7
 			z4:
 			-7
-Face2:
+	Face2:
 		Color:
 			r:
 			206

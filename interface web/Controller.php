@@ -84,12 +84,9 @@ function Edition($listWarning) {
                     }
                 }
 
-
-                //simplification des variables
-                $nbElli = isset($_SESSION['ellipsoid'])? count($_SESSION['ellipsoid']) : 0 ;
-                $nbPoly = isset($_SESSION['polyhedron'])? count($_SESSION['polyhedron']) : 0 ;
-
                 //boucle bloc ellipsoides
+                $nbElli = $_POST['selectElli'];//securiser
+                
                 if ($nbElli == 0) {
                     $string = "\r\n".'NumberOfEllipse:'."\r\n".'0';
                     fwrite($file, $string);
@@ -129,27 +126,58 @@ function Edition($listWarning) {
                     }
                 }
 
-
-                $string = "\r\n".'Polyhedron:'."\r\n".'0';
-                fwrite($file, $string);
-/*
                 //boucle bloc polyedres
-                if ($nbPoly == 0) {
-                    $string = "\r\n".'NumberOfSpheres:'."\r\n".'0';
+                $polyhedron = array();
+                foreach ($_SESSION['polyhedron'] as $poly) {
+                    foreach ($poly as $face) {
+                        $polyhedron[] = $face;
+                    }
+                }
+                
+                $nbFace = count($polyhedron);
+                if ($nbFace == 0) {
+                    $string = "\r\n".'Polyhedron:'."\r\n".'0';
                     fwrite($file, $string);
                 }
                 else {
-                    $detailPoly = $_SESSION['polyhedron'];
-                    
-                    $string = "\r\n".'NumberOfSpheres:'."\r\n".'1';
+                    $string = "\r\n".'Polyhedron:'."\r\n".'1'."\r\n".'Polyhedron1:';
                     fwrite($file, $string);
-                    foreach ($ellipsoids as $object) {
-                        $string = "\r\n".'Object'.$object['id'].':'."\r\n";
+                    
+                    $string = "\r\n\t".'NumberOfFaces:'."\r\n\t".$nbFace;
+                    fwrite($file, $string);
+                    
+                    for ($face = 0; $face < $nbFace; $face++) {
+                        $string = "\r\n\t".'Face'.($face+1).':';
                         fwrite($file, $string);
 
+                        $color = hex2rgb($polyhedron[$face]['color']);
+                        $string = "\r\n\t\t".'Color:';
+                        fwrite($file, $string);
+                        $string = "\r\n\t\t\t".'r:'."\r\n\t\t\t".$color['R'];
+                        fwrite($file, $string);
+                        $string = "\r\n\t\t\t".'g:'."\r\n\t\t\t".$color['G'];
+                        fwrite($file, $string);
+                        $string = "\r\n\t\t\t".'b:'."\r\n\t\t\t".$color['B'];
+                        fwrite($file, $string);
+
+                        $string = "\r\n\t\t".'isMirror:'."\r\n\t\t";
+                        $string .= ($polyhedron[$face]['reflex'])? '1' : '0' ;
+                        fwrite($file, $string);
+
+                        $nbPeak = count($polyhedron[$face]['peak']);
+                        $string = "\r\n\t\t".'Numberofpeaks:'."\r\n\t\t".$nbPeak;
+                        fwrite($file, $string);
+                        for ($peak = 1; $peak <= $nbPeak; $peak++) {
+                            $string = "\r\n\t\t\t".'x'.$peak.':'."\r\n\t\t\t".$polyhedron[$face]['peak'][$peak]['x'];
+                            fwrite($file, $string);
+                            $string = "\r\n\t\t\t".'y'.$peak.':'."\r\n\t\t\t".$polyhedron[$face]['peak'][$peak]['y'];
+                            fwrite($file, $string);
+                            $string = "\r\n\t\t\t".'z'.$peak.':'."\r\n\t\t\t".$polyhedron[$face]['peak'][$peak]['z'];
+                            fwrite($file, $string);   
+                        }
                     }
                 }
-*/
+
                 fclose($file);
 
                 exec("ProjetEx.exe");

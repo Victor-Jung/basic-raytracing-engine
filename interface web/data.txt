@@ -2,7 +2,7 @@
 Name:
 temporaire
 Height:
-1024
+768
 Width:
 768
 Shadows:
@@ -13,11 +13,11 @@ Video:
 0
 Background-color:
 	r:
-	131
+	0
 	g:
-	62
+	0
 	b:
-	168
+	0
 Brightness:
 1
 LightPosition:
@@ -35,26 +35,6 @@ ViewerPosition:
 	z:
 	1
 NumberOfEllipse:
-1
-Ellipse1:
-	Color:
-		r:
-		255
-		g:
-		255
-		b:
-		255
-	A:
-	10
-	B:
-	1
-	C:
-	1
-	alpha:
-	2
-	beta:
-	4
-	gamma:
-	6
+0
 Polyhedron:
 0
