@@ -248,11 +248,18 @@ int loadFromFile(sParam *param) {
 								}
 								fscanf(f, "%s", line);
 								i++;
-								if (strcmp(line, "r:") && strcmp(line, "g:") && strcmp(line, "b:") && strcmp(line, "Numberofpeaks:")) {
+								if (strcmp(line, "r:") && strcmp(line, "g:") && strcmp(line, "b:") && strcmp(line, "isMirror:")) {
 									return 0;
 								}
 							}
 							param->poly[j].face[l].color = colorTmp;
+						}
+						if (!strcmp(line, "isMirror:")) {
+							fscanf(f, "%s", line);
+							i++;
+							param->poly[j].face[l].isMirror = atoi(line);
+							fscanf(f, "%s", line);
+							i++;
 						}
 						if (!strcmp(line, "Numberofpeaks:")) {
 							fscanf(f, "%s", line);

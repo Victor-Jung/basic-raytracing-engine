@@ -1,5 +1,6 @@
 #include "bmp.h"
 #include <stdio.h>
+#include <stdbool.h>
 
 typedef struct sFormula_ sFormula;
 struct sFormula_ {
@@ -60,6 +61,7 @@ struct sFace_ {
 	int nbPeaks;
 	sPos *peak;
 	sPlanEqua planEqua;
+	bool isMirror;
 };
 
 typedef struct sPolyhedron_ sPoly;
