@@ -59,17 +59,16 @@ if ($_SESSION['pageBlock'] == 2) {
                             <tr><td colspan="2"><hr></td></tr>
                             <tr>
                                 <td>
-                                    Effets de lumière :
+                                    Effets :
                                 </td>
                                 <td>
                                     <?= $_SESSION['file']['effects']['shadows']? 'Ombres<br>' : '' ?>
-                                    <?= $_SESSION['file']['effects']['reflection']? 'Réflexion<br>' : '' ?>
-                                    <?= $_SESSION['file']['effects']['refraction']? 'Réfraction<br>' : '' ?>
+                                    <?= $_SESSION['file']['effects']['aliasing']? 'Anti-aliasing<br>' : '' ?>
                                 </td>
                             </tr>
                         </table>
-
-                        <?php if (isset($_SESSION['ellipsoid']) && count($_SESSION['ellipsoid']) > 0) {
+<!--
+                        < ?php if (isset($_SESSION['ellipsoid']) && count($_SESSION['ellipsoid']) > 0) {
                             $i = 0;
                             foreach ($_SESSION['ellipsoid'] as $shape) {
                                 $i++; ?>
@@ -77,7 +76,7 @@ if ($_SESSION['pageBlock'] == 2) {
                                 <table class="fiche">
                                     <tr>
                                         <th colspan="2">
-                                            Objet <?= htmlspecialchars($i.' : '.$shape['name']) ?>
+                                            Objet < ?= htmlspecialchars($i.' : '.$shape['name']) ?>
                                         </th>
                                     </tr>
                                     <tr><th colspan="2"><br></th></tr>
@@ -86,7 +85,7 @@ if ($_SESSION['pageBlock'] == 2) {
                                             Couleur :
                                         </td>
                                         <td>
-                                            <input type="color" value="<?= htmlspecialchars($shape['color']) ?>" disabled>
+                                            <input type="color" value="< ?= htmlspecialchars($shape['color']) ?>" disabled>
                                         </td>
                                     </tr>
                                     
@@ -94,29 +93,29 @@ if ($_SESSION['pageBlock'] == 2) {
                                     <tr>
                                         <td>Centre :</td>
                                         <td>
-                                            <?= htmlspecialchars($shape['pos']['x'].'-'.$shape['pos']['y'].'-'.$shape['pos']['z']) ?>
+                                            < ?= htmlspecialchars($shape['pos']['x'].'-'.$shape['pos']['y'].'-'.$shape['pos']['z']) ?>
                                         </td>
                                     </tr>
                                     <tr><td colspan="2"><br></td></tr>
                                     <tr>
                                         <td>Rayon :</td>
                                         <td>
-                                            <?= htmlspecialchars($shape['rad']['x'].'-'.$shape['rad']['y'].'-'.$shape['rad']['z']) ?>    
+                                            < ?= htmlspecialchars($shape['rad']['x'].'-'.$shape['rad']['y'].'-'.$shape['rad']['z']) ?>    
                                         </td>
                                     </tr>
                                     <tr><td colspan="2"><br></td></tr>
                                     <tr>
                                         <td>Rotation :</td>
                                         <td>
-                                            <?= (empty($shape['rot']['x']))? 0 : htmlspecialchars($shape['rot']['x']) ?>
+                                            < ?= (empty($shape['rot']['x']))? 0 : htmlspecialchars($shape['rot']['x']) ?>
                                             -
-                                            <?= (empty($shape['rot']['y']))? 0 : htmlspecialchars($shape['rot']['y']) ?>
+                                            < ?= (empty($shape['rot']['y']))? 0 : htmlspecialchars($shape['rot']['y']) ?>
                                             -
-                                            <?= (empty($shape['rot']['z']))? 0 : htmlspecialchars($shape['rot']['z']) ?>
+                                            < ?= (empty($shape['rot']['z']))? 0 : htmlspecialchars($shape['rot']['z']) ?>
                                         </td>
                                     </tr>
                                 </table>
-                            <?php }
+                            < ?php }
                         }
                         if (isset($_SESSION['polyhedron']) && count($_SESSION['polyhedron']) > 0) {
                             $i = 0;
@@ -126,35 +125,35 @@ if ($_SESSION['pageBlock'] == 2) {
                                 <table class="fiche">
                                     <tr>
                                         <th colspan="2">
-                                            Objet <?= htmlspecialchars($i.' : '.$shape['name']) ?>
+                                            Objet < ?= htmlspecialchars($i.' : '.$shape['name']) ?>
                                         </th>
                                     </tr>
                                     <tr><th colspan="2"><br></th></tr>
-                                    <?php foreach($shape['face'] as $face) { ?>
+                                    < ?php foreach($shape['face'] as $face) { ?>
                                         <tr>
                                             <td>
                                                 Couleur :
                                             </td>
                                             <td>
-                                                <input type="color" value="<?= htmlspecialchars($face['color']) ?>" disabled>
+                                                <input type="color" value="< ?= htmlspecialchars($face['color']) ?>" disabled>
                                             </td>
                                         </tr>
                                         <tr><td colspan="2"><br></td></tr>
-                                        <?php $j = 0;
+                                        < ?php $j = 0;
                                         foreach($face['peak'] as $peak) {
                                             $j++; ?>
                                             <tr>
                                                 <td colspan="2">
-                                                    Sommet <?= htmlspecialchars($j) ?> : position 
-                                                    <?= htmlspecialchars($peak['x'].'-'.$peak['y'].'-'.$peak['z']) ?>
+                                                    Sommet < ?= htmlspecialchars($j) ?> : position 
+                                                    < ?= htmlspecialchars($peak['x'].'-'.$peak['y'].'-'.$peak['z']) ?>
                                                 </td>
                                             </tr>
-
-                                        <?php }
+                                        < ?php }
                                     } ?>
                                 </table>
-                            <?php }
+                            < ?php }
                         } ?>
+-->
                     </div>
                 </td>
                 <td>
@@ -505,16 +504,16 @@ switch ($_SESSION['pageBlock']) {
                                         nbFaces[i] = $("#selectFace"+i).val();
                                         for(var j=1; j<=nbFaces[i]; j++){
                                             texte+= '<br>';
-                                            texte+= '<table><tr><th>';
-                                                    texte+= 'face '+j;
-                                                texte+= '</th><td>';
-                                                    texte+= '<input type="color" name="poly'+i+'_face'+j+'_color" value="#ffffff">';
-                                                    texte+= ' | ';
-                                                    texte+= '<label><input type="checkbox" name="poly'+i+'_face'+j+'_reflexion" value="1">Réflexion</label>';
+                                            texte+= '<table><tr><td>';
+                                                texte+= '<table><tr><th>';
+                                                        texte+= 'Face '+j;
+                                                    texte+= '</th><td style="width: 60%;">';
+                                                        texte+= '<input type="color" name="poly'+i+'_face'+j+'_color" value="#ffffff">';
+                                                        texte+= ' | ';
+                                                        texte+= '<label><input type="checkbox" name="poly'+i+'_face'+j+'_reflex" value="1">Réflexion</label>';
+                                                texte+= '</td></tr></table>';
                                                 texte+= '</td></tr><tr><td>';
-                                                    texte+= 'Sommets :';
-                                                texte+= '</td><td>';
-                                                    texte+= '<select id="selectPeak'+i+'_'+j+'" name="selectPeak'+i+'_'+j+'" class="selectPeak">';
+                                                    texte+= 'Nombre de sommets : <select id="selectPeak'+i+'_'+j+'" name="selectPeak'+i+'_'+j+'" class="selectPeak">';
                                                     for(var k=3; k<=9; k++){
                                                         texte+="<option";
                                                         if(k==nbPeaks[i][j]){
@@ -523,7 +522,7 @@ switch ($_SESSION['pageBlock']) {
                                                         texte+=">"+k+"</option>";
                                                     }
                                                     texte+= '</select>';
-                                                texte+= '</td></tr><tr><td id="allPeaks'+i+'_'+j+'" colspan="2">';
+                                                texte+= '</td></tr><tr><td id="allPeaks'+i+'_'+j+'">';
                                             texte+= '</td></tr></table>';
                                         }
                                         $("#allFaces"+i).html(texte);
@@ -546,7 +545,7 @@ switch ($_SESSION['pageBlock']) {
                                             nbPeaks[i][j] = $("#selectPeak"+i+'_'+j).val();
                                             for(var l=1; l<=nbPeaks[i][j]; l++){
                                                 texte+= '<table><tr><td>';
-                                                        texte+= 'Position du sommet '+l;
+                                                        texte+= 'Position '+l;
                                                     texte+= '</td><td>';
                                                         texte+= '<input type="number" class="xSmallNumber" name="poly'+i+'_face'+j+'_peak'+l+'_xPos" value="1"> - ';
                                                         texte+= '<input type="number" class="xSmallNumber" name="poly'+i+'_face'+j+'_peak'+l+'_yPos" value="1"> - ';

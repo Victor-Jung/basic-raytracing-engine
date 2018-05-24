@@ -66,7 +66,7 @@ try {
 
         if ($_POST['script'] == 'sceneConfig') {//bloc 2 : enregistrement des entrees
             $nbElli = filter_input(INPUT_POST, 'selectElli', FILTER_VALIDATE_INT);
-            for ($elli = 1; $elli < $nbElli; $elli++) {
+            for ($elli = 1; $elli <= $nbElli; $elli++) {
                 $_SESSION['ellipsoid'][$elli]['color']      = isset($_POST['elli'.$elli.'_color'])  ? filter_input(INPUT_POST, 'elli'.$elli.'_color', FILTER_SANITIZE_STRING) : false ;
                 $_SESSION['ellipsoid'][$elli]['pos']['x']   = isset($_POST['elli'.$elli.'_xPos'])   ? filter_input(INPUT_POST, 'elli'.$elli.'_xPos', FILTER_VALIDATE_INT)   : false ;
                 $_SESSION['ellipsoid'][$elli]['pos']['y']   = isset($_POST['elli'.$elli.'_yPos'])   ? filter_input(INPUT_POST, 'elli'.$elli.'_yPos', FILTER_VALIDATE_INT)   : false ;
@@ -75,32 +75,37 @@ try {
                 $_SESSION['ellipsoid'][$elli]['rad']['y']   = isset($_POST['elli'.$elli.'_yRad'])   ? filter_input(INPUT_POST, 'elli'.$elli.'_yRad', FILTER_VALIDATE_INT)   : false ;
                 $_SESSION['ellipsoid'][$elli]['rad']['z']   = isset($_POST['elli'.$elli.'_zRad'])   ? filter_input(INPUT_POST, 'elli'.$elli.'_zRad', FILTER_VALIDATE_INT)   : false ;
 
-                if (!$_SESSION['ellipsoid'][$elli]['color'])    $listWarning[] = 'Couleur de l\'objet'.($elli+1);
-                if (!$_SESSION['ellipsoid'][$elli]['pos']['x']) $listWarning[] = 'Position x du centre de l\'ellipsoïde '.($elli+1);
-                if (!$_SESSION['ellipsoid'][$elli]['pos']['y']) $listWarning[] = 'Position y du centre de l\'ellipsoïde '.($elli+1);
-                if (!$_SESSION['ellipsoid'][$elli]['pos']['z']) $listWarning[] = 'Position z du centre de l\'ellipsoïde '.($elli+1);
-                if (!$_SESSION['ellipsoid'][$elli]['rad']['x']) $listWarning[] = 'Rayon x de l\'ellipsoïde '.($elli+1);
-                if (!$_SESSION['ellipsoid'][$elli]['rad']['y']) $listWarning[] = 'Rayon y de l\'ellipsoïde '.($elli+1);
-                if (!$_SESSION['ellipsoid'][$elli]['rad']['z']) $listWarning[] = 'Rayon z de l\'ellipsoïde '.($elli+1);
+                if (!$_SESSION['ellipsoid'][$elli]['color'])    $listWarning[] = 'Ellipsoïde'.$elli.' : couleur';
+                if (!$_SESSION['ellipsoid'][$elli]['pos']['x']) $listWarning[] = 'Ellipsoïde'.$elli.' centre : position x';
+                if (!$_SESSION['ellipsoid'][$elli]['pos']['y']) $listWarning[] = 'Ellipsoïde'.$elli.' centre : position y';
+                if (!$_SESSION['ellipsoid'][$elli]['pos']['z']) $listWarning[] = 'Ellipsoïde'.$elli.' centre : position z';
+                if (!$_SESSION['ellipsoid'][$elli]['rad']['x']) $listWarning[] = 'Ellipsoïde'.$elli.' : rayon x';
+                if (!$_SESSION['ellipsoid'][$elli]['rad']['y']) $listWarning[] = 'Ellipsoïde'.$elli.' : rayon y';
+                if (!$_SESSION['ellipsoid'][$elli]['rad']['z']) $listWarning[] = 'Ellipsoïde'.$elli.' : rayon z';
             }
 
             $nbPoly = filter_input(INPUT_POST, 'selectPoly', FILTER_VALIDATE_INT);
-            for ($poly = 1; $poly < $nbPoly; $poly++) {
-                $_SESSION['polyhedron'][$poly]['color']      = isset($_POST['poly'.$poly.'_color'])  ? filter_input(INPUT_POST, 'poly'.$poly.'_color', FILTER_SANITIZE_STRING) : false ;
-                $_SESSION['polyhedron'][$poly]['pos']['x']   = isset($_POST['poly'.$poly.'_xPos'])   ? filter_input(INPUT_POST, 'poly'.$poly.'_xPos', FILTER_VALIDATE_INT)   : false ;
-                $_SESSION['polyhedron'][$poly]['pos']['y']   = isset($_POST['poly'.$poly.'_yPos'])   ? filter_input(INPUT_POST, 'poly'.$poly.'_yPos', FILTER_VALIDATE_INT)   : false ;
-                $_SESSION['polyhedron'][$poly]['pos']['z']   = isset($_POST['poly'.$poly.'_zPos'])   ? filter_input(INPUT_POST, 'poly'.$poly.'_zPos', FILTER_VALIDATE_INT)   : false ;
-                $_SESSION['polyhedron'][$poly]['rad']['x']   = isset($_POST['poly'.$poly.'_xRad'])   ? filter_input(INPUT_POST, 'poly'.$poly.'_xRad', FILTER_VALIDATE_INT)   : false ;
-                $_SESSION['polyhedron'][$poly]['rad']['y']   = isset($_POST['poly'.$poly.'_yRad'])   ? filter_input(INPUT_POST, 'poly'.$poly.'_yRad', FILTER_VALIDATE_INT)   : false ;
-                $_SESSION['polyhedron'][$poly]['rad']['z']   = isset($_POST['poly'.$poly.'_zRad'])   ? filter_input(INPUT_POST, 'poly'.$poly.'_zRad', FILTER_VALIDATE_INT)   : false ;
+            for ($poly = 1; $poly <= $nbPoly; $poly++) {
 
-                if (!$_SESSION['polyhedron'][$poly]['color'])    $listWarning[] = 'Couleur de la face';
-                if (!$_SESSION['polyhedron'][$poly]['pos']['x']) $listWarning[] = 'Position x '.$poly;
-                if (!$_SESSION['polyhedron'][$poly]['pos']['y']) $listWarning[] = 'Position y '.$poly;
-                if (!$_SESSION['polyhedron'][$poly]['pos']['z']) $listWarning[] = 'Position z '.$poly;
-                if (!$_SESSION['polyhedron'][$poly]['rad']['x']) $listWarning[] = 'Rayon x de '.$poly;
-                if (!$_SESSION['polyhedron'][$poly]['rad']['y']) $listWarning[] = 'Rayon y de '.$poly;
-                if (!$_SESSION['polyhedron'][$poly]['rad']['z']) $listWarning[] = 'Rayon z de '.$poly;
+                $nbFace = filter_input(INPUT_POST, 'selectFace'.$poly, FILTER_VALIDATE_INT);
+                for ($face = 1; $face <= $nbFace; $face++) {
+                    $_SESSION['polyhedron'][$poly][$face]['color']  = isset($_POST['poly'.$poly.'_face'.$face.'_color'])    ? filter_input(INPUT_POST, 'poly'.$poly.'_face'.$face.'_color', FILTER_SANITIZE_STRING) : false ;
+                    $_SESSION['polyhedron'][$poly][$face]['reflex'] = isset($_POST['poly'.$poly.'_face'.$face.'_reflex'])   ? filter_input(INPUT_POST, 'poly'.$poly.'_face'.$face.'_reflex', FILTER_VALIDATE_INT)   : false ;
+
+                    $nbPeak = filter_input(INPUT_POST, 'selectPeak'.$poly.'_'.$face, FILTER_VALIDATE_INT);
+                    for ($peak = 1; $peak <= $nbPeak; $peak++) {
+                        $_SESSION['polyhedron'][$poly][$face]['peak'][$peak]['x']   = isset($_POST['poly'.$poly.'_face'.$face.'_peak'.$peak.'_xPos'])   ? filter_input(INPUT_POST, 'poly'.$poly.'_face'.$face.'_peak'.$peak.'_xPos', FILTER_VALIDATE_INT)   : false ;
+                        $_SESSION['polyhedron'][$poly][$face]['peak'][$peak]['y']   = isset($_POST['poly'.$poly.'_face'.$face.'_peak'.$peak.'_yPos'])   ? filter_input(INPUT_POST, 'poly'.$poly.'_face'.$face.'_peak'.$peak.'_yPos', FILTER_VALIDATE_INT)   : false ;
+                        $_SESSION['polyhedron'][$poly][$face]['peak'][$peak]['z']   = isset($_POST['poly'.$poly.'_face'.$face.'_peak'.$peak.'_zPos'])   ? filter_input(INPUT_POST, 'poly'.$poly.'_face'.$face.'_peak'.$peak.'_zPos', FILTER_VALIDATE_INT)   : false ;
+
+                        if (!$_SESSION['polyhedron'][$poly][$face]['peak'][$peak]['x']) $listWarning[] = 'Polynome '.$poly.' face'.$face.' sommet'.$peak.' : position x';
+                        if (!$_SESSION['polyhedron'][$poly][$face]['peak'][$peak]['y']) $listWarning[] = 'Polynome '.$poly.' face'.$face.' sommet'.$peak.' : position y';
+                        if (!$_SESSION['polyhedron'][$poly][$face]['peak'][$peak]['z']) $listWarning[] = 'Polynome '.$poly.' face'.$face.' sommet'.$peak.' : position z';
+                    }
+
+                    if (!$_SESSION['polyhedron'][$poly][$face]['color'])    $listWarning[] = 'Polynome '.$poly.' face'.$face.' : couleur';
+                    if (!$_SESSION['polyhedron'][$poly][$face]['reflex'])   $listWarning[] = 'Polynome '.$poly.' face'.$face.' : réflexion';
+                }
             }
         } 
 

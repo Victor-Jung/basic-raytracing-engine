@@ -13,7 +13,7 @@
     </head>
     
     <body>
-        
+        <!--
             <div style="max-height: 300px; overflow-y: scroll; text-align: left;">
                 <table>
                     <tr>
@@ -40,7 +40,7 @@
                     </tr>
                 </table>
             </div>
-        
+        -->
         <header>
             <h1>Modélisation d'images en ray tracing - étape <?= $_SESSION['pageBlock']+1 ?></h1>
         </header>
