@@ -200,8 +200,10 @@ sColor mirrorFace(sParamEqua paramEqua, sParam param) {
 				p = mirrorFace(paramEquaReflected, param);
 				return p;
 			}
-			if (isInTheShadow(*(posPointObjet->position), param)) {
-				lightFactor -= 0.3;
+			if (param.shadows) {
+				if (isInTheShadow(*(posPointObjet->position), param)) {
+					lightFactor -= 0.3;
+				}
 			}
 			p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
 			p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
@@ -210,8 +212,10 @@ sColor mirrorFace(sParamEqua paramEqua, sParam param) {
 		}
 		else if (posPointSphere && !posPointObjet && !posPointEllipse) {
 			cptSphere = posPointSphere->iSphere;
-			if (isInTheShadow(*(posPointSphere->position), param)) {
-				lightFactor -= 0.3;
+			if (param.shadows) {
+				if (isInTheShadow(*(posPointSphere->position), param)) {
+					lightFactor -= 0.3;
+				}
 			}
 			p.r = param.sphere[cptSphere].color.r * lightFactor;
 			p.g = param.sphere[cptSphere].color.g * lightFactor;
@@ -220,8 +224,10 @@ sColor mirrorFace(sParamEqua paramEqua, sParam param) {
 		}
 		else if (posPointEllipse && !posPointSphere && !posPointObjet) {
 			cptEllipse = posPointEllipse->iEllipse;
-			if (isInTheShadow(*(posPointEllipse->position), param)) {
-				lightFactor -= 0.3;
+			if (param.shadows) {
+				if (isInTheShadow(*(posPointEllipse->position), param)) {
+					lightFactor -= 0.3;
+				}
 			}
 			p.r = param.ellipse[cptEllipse].color.r * lightFactor;
 			p.g = param.ellipse[cptEllipse].color.g * lightFactor;
@@ -356,8 +362,10 @@ int createImage(sPos posLight, sParam param, int CPT) {
 						setcolor(I, w - 1, h - 1, p);
 					}
 					else {
-						if (isInTheShadow(*(posPointObjet->position), param)) {
-							lightFactor -= 0.3;
+						if (param.shadows) {
+							if (isInTheShadow(*(posPointObjet->position), param)) {
+								lightFactor -= 0.3;
+							}
 						}
 						p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
 						p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
@@ -367,8 +375,10 @@ int createImage(sPos posLight, sParam param, int CPT) {
 				}
 				else if (posPointSphere && !posPointObjet && !posPointEllipse) {
 					cptSphere = posPointSphere->iSphere;
-					if (isInTheShadow(*(posPointSphere->position), param)) {
-						lightFactor -= 0.3;
+					if (param.shadows) {
+						if (isInTheShadow(*(posPointSphere->position), param)) {
+							lightFactor -= 0.3;
+						}
 					}
 					p.r = param.sphere[cptSphere].color.r * lightFactor;
 					p.g = param.sphere[cptSphere].color.g * lightFactor;
@@ -377,8 +387,10 @@ int createImage(sPos posLight, sParam param, int CPT) {
 				}
 				else if (posPointEllipse && !posPointSphere && !posPointObjet) {
 					cptEllipse = posPointEllipse->iEllipse;
-					if (isInTheShadow(*(posPointEllipse->position), param)) {
-						lightFactor -= 0.3;
+					if (param.shadows) {
+						if (isInTheShadow(*(posPointEllipse->position), param)) {
+							lightFactor -= 0.3;
+						}
 					}
 					p.r = param.ellipse[cptEllipse].color.r * lightFactor;
 					p.g = param.ellipse[cptEllipse].color.g * lightFactor;
@@ -481,32 +493,33 @@ int createImage(sPos posLight, sParam param, int CPT) {
 			}
 		}
 	}
-	char nameI[50];
-	char nameJ[50];
 	char cptS[3];
 	sprintf(cptS, "%d", CPT);
-	///
-	sFile* J = newBMP(param.image.width, param.image.height);
-	sColor p;
-	for (int w = 0; w < param.image.width; w++) {
-		for (int h = 0; h < param.image.height; h++) {
-			p = I->data[(int)param.image.height * w + h];
-			p = pixelAvg(p, I, J, w, h, param);
-			setcolor(J, w, h, p);
+	if (param.antialiasing) {
+		char nameJ[50];
+		sFile* J = newBMP(param.image.width, param.image.height);
+		sColor p;
+		for (int w = 0; w < param.image.width; w++) {
+			for (int h = 0; h < param.image.height; h++) {
+				p = I->data[(int)param.image.height * w + h];
+				p = pixelAvg(p, I, J, w, h, param);
+				setcolor(J, w, h, p);
+			}
 		}
+		strcpy(nameJ, param.image.name);
+		strcat(nameJ, cptS);
+		strcat(nameJ, "AA.bmp");
+		saveBMP(J, nameJ);
+		deleteBMP(J);
 	}
-	///
-	strcpy(nameI, param.image.name);
-	strcat(nameI, cptS);
-	strcat(nameI, ".bmp");
-	saveBMP(I, nameI);
-	strcpy(nameJ, param.image.name);
-	strcat(nameJ, cptS);
-	strcat(nameJ, "AA.bmp");
-	saveBMP(J, nameJ);
-	deleteBMP(I);
-	deleteBMP(J);
-	return 1;
+	else {
+		char nameI[50];
+		strcpy(nameI, param.image.name);
+		strcat(nameI, ".bmp");
+		saveBMP(I, nameI);
+		deleteBMP(I);
+		return 1;
+	}
 }
 
 #endif // MORE

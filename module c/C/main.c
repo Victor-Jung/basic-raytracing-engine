@@ -18,9 +18,19 @@ int main() {
 	}
 	//remove("data.txt");
 	showStruct(param);
-	if (createImage(param.lightSource, param, 0)) {
-		freeAll(&param);
-		return 1;
+	if (!(param.video.isTrue)) {
+		if (createImage(param.lightSource, param, 0)) {
+			freeAll(&param);
+			return 1;
+		}
+	}
+	else {
+		for (int i = 1; i <= param.video.frames; i++) {
+			createImage(param.lightSource, param, i);
+			param.viewerPos.x += param.video.movement.x;
+			param.viewerPos.y += param.video.movement.y;
+			param.viewerPos.z += param.video.movement.z;
+		}
 	}
 	return 0;
 
