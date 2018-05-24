@@ -29,13 +29,13 @@
                     </tr>
                     <tr>
                         <td>
-                            <pre><?= print_r($_SESSION['ellipsoid']) ?></pre>
+                            <pre>< ?= print_r($_SESSION['ellipsoid']) ?></pre>
                         </td>
                         <td>
-                            <pre><?php if (isset($_POST)) print_r($_POST) ?></pre>
+                            <pre>< ?php if (isset($_POST)) print_r($_POST) ?></pre>
                         </td>
                         <td>
-                            <pre><?= print_r($_SESSION['polyhedron']) ?></pre>
+                            <pre>< ?= print_r($_SESSION['polyhedron']) ?></pre>
                         </td>
                     </tr>
                 </table>

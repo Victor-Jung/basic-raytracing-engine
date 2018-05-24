@@ -1,0 +1,78 @@
+
+Name:
+test
+Height:
+1024
+Width:
+768
+Shadows:
+1
+Antialiasing:
+0
+Background-color:
+	r:
+	64
+	g:
+	195
+	b:
+	239
+Brightness:
+0.8
+LightPosition:
+	x:
+	5
+	y:
+	6
+	z:
+	7
+ViewerPosition:
+	x:
+	8
+	y:
+	12
+	z:
+	-32
+NumberOfEllipse:
+2
+Ellipse1:
+	Color:
+		r:
+		235
+		g:
+		48
+		b:
+		48
+	A:
+	3
+	B:
+	5
+	C:
+	6
+	alpha:
+	2
+	beta:
+	3
+	gamma:
+	9
+Ellipse2:
+	Color:
+		r:
+		175
+		g:
+		225
+		b:
+		99
+	A:
+	3
+	B:
+	7
+	C:
+	8
+	alpha:
+	2
+	beta:
+	4
+	gamma:
+	9
+Polyhedron:
+0

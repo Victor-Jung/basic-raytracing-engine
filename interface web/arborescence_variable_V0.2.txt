@@ -16,9 +16,7 @@
 			['saveData'] (boolean)
 			[effects] (booleans)
 					['shadows']
-					['reflection']
-					['refraction']
-	*				['anti-aliasing']
+					['aliasing']
 		['scene']
 			['color']
 			['viewer'] (position)

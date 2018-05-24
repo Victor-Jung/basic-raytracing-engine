@@ -5,6 +5,11 @@ Height:
 1024
 Width:
 1024
+Shadows:
+1
+Antialiasing:
+1
+...
 Background-color:
 	r:
 	41
@@ -28,6 +33,28 @@ ViewerPosition:
 	3
 	z:
 	3
+NumberOfEllipse:
+1
+Ellipse1:
+	Color:
+		r:
+		255
+		g:
+		255
+		b:
+		30
+	A:
+	2
+	B:
+	13
+	C:
+	1
+	alpha:
+	2
+	beta:
+	3
+	gamma:
+	5
 Polyhedron:
 1
 Polyhedron1:
@@ -105,44 +132,3 @@ Face2:
 			8
 			z4:
 			-10
-NumberOfSpheres:
-1
-Sphere1:
-	Color:
-		r:
-		180
-		g:
-		155
-		b:
-		19
-	Center:
-		x:
-		2
-		y:
-		10
-		z:
-		3
-	Radius:
-		2
-NumberOfEllipse:
-1
-Ellipse1:
-	Color:
-		r:
-		255
-		g:
-		255
-		b:
-		30
-	A:
-	2
-	B:
-	13
-	C:
-	1
-	alpha:
-	2
-	beta:
-	3
-	gamma:
-	5
