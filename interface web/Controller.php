@@ -181,7 +181,7 @@ function Edition($listWarning) {
                 fclose($file);
 
                 exec("ProjetEx.exe");
-            }
+				echo '<script>window.open("Link/anim.html?name='.$detailFile['name'].'&nbImages=1&antialiasing='.$detailFile['effects']['aliasing'].'&height='.$detailFile['dim']['x'].'&width='.$detailFile['dim']['y'].'");</script>';          }
         }
     }
 
