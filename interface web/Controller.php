@@ -13,9 +13,9 @@ function Edition($listWarning) {
 
             if ($_SESSION['pageBlock'] >= 2) {
                 //creee fichiers textes
-                $file = fopen('link/data.txt', 'a');
+                $file = fopen('link/data.txt', 'w');
                 if ($_SESSION == 3 && isset($_POST['saveData']) && $_POST['saveData']) {
-                    $file = fopen('link/'.$_SESSION['file']['name'].'.txt', 'a');
+                    $file = fopen('link/'.$_SESSION['file']['name'].'.txt', 'w');
                 }
 
                 //simplification des variables
