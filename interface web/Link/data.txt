@@ -1,6 +1,6 @@
 
 Name:
-test
+temporaire
 Height:
 1024
 Width:
@@ -8,71 +8,112 @@ Width:
 Shadows:
 1
 Antialiasing:
+1
+Video:
 0
 Background-color:
 	r:
-	64
+	45
 	g:
-	195
+	101
 	b:
-	239
+	216
 Brightness:
 0.8
 LightPosition:
 	x:
-	5
+	2
 	y:
-	6
+	-5
 	z:
-	7
+	15
 ViewerPosition:
 	x:
-	8
+	10
 	y:
-	12
+	10
 	z:
-	-32
+	10
 NumberOfEllipse:
-2
+1
 Ellipse1:
 	Color:
 		r:
-		235
+		91
 		g:
-		48
+		143
 		b:
-		48
+		205
 	A:
-	3
-	B:
 	5
+	B:
+	12
 	C:
 	6
 	alpha:
-	2
+	20
 	beta:
-	3
+	32
 	gamma:
-	9
-Ellipse2:
+	12
+Polyhedron:
+0
+Name:
+temporaire
+Height:
+1024
+Width:
+768
+Shadows:
+1
+Antialiasing:
+1
+Video:
+0
+Background-color:
+	r:
+	45
+	g:
+	101
+	b:
+	216
+Brightness:
+0.8
+LightPosition:
+	x:
+	2
+	y:
+	-5
+	z:
+	15
+ViewerPosition:
+	x:
+	-10
+	y:
+	-12
+	z:
+	-15
+NumberOfEllipse:
+1
+Ellipse1:
 	Color:
 		r:
-		175
+		78
 		g:
-		225
+		107
 		b:
-		99
+		226
 	A:
-	3
+	5
 	B:
-	7
+	12
 	C:
-	8
+	6
 	alpha:
-	2
+	20
 	beta:
-	4
+	32
 	gamma:
-	9
+	12
 Polyhedron:
 0

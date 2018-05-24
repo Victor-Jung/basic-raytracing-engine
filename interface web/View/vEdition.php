@@ -570,7 +570,7 @@ switch ($_SESSION['pageBlock']) {
         ob_start(); ?>
             <tr>
                 <td colspan="2">
-                    <img src="../link/preview.bmp" alt="Fichier produit" width="75%">
+                    <img src="../link/<?= $_SESSION['file']['name'] ?>.bmp" alt="Fichier produit" width="75%">
                 </td>
             </tr>
         <?php $edition['content']['fillable'] = ob_get_clean();

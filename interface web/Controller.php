@@ -27,12 +27,14 @@ function Edition($listWarning) {
                                                 'Height:'."\r\n",
                                                 'Width:'."\r\n", 
                                                 'Shadows:'."\r\n",
-                                                'Antialiasing:'."\r\n");
+                                                'Antialiasing:'."\r\n",
+                                                'Video:'."\r\n");
                 $fileContent['detail'][0] = array($detailFile['name'], 
                                                 $detailFile['dim']['x'], 
                                                 $detailFile['dim']['y'], 
                                                 $detailFile['effects']['shadows'],
-                                                $detailFile['effects']['aliasing']);
+                                                $detailFile['effects']['aliasing'],
+                                                $detailFile['video']['selected']);
                                                 
                 $background = hex2rgb($_SESSION['scene']['color']);
                 $fileContent['title'][1] = array('Background-color:'."\r\n\t",
