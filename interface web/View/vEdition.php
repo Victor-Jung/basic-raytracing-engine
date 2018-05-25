@@ -439,9 +439,9 @@ switch ($_SESSION['pageBlock']) {
                                             texte+= '</td></tr><tr><td>';
                                                     texte+= 'Rayons : ';
                                                 texte+= '</td><td>';
-                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_xRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['x'] ?>+'" step="0.1"> - ';
-                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_yRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['y'] ?>+'" step="0.1"> - ';
-                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_zRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['z'] ?>+'" step="0.1">';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_xRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['x'] ?>+'" step="0.1" min="0.1"> - ';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_yRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['y'] ?>+'" step="0.1" min="0.1"> - ';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_zRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['z'] ?>+'" step="0.1" min="0.1">';
                                         texte+= '</td></tr></table>';
                                         $("#allElli").html(texte);
                                     }
