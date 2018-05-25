@@ -9,20 +9,20 @@ function initialSession() {
     $_SESSION['pageBlock'] = 0;
 
     $_SESSION['file']['name'] = 'temporaire';
-    $_SESSION['file']['dim']['x'] = 768;
-    $_SESSION['file']['dim']['y'] = 768;
+    $_SESSION['file']['dim']['x'] = 1024;
+    $_SESSION['file']['dim']['y'] = 1024;
     $_SESSION['file']['video']['selected'] = 0;
     $_SESSION['file']['video']['frames'] = 10;
-    $_SESSION['file']['video']['move']['x'] = 1;
-    $_SESSION['file']['video']['move']['y'] = 1;
-    $_SESSION['file']['video']['move']['z'] = 1;
+    $_SESSION['file']['video']['move']['x'] = 0;
+    $_SESSION['file']['video']['move']['y'] = 0;
+    $_SESSION['file']['video']['move']['z'] = 0;
     $_SESSION['file']['effects']['shadows'] = 1;
     $_SESSION['file']['effects']['aliasing'] = 1;
 
     $_SESSION['scene']['color'] = '#000000';
     $_SESSION['scene']['light'][0]['bright'] = 100;
-    $_SESSION['scene']['light'][0]['pos'] = array('x' => 1, 'y' => 1, 'z' => 1);
-    $_SESSION['scene']['viewer'] = array('x' => 1, 'y' => 1, 'z' => 1);
+    $_SESSION['scene']['light'][0]['pos'] = array('x' => 0, 'y' => 0, 'z' => 0);
+    $_SESSION['scene']['viewer'] = array('x' => 0, 'y' => 0, 'z' => 0);
 
     $_SESSION['ellipsoid'] = array();
     $_SESSION['polyhedron'] = array();
