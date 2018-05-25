@@ -9,17 +9,14 @@
 	<script type="text/javascript" src="anim.js"></script>
 	<link rel="icon" type="image/png" href="../View/Ressources/icone.ico"/>
 	<style>
-		#video{
-			opacity: 0;
-		}
-		
-		#replay{
+		#video, #replay, #help{
 			opacity: 0;
 		}
 	</style>
 </head>
 
 	<body>
+		<p id="help">Si votre image/vidéo ne s'affiche pas ou comporte des bugs, cliquez <a href ="" style="color: blue;" onclick="location.reload();">ICI</a></p>
 		<h1 id="load"></h1> <button id="replay" type="button">Replay</button>
 		FPS: <input id="fps" type="number" min="1" max="120" step="1" value="20"/>
 		<div id="video">

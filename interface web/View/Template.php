@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<?php
+	$detailFile = $_SESSION['file'];
+	$nbImg = $detailFile['video']['selected']? $detailFile['video']['frames'] : 1;
+?>
 <html>
     <head>
         <meta charset="utf-8"/>
@@ -104,7 +108,7 @@
                                             <?php } 
                                             else { ?>
                                                 <td colspan="2">
-                                                    <input type="submit" value="Suivant">
+                                                    <input type="submit" value="Suivant" <?php if($_SESSION['pageBlock']==1){echo 'onclick="window.open(\'Link/anim.html?name='.$detailFile['name'].'&nbImages='.$nbImg.'&antialiasing='.$detailFile['effects']['aliasing'].'&height='.$detailFile['dim']['x'].'&width='.$detailFile['dim']['y'].'\');"';}?>>
                                                 </td>
                                             <?php } ?>
                                         </tr>
