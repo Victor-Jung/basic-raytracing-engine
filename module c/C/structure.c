@@ -104,7 +104,7 @@ int loadFromFile(sParam *param) {
 	}
 	char line[100];
 	int sizeFile = nbLine(f); //on recupere le nombre de lignes du fichier
-	fscanf(f, "%s", line);
+	//fscanf(f, "%s", line);
 	for (int i = 0; i < sizeFile; i++) {
 		fscanf(f, "%s", line);
 		if (!strcmp(line, "Name:")) {
