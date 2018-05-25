@@ -14,8 +14,7 @@ try {
         if ($_POST['script'] == 'fileConfig') {//bloc 1 : enregistrement des entrees
             $_SESSION['file']['name']               = isset($_POST['fileName']) ? filter_input(INPUT_POST, 'fileName',  FILTER_SANITIZE_STRING) : false ;
             $_SESSION['file']['video']['selected']  = isset($_POST['video'])    ? filter_input(INPUT_POST, 'video',     FILTER_VALIDATE_INT)    : null ;
-            $_SESSION['file']['video']['duration']  = isset($_POST['duration']) ? filter_input(INPUT_POST, 'duration',  FILTER_VALIDATE_INT)    : false ;
-            $_SESSION['file']['video']['frequency'] = isset($_POST['frequency'])? filter_input(INPUT_POST, 'frequency', FILTER_VALIDATE_INT)    : false ;
+            $_SESSION['file']['video']['frames']    = isset($_POST['frames'])   ? filter_input(INPUT_POST, 'frames',    FILTER_VALIDATE_INT)    : false ;
             $_SESSION['file']['video']['move']['x'] = isset($_POST['moveX'])    ? filter_input(INPUT_POST, 'moveX',     FILTER_VALIDATE_INT)    : false ;
             $_SESSION['file']['video']['move']['y'] = isset($_POST['moveY'])    ? filter_input(INPUT_POST, 'moveY',     FILTER_VALIDATE_INT)    : false ;
             $_SESSION['file']['video']['move']['z'] = isset($_POST['moveZ'])    ? filter_input(INPUT_POST, 'moveZ',     FILTER_VALIDATE_INT)    : false ;
@@ -47,8 +46,7 @@ try {
 
             if (!$_SESSION['file']['name'])                         $listWarning[] = 'nom de fichier';
             if (is_null($_SESSION['file']['video']['selected']))    $listWarning[] = 'format de fichier';
-            if (!$_SESSION['file']['video']['duration'])            $listWarning[] = 'durée de la vidéo';
-            if (!$_SESSION['file']['video']['frequency'])           $listWarning[] = 'images par secondes';
+            if (!$_SESSION['file']['video']['frames'])              $listWarning[] = 'nombres d\'images';
             if (!$_SESSION['file']['video']['move']['x'])           $listWarning[] = 'déplacement en x';
             if (!$_SESSION['file']['video']['move']['y'])           $listWarning[] = 'déplacement en y';
             if (!$_SESSION['file']['video']['move']['z'])           $listWarning[] = 'déplacement en z';

@@ -20,7 +20,7 @@ if ($_SESSION['pageBlock'] > 0) {
                             <td>
                                 Type de fichier : <?= (!$_SESSION['file']['video']['selected'])? 'Image' : 'Vidéo' ?>
                                 <?php if ($_SESSION['file']['video']['selected']) { ?>
-                                    <br>Durée en secondes : <?= htmlspecialchars($_SESSION['file']['video']['duration']) ?>
+                                    <br>Nombres d'images : <?= htmlspecialchars($_SESSION['file']['video']['frames']) ?>
                                     <br>Mouvement en x : <?= htmlspecialchars($_SESSION['file']['video']['move']['x']) ?>
                                     <br>Mouvement en y : <?= htmlspecialchars($_SESSION['file']['video']['move']['y']) ?>
                                     <br>Mouvement en z : <?= htmlspecialchars($_SESSION['file']['video']['move']['z']) ?>
@@ -246,22 +246,12 @@ switch ($_SESSION['pageBlock']) {
                                     </tr>
                                     <tr>
                                         <td>
-                                            Durée en secondes :
+                                            Nombre d'images :
                                         </td>
                                         <td>
-                                            <input type="number" class="number" name="duration" 
-                                            value="<?= htmlspecialchars($_SESSION['file']['video']['duration']) ?>" 
-                                            step="1" min="1" max="<?= MAX_DURATION ?>" required>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Images par seconde :
-                                        </td>
-                                        <td>
-                                            <input type="number" class="number" name="frequency" 
-                                            value="<?= htmlspecialchars($_SESSION['file']['video']['frequency']) ?>" 
-                                            step="1" min="1" max="60" required>
+                                            <input type="number" class="number" name="frames" 
+                                            value="<?= htmlspecialchars($_SESSION['file']['video']['frames']) ?>" 
+                                            step="1" min="2" required>
                                         </td>
                                     </tr>
                                     <tr>
