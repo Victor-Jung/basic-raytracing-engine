@@ -251,7 +251,7 @@ switch ($_SESSION['pageBlock']) {
                                         <td>
                                             <input type="number" class="number" name="frames" 
                                             value="<?= htmlspecialchars($_SESSION['file']['video']['frames']) ?>" 
-                                            step="0.1" min="2" required>
+                                            min="2" required>
                                         </td>
                                     </tr>
                                     <tr>
