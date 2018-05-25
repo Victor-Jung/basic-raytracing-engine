@@ -136,7 +136,7 @@ function createFile($file) {
     }
 
     //boucle bloc ellipsoides
-    $nbElli = $_POST['selectElli'];//securiser
+    $nbElli = isset($_POST['selectElli'])? $_POST['selectElli'] : 0;//securiser
     
     if ($nbElli == 0) {
         $string = "\r\n".'NumberOfEllipse:'."\r\n".'0';
