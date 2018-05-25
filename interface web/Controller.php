@@ -20,7 +20,7 @@ function Edition($listWarning) {
                 $detailFile = $_SESSION['file'];
 
                 exec("ProjetEx.exe");
-                echo '<script>window.open("Link/anim.html?name='.$detailFile['name'].'&nbImages=1&antialiasing='.$detailFile['effects']['aliasing'].'&height='.$detailFile['dim']['x'].'&width='.$detailFile['dim']['y'].'");</script>';
+                echo '<script>window.open("Link/anim.html?name='.$detailFile['name'].'&nbImages='.$detailFile['video']['frames'].'&antialiasing='.$detailFile['effects']['aliasing'].'&height='.$detailFile['dim']['x'].'&width='.$detailFile['dim']['y'].'");</script>';
             }
             if (isset($_POST['saveData'])) {
                 $file = fopen('link/'.$_SESSION['file']['name'].'.txt', 'w');
