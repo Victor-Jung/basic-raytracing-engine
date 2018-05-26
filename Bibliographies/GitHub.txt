@@ -1,0 +1,43 @@
+LOCAL (commun)
+installer git sur la console (si déjà fait : explications des commandes en anglais)
+
+créer nouveau dossier (répertoire), s'y positionner et utiliser commande <git init>
+pour ajouter du contenu à l'index : <git add .> ou <git add nom.type>
+Pour enregistrer les modifications : <git commit -a -m "description des modifs">
+Pour modifier le message du dernier commmit (encore en local) : <git commit --amend -m "Nouveau message">
+
+Pour voir l'historique des modifs : <git log>
+Pour reprendre une version de l'historique : <git checkout SHADuCommit>
+Pour revenir au dernier commit : <git checkout master>
+
+~~~~~~~~~~~~~~~~~~~~
+
+CENTRAL (dépend du service)
+
+GitHub
+pour importer un répertoire en local : cliquer sur "clone URL", se mettre dans le dossier puis <git clone lienURL>
+à la création d'un répertoire : cocher l'option "initialise with a readme" s'il n'est pas encore créé en local
+pour ignorer un fichier : créer un fichier .gitignore et y lister les fichiers à ignorer (chemin relatif au répertoire)
+
+pour envoyer modifs locales : <git push nomRemote nomBranche>
+pour recevoir modifs centrales : <git pull nomRemote nomBranche>
+	généralement, nomRemote = origin et nomBranche = master
+	remote : destination
+	branche : version de code
+
+pour voir les branches du repertoire : <git branch> (étoile devant branche courante)
+pour créer une nouvelle branche : <git branch nomBranche>
+pour changer de branche : <git checkout nomBranche>
+pour créer une branche et s'y placer : <git checkout -b nomBranche>
+pour fusionner des branches (mettre a jour A avec contenu de B) : <git checkout brancheA> <git merge brancheB>
+	si conflit : installer *nom logiciel*, résoudre conflits avec <mergeTool>, puis entrer <git commit>
+
+pour connaitre auteur(s) d'une modif : <git blame fichier.type>
+pour connaitre raison de modif : <git show SHADuCommit>
+
+pour mettre de côté les modifs en cours : <git stash>
+pour reprendre les modifs précédentes : <git stash pop>
+
+
+FramaGit
+

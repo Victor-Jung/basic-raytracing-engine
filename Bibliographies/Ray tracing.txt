@@ -1,0 +1,11 @@
+Principe :
+    Partir du point observateur,
+    traverser une matrice (image) en un point (pixel), 
+    déterminer la première surface rencontrée par la demi droite (faisceau lumineux),
+    déterminer si cette surface est éclairée,
+    et attribuer la couleur correspondante au point de la matrice.
+
+
+Liens utiles :
+    https://fr.wikipedia.org/wiki/Ray_tracing
+    https://www.khanacademy.org/partner-content/pixar/rendering/rendering1/v/rendering-1

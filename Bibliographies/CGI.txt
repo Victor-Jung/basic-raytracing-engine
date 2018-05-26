@@ -1,0 +1,14 @@
+CGI - Common Gateway Interface
+
+interface qui permet l'échange de données entre un programme et le contenu d'un page WEB
+Les programmes qui utilisent l'iterface sont aussi appelé CGI.
+
+A la différence d'un script, le programme CGI sera exécuté sur la machine hébergeant le serveur Web, et non sur la machine de l'utilisateur.
+
+permet à une page web de faire executer un programme, envoie le programme au serveur plutot que le contenu d'une page
+
+
+
+Sources : 
+https://web.developpez.com/cgic.htm
+https://fr.wikipedia.org/wiki/Common_Gateway_Interface

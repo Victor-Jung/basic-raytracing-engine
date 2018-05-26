@@ -1,0 +1,27 @@
+I. présentation et définition, en français : (s'arrêter à "multithreading en C#")
+https://www.supinfo.com/articles/single/67-introduction-au-multithreading
+
+
+II. présentation plus complète, en anglais :
+http://softpixel.com/~cwright/programming/threads/threads.c.php
+
+
+III. présentation rapide, en anglais :
+https://www.geeksforgeeks.org/multithreading-c-2/
+	liens intéressants en commentaire :
+	projets github : https://github.com/seanpburke/Nifty
+
+
+IV. cours complet et détaillé, en français :
+https://franckh.developpez.com/tutoriels/posix/pthreads/
+
+
+V. cours plus rapide mais suffisant, en français :
+https://openclassrooms.com/courses/la-programmation-systeme-en-c-sous-unix/les-threads-3
+
+	
+
+
+recommendation de lecture :
+I puis IV, potentiellement II et V
+lien III en extra

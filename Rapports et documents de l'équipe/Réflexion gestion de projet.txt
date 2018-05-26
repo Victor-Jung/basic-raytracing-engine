@@ -1,0 +1,35 @@
+Lancement du projet
+    Discussions sur le sujet du projet et mise en accord sur l'objectif final
+    Définition d'objectifs moyen terme basés sur la compréhension initiale du sujet
+    Mise en accord sur les technologies à utiliser
+    Profilage des membres de l'équipe sur les connaissances en jeu
+    Répartition globale des tâches selon les profils précédemment établis
+    Mise en place de chartes {pour chaque pôle ?} (syntaxe de programmation...)
+    Mise en place des outils de communication (réunions - fréquence, durée | logiciels : discord - un salon par pôle minimum)
+    Mise en place des outils de partage de fichiers (plateforme : github - une branche par pôle, fichiers généraux sur le master)
+
+Au cours du projet
+    Réunions d'entrée :
+        Rappel de l'avancement de chaque pôle : compte rendu de la précédente réunion
+        Répartition de l'équipe en conséquence (reprise de la précédente build et changement si nécessaire)
+
+    Réunions de sortie :
+        Point sur l'avancement de chaque pôle
+            Ce qui a été fait et la satisfaction associée
+            Les problèmes à résoudre s'il y en a, pour empêcher les blocages
+                Réflexion de groupe sur des pistes de solution ?
+        Point sur l'avancement du groupe
+            Rapport au planning (en avance - dans les temps - en retard)
+            Décisions importantes - impactant tout un pôle ou plusieurs
+
+    Comptes rendus
+        Résumé de ce qui a été prévu en réunion d'entrée et constaté en réunion de sortie
+        Régulièrement (fin de semaine? quart de projet?) : ajout des visuels produits (site...) et d'une archive des codes (backup)
+
+    Pour le second tiers du projet : définition d'objectifs moyen terme plus réalistes
+    Pour le dernier tiers du projet : définition d'objectifs court terme
+
+A la fin du projet
+    Satisfaction de chacun
+    Modifications apportées par chacun à la réalisation du projet avec le recul
+    Affiner ce modèle

@@ -1,0 +1,8 @@
+* CamelChar --> éviter les underscore dans le code
+* code en anglais
+* nom de variable explicite
+* rendre les variables les plus locales possible
+* éviter les variables globales
+* variables globales dans un header
+* commentaires pour le débug et l'explication des fonction/variable/boucles
+* boucles et condition sur plusieurs lignes

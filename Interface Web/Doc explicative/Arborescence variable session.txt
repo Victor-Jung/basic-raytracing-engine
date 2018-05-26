@@ -1,0 +1,60 @@
+﻿$_SESSION
+		['pageBlock'] (1-3)
+		['file']
+			['name']
+			['dim'] (z = 1000)
+					['x']
+					['y']
+			['video'] (later)
+					['selected'] (boolean)
+					['frames']
+					['move']
+							['x']
+							['y']
+							['z']
+			['saveData'] (boolean)
+			[effects] (booleans)
+					['shadows']
+					['aliasing']
+		['scene']
+			['color']
+			['viewer'] (position)
+						['x']
+						['y']
+						['z']
+			['light']
+					[idLight] (later)
+							['bright'] (%)
+							['pos']
+									['x']
+									['y']
+									['z']
+		['ellipsoid']
+					[idEllipsoid]
+								['color']
+								['pos'] (center)
+										['x']
+										['y']
+										['z']
+								['rad']
+										['x']
+										['y']
+										['z']
+		['polyhedron']
+					[idPolyhedron]
+								[idFace]
+										['color']
+										['reflex']
+										['peak']
+												[idPeak](position)
+														['x']
+														['y']
+														['z']
+										['rot']
+												['x']
+												['y']
+												['z']
+
+
+
+

@@ -1,0 +1,26 @@
+Début:
+	1- Lecture du fichier data.txt, récupération des champs de données et stockage dans les structures correspondantes.
+
+	2- Suppression du fichier data.txt
+	
+	3- Création du squelette de l'image (tableau de hauteur*largeur pixels)
+
+	4- Boucle pour chaque pixel : - détermination de l'équation paramétrique du faisceau lumineux qui va de l'observateur au pixel du plan image
+				      
+				      - détermination de toutes les intersections possibles avec les plans(fonctionnel)/sphères(en cours de développement)
+
+				      - test de colision avec le polygone de chaque plan en partant du temps le plus petit
+
+				      - si collision, attribution de la valeur rgb de la face au pixel
+				
+						- détection des obstacles entre le point incident et la source lumineuse
+						
+							- si oui : facteur de luminosité réduit pour simuler une ombre
+	
+				      - sinon attribution de la valeur rgb du background	
+	
+	5- Création du fichier .bmp
+
+	6- Post-traitement : anticrénelage
+
+Fin. 
