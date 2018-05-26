@@ -581,10 +581,10 @@ switch ($_SESSION['pageBlock']) {
         ob_start(); ?>
             <tr>
                 <td colspan="2">
-				<?php
+				<?php////////////////////////////////////AJOUT//////////////////////////////////////
 					$detailFile = $_SESSION['file'];
-					$nbImg = $_SESSION['file']['video']['selected']? $_SESSION['file']['video']['frames'] : 1;
-				?>
+					$nbImg = $detailFile['video']['selected']? $detailFile['video']['frames'] : 1;
+				////////////////////////////////////AJOUT//////////////////////////////////////?>
                     Fichier généré : affichage sur <a href="<?= 'Link/anim.html?name='.$detailFile['name'].'&nbImages='.$nbImg.'&antialiasing='.$detailFile['effects']['aliasing'].'&height='.$detailFile['dim']['x'].'&width='.$detailFile['dim']['y'].'\''?>" target="_blank">la fenêtre pop-up</a>.
                 </td>
             </tr>

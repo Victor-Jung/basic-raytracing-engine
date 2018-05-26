@@ -11,7 +11,6 @@
         </title>
         <link href="View/Ressources/global.css" rel="stylesheet">
         <link href="View/Ressources/edition.css" rel="stylesheet">
-        <link href="View/Ressources/geometry.css" rel="stylesheet">
         <script src="View/Ressources/jquery-3.1.1.min.js"></script>
         <link rel="icon" type="image/png" href="View/Ressources/icone.ico"/>
     </head>
