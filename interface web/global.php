@@ -13,9 +13,9 @@ function initialSession() {
     $_SESSION['file']['dim']['y'] = 768;
     $_SESSION['file']['video']['selected'] = 0;
     $_SESSION['file']['video']['frames'] = 10;
-    $_SESSION['file']['video']['move']['x'] = 1;
-    $_SESSION['file']['video']['move']['y'] = 1;
-    $_SESSION['file']['video']['move']['z'] = 1;
+    $_SESSION['file']['video']['move']['x'] = 0;
+    $_SESSION['file']['video']['move']['y'] = 0;
+    $_SESSION['file']['video']['move']['z'] = 0;
     $_SESSION['file']['effects']['shadows'] = 1;
     $_SESSION['file']['effects']['aliasing'] = 1;
 

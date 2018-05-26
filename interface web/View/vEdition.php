@@ -261,15 +261,15 @@ switch ($_SESSION['pageBlock']) {
                                         <td>
                                             <input type="number" class="xSmallNumber" name="moveX" 
                                             value="<?= htmlspecialchars($_SESSION['file']['video']['move']['x']) ?>" 
-                                            step="1" required>
+                                            step="0.1" required>
                                             -
                                             <input type="number" class="xSmallNumber" name="moveY" 
                                             value="<?= htmlspecialchars($_SESSION['file']['video']['move']['y']) ?>" 
-                                            step="1" required>
+                                            step="0.1" required>
                                             -
                                             <input type="number" class="xSmallNumber" name="moveZ" 
                                             value="<?= htmlspecialchars($_SESSION['file']['video']['move']['z']) ?>" 
-                                            step="1" required>
+                                            step="0.1" required>
                                         </td>
                                     </tr>
                                 </table>
@@ -299,15 +299,15 @@ switch ($_SESSION['pageBlock']) {
                             <td>
                                 <input type="number" class="smallNumber" name="viewerX" 
                                 value="<?= htmlspecialchars($_SESSION['scene']['viewer']['x']) ?>" 
-                                step="1" required>
+                                step="0.1" required>
                                 -
                                 <input type="number" class="smallNumber" name="viewerY" 
                                 value="<?= htmlspecialchars($_SESSION['scene']['viewer']['y']) ?>" 
-                                step="1" required>
+                                step="0.1" required>
                                 -
                                 <input type="number" class="smallNumber" name="viewerZ" 
                                 value="<?= htmlspecialchars($_SESSION['scene']['viewer']['z']) ?>" 
-                                step="1" required>
+                                step="0.1" required>
                             </td>
                         </tr>
                         <tr>
@@ -322,15 +322,15 @@ switch ($_SESSION['pageBlock']) {
                             <td>
                                 <input type="number" class="smallNumber" name="lightX" 
                                 value="<?= htmlspecialchars($_SESSION['scene']['light'][0]['pos']['x']) ?>" 
-                                step="1" required>
+                                step="0.1" required>
                                 -
                                 <input type="number" class="smallNumber" name="lightY" 
                                 value="<?= htmlspecialchars($_SESSION['scene']['light'][0]['pos']['y']) ?>" 
-                                step="1" required>
+                                step="0.1" required>
                                 -
                                 <input type="number" class="smallNumber" name="lightZ" 
                                 value="<?= htmlspecialchars($_SESSION['scene']['light'][0]['pos']['z']) ?>" 
-                                step="1" required>
+                                step="0.1" required>
                             </td>
                         </tr>
                         <tr>
@@ -433,15 +433,15 @@ switch ($_SESSION['pageBlock']) {
                                             texte+= '</td></tr><tr><td>';
                                                     texte+= 'Position du centre : ';
                                                 texte+= '</td><td>';
-                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_xPos" value="'+<?= $_SESSION['ellipsoid'][$idElli]['pos']['x'] ?>+'"> - ';
-                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_yPos" value="'+<?= $_SESSION['ellipsoid'][$idElli]['pos']['y'] ?>+'"> - ';
-                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_zPos" value="'+<?= $_SESSION['ellipsoid'][$idElli]['pos']['z'] ?>+'">';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_xPos" value="'+<?= $_SESSION['ellipsoid'][$idElli]['pos']['x'] ?>+'" step="0.1"> - ';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_yPos" value="'+<?= $_SESSION['ellipsoid'][$idElli]['pos']['y'] ?>+'" step="0.1"> - ';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_zPos" value="'+<?= $_SESSION['ellipsoid'][$idElli]['pos']['z'] ?>+'" step="0.1">';
                                             texte+= '</td></tr><tr><td>';
                                                     texte+= 'Rayons : ';
                                                 texte+= '</td><td>';
-                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_xRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['x'] ?>+'"> - ';
-                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_yRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['y'] ?>+'"> - ';
-                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_zRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['z'] ?>+'">';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_xRad" min="1" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['x'] ?>+'" step="0.1"> - ';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_yRad" min="1" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['y'] ?>+'" step="0.1"> - ';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_zRad" min="1" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['z'] ?>+'" step="0.1">';
                                         texte+= '</td></tr></table>';
                                         $("#allElli").html(texte);
                                     }
