@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	
+	
 	function GET(param) {
 		var vars = {};
 		window.location.href.replace( location.hash, '' ).replace( 
@@ -34,7 +35,15 @@ $(document).ready(function() {
 	$("#load").html("Chargement...");
 	$("#replay").on("click", play);
 	
+	function checkImg(){
+		var tester=new Image();
+		tester.onload=function() {}
+		tester.onerror=function() {location.reload();}
+		tester.src = name+(nbImages-1)+plus+".bmp";
+	}	
+	
 	function load(){
+		checkImg();
 		$("#video").css("background", "url("+name+iImage+plus+".bmp) no-repeat");
 		iImage++;	
 		if(iImage>=nbImages){
@@ -51,6 +60,7 @@ $(document).ready(function() {
 	function anim(){
 		$("#load").html("Chargement terminé");
 		$("#video").css("opacity", "1");	
+		$("#help").css("opacity", "1");	
 		$("#video").css("background", "url("+name+iImage+plus+".bmp) no-repeat");
 		iImage++;
 		if(iImage>=nbImages){

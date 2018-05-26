@@ -251,7 +251,7 @@ switch ($_SESSION['pageBlock']) {
                                         <td>
                                             <input type="number" class="number" name="frames" 
                                             value="<?= htmlspecialchars($_SESSION['file']['video']['frames']) ?>" 
-                                            step="1" min="2" required>
+                                            min="2" required>
                                         </td>
                                     </tr>
                                     <tr>
@@ -439,9 +439,9 @@ switch ($_SESSION['pageBlock']) {
                                             texte+= '</td></tr><tr><td>';
                                                     texte+= 'Rayons : ';
                                                 texte+= '</td><td>';
-                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_xRad" min="1" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['x'] ?>+'" step="0.1"> - ';
-                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_yRad" min="1" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['y'] ?>+'" step="0.1"> - ';
-                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_zRad" min="1" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['z'] ?>+'" step="0.1">';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_xRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['x'] ?>+'" step="0.1" min="0.1"> - ';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_yRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['y'] ?>+'" step="0.1" min="0.1"> - ';
+                                                    texte+= '<input type="number" class="smallNumber" name="elli'+i+'_zRad" value="'+<?= $_SESSION['ellipsoid'][$idElli]['rad']['z'] ?>+'" step="0.1" min="0.1">';
                                         texte+= '</td></tr></table>';
                                         $("#allElli").html(texte);
                                     }
@@ -558,9 +558,9 @@ switch ($_SESSION['pageBlock']) {
                                                 texte+= '<table><tr><td>';
                                                         texte+= 'Position '+l;
                                                     texte+= '</td><td>';
-                                                        texte+= '<input type="number" class="xSmallNumber" name="poly'+i+'_face'+j+'_peak'+l+'_xPos" value="1"> - ';
-                                                        texte+= '<input type="number" class="xSmallNumber" name="poly'+i+'_face'+j+'_peak'+l+'_yPos" value="1"> - ';
-                                                        texte+= '<input type="number" class="xSmallNumber" name="poly'+i+'_face'+j+'_peak'+l+'_zPos" value="1">';
+                                                        texte+= '<input type="number" class="xSmallNumber" name="poly'+i+'_face'+j+'_peak'+l+'_xPos" value="1" step="0.1"> - ';
+                                                        texte+= '<input type="number" class="xSmallNumber" name="poly'+i+'_face'+j+'_peak'+l+'_yPos" value="1" step="0.1"> - ';
+                                                        texte+= '<input type="number" class="xSmallNumber" name="poly'+i+'_face'+j+'_peak'+l+'_zPos" value="1" step="0.1">';
                                                 texte+= '</td></tr></table>';
                                             };
                                             $("#allPeaks"+i+'_'+j).html(texte);
@@ -581,7 +581,11 @@ switch ($_SESSION['pageBlock']) {
         ob_start(); ?>
             <tr>
                 <td colspan="2">
-                    Fichier généré : affichage sur la fenêtre pop-up.
+				<?php
+					$detailFile = $_SESSION['file'];
+					$nbImg = $_SESSION['file']['video']['selected']? $_SESSION['file']['video']['frames'] : 1;
+				?>
+                    Fichier généré : affichage sur <a href="<?= 'Link/anim.html?name='.$detailFile['name'].'&nbImages='.$nbImg.'&antialiasing='.$detailFile['effects']['aliasing'].'&height='.$detailFile['dim']['x'].'&width='.$detailFile['dim']['y'].'\''?>" target="_blank">la fenêtre pop-up</a>.
                 </td>
             </tr>
         <?php $edition['content']['fillable'] = ob_get_clean();

@@ -497,6 +497,8 @@ int createImage(sPos posLight, sParam param, int CPT) {
 	sprintf(cptS, "%d", CPT);
 	if (param.antialiasing) {
 		char nameJ[50];
+		char path[50];
+		strcpy(path, "Link\\");
 		sFile* J = newBMP(param.image.width, param.image.height);
 		sColor p;
 		for (int w = 0; w < param.image.width; w++) {
@@ -509,14 +511,19 @@ int createImage(sPos posLight, sParam param, int CPT) {
 		strcpy(nameJ, param.image.name);
 		strcat(nameJ, cptS);
 		strcat(nameJ, "AA.bmp");
-		saveBMP(J, nameJ);
+		strcat(path, nameJ);
+		saveBMP(J, path);
 		deleteBMP(J);
 	}
 	else {
 		char nameI[50];
+		char path[50];
+		strcpy(path, "Link\\");
 		strcpy(nameI, param.image.name);
+		strcat(nameI, cptS);
 		strcat(nameI, ".bmp");
-		saveBMP(I, nameI);
+		strcat(path, nameI);
+		saveBMP(I, path);
 		deleteBMP(I);
 		return 1;
 	}
