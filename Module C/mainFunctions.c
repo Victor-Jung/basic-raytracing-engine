@@ -121,8 +121,6 @@ void* doesCollide(sParam param, double *t) { // le rayon de lumière entre t il 
 	return false; // sinon on return false
 }
 
-#ifdef MORE
-
 sColor pixelAvg(sColor pixel, sFile *imageStart, sFile *imageEnd, int w, int h, sParam param) { // fonction d'antialiasing, fais la moyenne des N pixel autour du pixel ciblé et crée la nouvelle image
 	int averageR = 0;
 	int averageG = 0;
@@ -353,5 +351,3 @@ int createImage(sPos posLight, sParam param, int CPT) {
 		return 1;
 	}
 }
-
-#endif // MORE
