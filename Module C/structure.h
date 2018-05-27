@@ -1,6 +1,5 @@
 #include "bmp.h"
-#include <stdio.h>
-#include <stdbool.h>
+#define sizeName 30
 
 typedef struct sFormula_ sFormula;
 struct sFormula_ {

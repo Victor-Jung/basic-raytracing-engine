@@ -1,4 +1,12 @@
 #pragma once
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+#include <string.h>
+#include <assert.h>
+#define _CRT_SECURE_NO_WARNINGS
+
 
 typedef struct sColor_ sColor;
 struct sColor_ {

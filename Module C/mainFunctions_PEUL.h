@@ -1,4 +1,7 @@
 #pragma once
+#include "structure.h"
+#include "mainFunctions.h"
+#define PI 3,1415926535
 
 sParamEqua calcParamEquaBetweenTwoPos(sPos pos, sPos light);
 

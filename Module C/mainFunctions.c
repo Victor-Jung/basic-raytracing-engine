@@ -1,15 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include "mainFunctions.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <stdbool.h>
-#include <string.h>
-#include "mainFunctions_PEUL.h"
-#define ALIASING 1
-#define PI 3,1415926535
-#define INTENSITY 90 //donne le nombre maximum d'unité où la lumière va se propager, si le rendu est trop sombre
-#define MORE		 //il faut augmenter la valeur et vice versa.
 
 int compare(double const *a, double const *b) { //fonction de comparaison entre 2 double
 	if (floor(*a) > floor(*b)) {

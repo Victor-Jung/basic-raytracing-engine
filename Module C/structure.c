@@ -1,10 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include "structure.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#define sizeName 30
-
 
 void freeAll(sParam *param) {
 	free(param->poly);

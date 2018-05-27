@@ -1,8 +1,5 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
 #include "mainFunctions.h"
+#include "mainFunctions_PEUL.h"
 //#define FPF //FPF = (Frame Per Frame) -> utlise par defaut
 //#define ANIMATION
 

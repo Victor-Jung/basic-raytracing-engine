@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <stdbool.h>
-#include "mainFunctions.h"
 #include "mainFunctions_PEUL.h"
-#define PI 3,1415926535
 
 sParamEqua calcParamEquaBetweenTwoPos(sPos pos, sPos light) { //le nom de la fonction est explicite :) 
 	sPos vectorLightToPos;
