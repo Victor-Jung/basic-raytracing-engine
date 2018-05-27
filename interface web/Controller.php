@@ -31,7 +31,6 @@ function Edition($listWarning) {
     }
 
     //variables de la page
-    $template['pageName'] = 'Edition d\'image';
     if ($listWarning) $template['listWarning'] = $listWarning;
     $edition['legend'] = array('Caractérisation du fichier', 'Composition du fichier', 'Validation du résultat');
 

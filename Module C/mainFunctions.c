@@ -8,7 +8,7 @@
 #include "mainFunctions_PEUL.h"
 #define ALIASING 1
 #define PI 3,1415926535
-#define INTENSITY 90 //donne le nombre maximum d'unité où la lumière va se propager, si le rendu est trop sombre
+#define INTENSITY 90 //donne le nombre maximum d'unitÃ© oÃ¹ la lumiÃ¨re va se propager, si le rendu est trop sombre
 #define MORE		 //il faut augmenter la valeur et vice versa.
 
 int compare(double const *a, double const *b) { //fonction de comparaison entre 2 double
@@ -39,7 +39,7 @@ void sort(double *t) { // trie un tableau de valeurs double en partant de l'indi
 	}
 }
 
-void showTab(double *t) { //fonction de débog du tableau de t
+void showTab(double *t) { //fonction de dÃ©bog du tableau de t
 	for (int i = 1; i <= t[0]; i++) {
 		printf("%.15f ", t[i]);
 	}
@@ -53,9 +53,9 @@ double* listingTimes(sParam param, double *t) {
 	}
 	t = (double*)malloc((nbT + 1) * sizeof(double));
 	int cpt = 1;
-	t[0] = nbT; //la première valeur du tableau est le nombre de plan
+	t[0] = nbT; //la premiÃ¨re valeur du tableau est le nombre de plan
 	for (int i = 0; i < param.nbPolyhedrons; i++) {
-		for (int j = 0; j < param.poly[i].nbFaces; j++) { // calcul de la valeur de t pour chaque plan rencontré
+		for (int j = 0; j < param.poly[i].nbFaces; j++) { // calcul de la valeur de t pour chaque plan rencontrÃ©
 			t[cpt] = -((param.light.paramEqua.x[1] * param.poly[i].face[j].planEqua.a + param.light.paramEqua.y[1] * param.poly[i].face[j].planEqua.b + param.light.paramEqua.z[1] * param.poly[i].face[j].planEqua.c + param.poly[i].face[j].planEqua.d) / (param.poly[i].face[j].planEqua.a * param.light.paramEqua.x[0] + param.poly[i].face[j].planEqua.b * param.light.paramEqua.y[0] + param.poly[i].face[j].planEqua.c * param.light.paramEqua.z[0]));
 			cpt++;
 		}
@@ -65,7 +65,7 @@ double* listingTimes(sParam param, double *t) {
 	return t;
 }
 
-void equaParamLight(sParam *param, double X, double Y) { //retourne l'équation paramétrique du rayon de lumière qui passe par le pixel (X;Y) de l'image
+void equaParamLight(sParam *param, double X, double Y) { //retourne l'Ã©quation paramÃ©trique du rayon de lumiÃ¨re qui passe par le pixel (X;Y) de l'image
 	/*sFace planImage;
 	planImage.nbPeaks = 0;
 	planImage.planEqua.a = 1;
@@ -82,7 +82,7 @@ void equaParamLight(sParam *param, double X, double Y) { //retourne l'équation p
 	param->light.paramEqua.z[0] = (nWidth / 2) - (Y / 256);
 }
 
-sPos* intersectLight(sParam param, double t) { // retourne l'intersection entre le rayon lumineux à la valeur t
+sPos* intersectLight(sParam param, double t) { // retourne l'intersection entre le rayon lumineux Ã  la valeur t
 	double x = param.light.paramEqua.x[0] * t + param.light.paramEqua.x[1];
 	double y = param.light.paramEqua.y[0] * t + param.light.paramEqua.y[1];
 	double z = param.light.paramEqua.z[0] * t + param.light.paramEqua.z[1];
@@ -93,15 +93,15 @@ sPos* intersectLight(sParam param, double t) { // retourne l'intersection entre 
 	return pos;
 }
 
-void* doesCollide(sParam param, double *t) { // le rayon de lumière entre t il en collision avec un des polygone ?
-	for (int i = 0; i < param.nbPolyhedrons; i++) {
-		for (int j = 1; j <= t[0]; j++) { // pour chaque face valeur de t stocké 
+void* doesCollide(sParam param, double *t) { // le rayon de lumiÃ¨re entre t il en collision avec un des polygone ?
+	for (int j = 1; j <= t[0]; j++) {
+		for (int i = 0; i < param.nbPolyhedrons; i++) { // pour chaque face valeur de t stockÃ© 
 			sPosFace *pos = (sPosFace*)malloc(sizeof(sPosFace));
 			pos->position = intersectLight(param, t[j]); // stock la position du point incident avec le plan actuel
 			double theta = 0;
 			for (int k = 0; k < param.poly[i].nbFaces; k++) { 
-				for (int l = 0; l < param.poly[i].face[k].nbPeaks; l++) { // pour chaque sommet du polygone ciblé
-					if (l + 1 < param.poly[i].face[k].nbPeaks) { // calcul de chaque angle orienté
+				for (int l = 0; l < param.poly[i].face[k].nbPeaks; l++) { // pour chaque sommet du polygone ciblÃ©
+					if (l + 1 < param.poly[i].face[k].nbPeaks) { // calcul de chaque angle orientÃ©
 						double xps = param.poly[i].face[k].peak[l].x - pos->position->x;
 						double yps = param.poly[i].face[k].peak[l].y - pos->position->y;
 						double zps = param.poly[i].face[k].peak[l].z - pos->position->z;
@@ -112,7 +112,7 @@ void* doesCollide(sParam param, double *t) { // le rayon de lumière entre t il e
 						double lengthPt = pow(xpt, 2) + pow(ypt, 2) + pow(zpt, 2);
 						theta += acos((xps*xpt + yps*ypt + zps*zpt) / sqrt(lengthPs*lengthPt));
 					}
-					else { // ce else est juste pour que l'angle entre le dernier sommet et le premier sommet de la liste soit calculé
+					else { // ce else est juste pour que l'angle entre le dernier sommet et le premier sommet de la liste soit calculÃ©
 						double xps = param.poly[i].face[k].peak[l].x - pos->position->x;
 						double yps = param.poly[i].face[k].peak[l].y - pos->position->y;
 						double zps = param.poly[i].face[k].peak[l].z - pos->position->z;
@@ -126,7 +126,7 @@ void* doesCollide(sParam param, double *t) { // le rayon de lumière entre t il e
 				}
 				theta /= 2 * PI;  //precision environ egale a 2.6646.10^-15
 				//printf("%.16f\n", theta); //1.0471975511965976
-				if (theta > 1.047197/*1.047197551196*/ && theta < 1.047198/*1.047197551197*/) {  // si l'angle est compris dans l'intervalle alors on retoune le numéro de la face et du polyhèdre qui lui est incident en plus de la positon du point d'intersection
+				if (theta > 1.047197/*1.047197551196*/ && theta < 1.047198/*1.047197551197*/) {  // si l'angle est compris dans l'intervalle alors on retoune le numÃ©ro de la face et du polyhÃ¨dre qui lui est incident en plus de la positon du point d'intersection
 					pos->iFace = k;
 					pos->iPoly = i;
 					return pos;
@@ -141,7 +141,7 @@ void* doesCollide(sParam param, double *t) { // le rayon de lumière entre t il e
 
 #ifdef MORE
 
-sColor pixelAvg(sColor pixel, sFile *imageStart, sFile *imageEnd, int w, int h, sParam param) { // fonction d'antialiasing, fais la moyenne des N pixel autour du pixel ciblé et crée la nouvelle image
+sColor pixelAvg(sColor pixel, sFile *imageStart, sFile *imageEnd, int w, int h, sParam param) { // fonction d'antialiasing, fais la moyenne des N pixel autour du pixel ciblÃ© et crÃ©e la nouvelle image
 	int averageR = 0;
 	int averageG = 0;
 	int averageB = 0;
@@ -180,7 +180,6 @@ sColor mirrorFace(sParamEqua paramEqua, sParam param) {
 	int cptEllipse = -1;
 
 	sPosFace *posPointObjet = NULL;
-	sPosSphere *posPointSphere = NULL;
 	sPosEllipse *posPointEllipse = NULL;
 
 	double distance = 0;
@@ -190,13 +189,13 @@ sColor mirrorFace(sParamEqua paramEqua, sParam param) {
 	double *t = NULL;
 	t = listingTimesWithParamEqua(param, paramEqua, t);
 
-	if ((posPointObjet = doesCollide_PEUL(param, *t, paramEqua)) || (posPointSphere = doesRayCollideWithAnySphere(param, paramEqua)) || (posPointEllipse = doesRayCollideWithAnyEllipse(param, paramEqua))) {
-		if (posPointObjet && !posPointSphere && !posPointEllipse) {// juste l'objet
+	if ((posPointObjet = doesCollide_PEUL(param, *t, paramEqua)) || (posPointEllipse = doesRayCollideWithAnyEllipse(param, paramEqua))) {
+		if (posPointObjet && !posPointEllipse) {// juste l'objet
 			cptPoly = posPointObjet->iPoly;
 			cptFace = posPointObjet->iFace;
 			if (param.poly[cptPoly].face[cptFace].isMirror) {
 				sParamEqua paramEquaReflected;
-				paramEquaReflected = reflectedRay(param.light.paramEqua, param.poly[cptPoly].face[cptFace].planEqua);
+				paramEquaReflected = isReflectedRay(param.light.paramEqua, param.poly[cptPoly].face[cptFace].planEqua);
 				p = mirrorFace(paramEquaReflected, param);
 				return p;
 			}
@@ -210,19 +209,7 @@ sColor mirrorFace(sParamEqua paramEqua, sParam param) {
 			p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
 			return p;
 		}
-		else if (posPointSphere && !posPointObjet && !posPointEllipse) {
-			cptSphere = posPointSphere->iSphere;
-			if (param.shadows) {
-				if (isInTheShadow(*(posPointSphere->position), param)) {
-					lightFactor -= 0.3;
-				}
-			}
-			p.r = param.sphere[cptSphere].color.r * lightFactor;
-			p.g = param.sphere[cptSphere].color.g * lightFactor;
-			p.b = param.sphere[cptSphere].color.b * lightFactor;
-			return p;
-		}
-		else if (posPointEllipse && !posPointSphere && !posPointObjet) {
+		else if (posPointEllipse && !posPointObjet) {
 			cptEllipse = posPointEllipse->iEllipse;
 			if (param.shadows) {
 				if (isInTheShadow(*(posPointEllipse->position), param)) {
@@ -234,65 +221,11 @@ sColor mirrorFace(sParamEqua paramEqua, sParam param) {
 			p.b = param.ellipse[cptEllipse].color.b * lightFactor;
 			return p;
 		}
-		else if (posPointSphere != NULL && posPointObjet != NULL && posPointEllipse == NULL) {
-			if (posPointObjet->position->x > posPointSphere->position->x) {
-				p.r = param.sphere[cptSphere].color.r * lightFactor;
-				p.g = param.sphere[cptSphere].color.g * lightFactor;
-				p.b = param.sphere[cptSphere].color.b * lightFactor;
-				return p;
-			}
-			else {
-				if (param.poly[cptPoly].face[cptFace].isMirror) {
-					sParamEqua paramEquaReflected;
-					paramEquaReflected = reflectedRay(param.light.paramEqua, param.poly[cptPoly].face[cptFace].planEqua);
-					p = mirrorFace(paramEquaReflected, param);
-					return p;
-				}
-				p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
-				p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
-				p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
-				return p;
-			}
-		}
-		else if (posPointObjet == NULL && posPointSphere != NULL && posPointEllipse != NULL) {
-			if (posPointEllipse->position->x > posPointSphere->position->x) {
-				p.r = param.sphere[cptSphere].color.r * lightFactor;
-				p.g = param.sphere[cptSphere].color.g * lightFactor;
-				p.b = param.sphere[cptSphere].color.b * lightFactor;
-				return p;
-			}
-			else {
-				p.r = param.ellipse[cptEllipse].color.r * lightFactor;
-				p.g = param.ellipse[cptEllipse].color.g * lightFactor;
-				p.b = param.ellipse[cptEllipse].color.b * lightFactor;
-				return p;
-			}
-		}
-		else if (posPointSphere == NULL && posPointEllipse != NULL && posPointObjet != NULL) {
-			if (posPointObjet->position->x > posPointEllipse->position->x) {
-				p.r = param.ellipse[cptEllipse].color.r * lightFactor;
-				p.g = param.ellipse[cptEllipse].color.g * lightFactor;
-				p.b = param.ellipse[cptEllipse].color.b * lightFactor;
-				return p;
-			}
-			else {
-				if (param.poly[cptPoly].face[cptFace].isMirror) {
-					sParamEqua paramEquaReflected;
-					paramEquaReflected = reflectedRay(param.light.paramEqua, param.poly[cptPoly].face[cptFace].planEqua);
-					p = mirrorFace(paramEquaReflected, param);
-					return p;
-				}
-				p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
-				p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
-				p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
-				return p;
-			}
-		}
 		else {
-			if (posPointObjet->position->x < posPointEllipse->position->x && posPointObjet->position->x < posPointSphere->position->x) {
+			if (posPointObjet->position->x < posPointEllipse->position->x) {
 				if (param.poly[cptPoly].face[cptFace].isMirror) {
 					sParamEqua paramEquaReflected;
-					paramEquaReflected = reflectedRay(param.light.paramEqua, param.poly[cptPoly].face[cptFace].planEqua);
+					paramEquaReflected = isReflectedRay(param.light.paramEqua, param.poly[cptPoly].face[cptFace].planEqua);
 					p = mirrorFace(paramEquaReflected, param);
 					return p;
 				}
@@ -301,20 +234,13 @@ sColor mirrorFace(sParamEqua paramEqua, sParam param) {
 				p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
 				return p;
 			}
-			else if (posPointEllipse->position->x < posPointObjet->position->x && posPointEllipse->position->x < posPointSphere->position->x) {
+			else{
 				p.r = param.ellipse[cptEllipse].color.r * lightFactor;
 				p.g = param.ellipse[cptEllipse].color.g * lightFactor;
 				p.b = param.ellipse[cptEllipse].color.b * lightFactor;
 				return p;
 			}
-			else {
-				p.r = param.sphere[cptSphere].color.r * lightFactor;
-				p.g = param.sphere[cptSphere].color.g * lightFactor;
-				p.b = param.sphere[cptSphere].color.b * lightFactor;
-				return p;
-			}
 		}
-		free(posPointSphere);
 		free(t);
 		free(posPointObjet);
 		free(posPointEllipse);
@@ -341,7 +267,6 @@ int createImage(sPos posLight, sParam param, int CPT) {
 			t = listingTimes(param, t);
 			//showTab(t);
 			sPosFace *posPointObjet = NULL;
-			sPosSphere *posPointSphere = NULL;
 			sPosEllipse *posPointEllipse = NULL;
 			double distance = 0;
 			sColor p;
@@ -351,13 +276,13 @@ int createImage(sPos posLight, sParam param, int CPT) {
 			//				distance = distBetweenTwoPoints(param.lightSource, *(posPointObjet->position));
 			//				lightFactor *= ((INTENSITY - distance) / INTENSITY);
 
-			if ((posPointObjet = doesCollide(param, t)) || (posPointSphere = doesCollideSphere(param)) || (posPointEllipse = doesCollideEllipse(param))) {
-				if (posPointObjet && !posPointSphere && !posPointEllipse) {// juste l'objet
+			if ((posPointObjet = doesCollide(param, t)) || (posPointEllipse = doesCollideEllipse(param))) {
+				if (posPointObjet && !posPointEllipse) {// juste l'objet
 					cptPoly = posPointObjet->iPoly;
 					cptFace = posPointObjet->iFace;
 					if (param.poly[cptPoly].face[cptFace].isMirror) {
 						sParamEqua paramEquaReflected;
-						paramEquaReflected = reflectedRay(param.light.paramEqua, param.poly[cptPoly].face[cptFace].planEqua);
+						paramEquaReflected = isReflectedRay(param.light.paramEqua, param.poly[cptPoly].face[cptFace].planEqua);
 						p = mirrorFace(paramEquaReflected, param);
 						setcolor(I, w - 1, h - 1, p);
 					}
@@ -373,19 +298,7 @@ int createImage(sPos posLight, sParam param, int CPT) {
 						setcolor(I, w - 1, h - 1, p);
 					}
 				}
-				else if (posPointSphere && !posPointObjet && !posPointEllipse) {
-					cptSphere = posPointSphere->iSphere;
-					if (param.shadows) {
-						if (isInTheShadow(*(posPointSphere->position), param)) {
-							lightFactor -= 0.3;
-						}
-					}
-					p.r = param.sphere[cptSphere].color.r * lightFactor;
-					p.g = param.sphere[cptSphere].color.g * lightFactor;
-					p.b = param.sphere[cptSphere].color.b * lightFactor;
-					setcolor(I, w - 1, h - 1, p);
-				}
-				else if (posPointEllipse && !posPointSphere && !posPointObjet) {
+				else if (posPointEllipse && !posPointObjet) {
 					cptEllipse = posPointEllipse->iEllipse;
 					if (param.shadows) {
 						if (isInTheShadow(*(posPointEllipse->position), param)) {
@@ -397,43 +310,7 @@ int createImage(sPos posLight, sParam param, int CPT) {
 					p.b = param.ellipse[cptEllipse].color.b * lightFactor;
 					setcolor(I, w - 1, h - 1, p);
 				}
-				else if (posPointSphere != NULL && posPointObjet != NULL && posPointEllipse == NULL) {
-					if (posPointObjet->position->x > posPointSphere->position->x) {
-						p.r = param.sphere[cptSphere].color.r * lightFactor;
-						p.g = param.sphere[cptSphere].color.g * lightFactor;
-						p.b = param.sphere[cptSphere].color.b * lightFactor;
-						setcolor(I, w - 1, h - 1, p);
-					}
-					else {
-						if (param.poly[cptPoly].face[cptFace].isMirror) {
-							sParamEqua paramEquaReflected;
-							paramEquaReflected = reflectedRay(param.light.paramEqua, param.poly[cptPoly].face[cptFace].planEqua);
-							p = mirrorFace(paramEquaReflected, param);
-							setcolor(I, w - 1, h - 1, p);
-						}
-						else {
-							p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
-							p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
-							p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
-							setcolor(I, w - 1, h - 1, p);
-						}
-					}
-				}
-				else if (posPointObjet == NULL && posPointSphere != NULL && posPointEllipse != NULL) {
-					if (posPointEllipse->position->x > posPointSphere->position->x) {
-						p.r = param.sphere[cptSphere].color.r * lightFactor;
-						p.g = param.sphere[cptSphere].color.g * lightFactor;
-						p.b = param.sphere[cptSphere].color.b * lightFactor;
-						setcolor(I, w - 1, h - 1, p);
-					}
-					else {
-						p.r = param.ellipse[cptEllipse].color.r * lightFactor;
-						p.g = param.ellipse[cptEllipse].color.g * lightFactor;
-						p.b = param.ellipse[cptEllipse].color.b * lightFactor;
-						setcolor(I, w - 1, h - 1, p);
-					}
-				}
-				else if (posPointSphere == NULL && posPointEllipse != NULL && posPointObjet != NULL) {
+				else{
 					if (posPointObjet->position->x > posPointEllipse->position->x) {
 						p.r = param.ellipse[cptEllipse].color.r * lightFactor;
 						p.g = param.ellipse[cptEllipse].color.g * lightFactor;
@@ -443,7 +320,7 @@ int createImage(sPos posLight, sParam param, int CPT) {
 					else {
 						if (param.poly[cptPoly].face[cptFace].isMirror) {
 							sParamEqua paramEquaReflected;
-							paramEquaReflected = reflectedRay(param.light.paramEqua, param.poly[cptPoly].face[cptFace].planEqua);
+							paramEquaReflected = isReflectedRay(param.light.paramEqua, param.poly[cptPoly].face[cptFace].planEqua);
 							mirrorFace(paramEquaReflected, param);
 						}
 						p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
@@ -452,35 +329,6 @@ int createImage(sPos posLight, sParam param, int CPT) {
 						setcolor(I, w - 1, h - 1, p);
 					}
 				}
-				else {
-					if (posPointObjet->position->x < posPointEllipse->position->x && posPointObjet->position->x < posPointSphere->position->x) {
-						if (param.poly[cptPoly].face[cptFace].isMirror) {
-							sParamEqua paramEquaReflected;
-							paramEquaReflected = reflectedRay(param.light.paramEqua, param.poly[cptPoly].face[cptFace].planEqua);
-							p = mirrorFace(paramEquaReflected, param);
-							setcolor(I, w - 1, h - 1, p);
-						}
-						else {
-							p.r = param.poly[cptPoly].face[cptFace].color.r * lightFactor;
-							p.g = param.poly[cptPoly].face[cptFace].color.g * lightFactor;
-							p.b = param.poly[cptPoly].face[cptFace].color.b * lightFactor;
-							setcolor(I, w - 1, h - 1, p);
-						}
-					}
-					else if (posPointEllipse->position->x < posPointObjet->position->x && posPointEllipse->position->x < posPointSphere->position->x) {
-						p.r = param.ellipse[cptEllipse].color.r * lightFactor;
-						p.g = param.ellipse[cptEllipse].color.g * lightFactor;
-						p.b = param.ellipse[cptEllipse].color.b * lightFactor;
-						setcolor(I, w - 1, h - 1, p);
-					}
-					else {
-						p.r = param.sphere[cptSphere].color.r * lightFactor;
-						p.g = param.sphere[cptSphere].color.g * lightFactor;
-						p.b = param.sphere[cptSphere].color.b * lightFactor;
-						setcolor(I, w - 1, h - 1, p);
-					}
-				}
-				free(posPointSphere);
 				free(t);
 				free(posPointObjet);
 				free(posPointEllipse);
@@ -530,7 +378,3 @@ int createImage(sPos posLight, sParam param, int CPT) {
 }
 
 #endif // MORE
-
-// Avec pc ISEN :
-//TPS ESTIME 80 000px par seconde 
-//TPS ESTIME 16 350px par seconde

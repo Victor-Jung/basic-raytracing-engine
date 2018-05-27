@@ -187,17 +187,14 @@ if ($_SESSION['pageBlock'] == 2) {
         </table>
     <?php $edition['content']['fixed'][2] = ob_get_clean();
 }
-
 switch ($_SESSION['pageBlock']) {
     case 0:
         $edition['display'] = array(true, false, false);
         $edition['script'] = 'fileConfig';
-
         function definition($axis) { ?>
             <select id="dim<?= $axis ?>File" name="dim<?= $axis ?>File">
                 <?php for ($i = 1; $i <= RESOLUTION_LEVELS; $i++) {
                     $pixels = 256*$i;
-
                     echo '<option';
                     if ($_SESSION['file']['dim'][strtolower($axis)] == $pixels) {
                         echo ' selected';
@@ -382,7 +379,6 @@ switch ($_SESSION['pageBlock']) {
     case 1:
         $edition['display'] = array(true, true, false);
         $edition['script'] = 'sceneConfig';
-
         ob_start(); ?>
             <tr>
                 <td>
@@ -577,20 +573,18 @@ switch ($_SESSION['pageBlock']) {
     case 2:
         $edition['display'] = array(true, true, true);
         $edition['script'] = '';
-
         ob_start(); ?>
             <tr>
                 <td colspan="2">
-				<?php////////////////////////////////////AJOUT//////////////////////////////////////
+				<?php
 					$detailFile = $_SESSION['file'];
 					$nbImg = $detailFile['video']['selected']? $detailFile['video']['frames'] : 1;
-				////////////////////////////////////AJOUT//////////////////////////////////////?>
+				?>
                     Fichier généré : affichage sur <a href="<?= 'Link/anim.html?name='.$detailFile['name'].'&nbImages='.$nbImg.'&antialiasing='.$detailFile['effects']['aliasing'].'&height='.$detailFile['dim']['x'].'&width='.$detailFile['dim']['y'].'\''?>" target="_blank">la fenêtre pop-up</a>.
                 </td>
             </tr>
         <?php $edition['content']['fillable'] = ob_get_clean();
     break;
 }
-
 //remplissage du template
 require('View/Template.php');

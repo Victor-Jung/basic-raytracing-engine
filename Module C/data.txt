@@ -10,7 +10,15 @@ Shadows:
 Antialiasing:
 1
 Video:
-0
+1
+	NumberofFrames:
+	20
+		x:
+		0.1
+		y:
+		0
+		z:
+		0.3
 Background-color:
 	r:
 	26

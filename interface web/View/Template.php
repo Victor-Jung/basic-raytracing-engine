@@ -6,9 +6,7 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>
-            <?= htmlspecialchars($template['pageName']) ?>
-        </title>
+        <title>Edition d'image</title>
         <link href="View/Ressources/global.css" rel="stylesheet">
         <link href="View/Ressources/edition.css" rel="stylesheet">
         <script src="View/Ressources/jquery-3.1.1.min.js"></script>
