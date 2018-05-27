@@ -28,30 +28,6 @@ sParamEqua calcParamEquaBetweenTwoPos(sPos pos, sPos light) { //le nom de la fon
 	return paramEquaLightToPos;
 }
 
-int testTvalueFromParamEqua(sPos pos, sParamEqua paramEqua) { // test si un point appartient à l'equation paramétrique
-	double t[3];
-	int xTrue = 0, yTrue = 0, zTrue = 0; // bcp de conditions pour éviter de diviser par 0 :(
-	if (paramEqua.x[0] != 0) {
-		t[0] = (pos.x - paramEqua.x[1]) / paramEqua.x[0];
-		xTrue = 1;
-	}
-	if (paramEqua.y[0] != 0) {
-		t[1] = (pos.y - paramEqua.y[1]) / paramEqua.y[0];
-		yTrue = 1;
-	}
-	if (paramEqua.z[0] != 0) {
-		t[2] = (pos.z - paramEqua.z[1]) / paramEqua.z[0];
-		zTrue = 1;
-	}
-
-	if (((t[0] != t[1]) && !zTrue) || (!zTrue && !yTrue && xTrue) || ((t[0] != t[2]) && !yTrue) || (!yTrue && !xTrue && zTrue) || ((t[2] != t[1]) && !xTrue) || (!xTrue && !zTrue && yTrue)) {
-		return 0;
-	}
-
-	return 1;
-
-}
-
 
 sPos* intersectLight_PEUL(sParamEqua paramEqua, double t, sPos *pos) { // même fonctionalité que pour intersectLight mais entre la droite d'equation donnée
 	double x = paramEqua.x[0] * t + paramEqua.x[1];
@@ -289,41 +265,6 @@ void* doesCollideEllipse(sParam param) {
 	return false;
 }
 
-sPlanEqua makeTangentPlanFromSphere(sPos collisionPoint, sPos centerOfSphere) {
-	sPos radiusVector;
-	sPlanEqua tangentPlan;
-
-	radiusVector.x = collisionPoint.x - centerOfSphere.x;
-	radiusVector.y = collisionPoint.y - centerOfSphere.y;
-	radiusVector.z = collisionPoint.z - centerOfSphere.z;
-
-	tangentPlan.a = radiusVector.x;
-	tangentPlan.b = radiusVector.y;
-	tangentPlan.c = radiusVector.z;
-
-	tangentPlan.d = (tangentPlan.a*collisionPoint.x + tangentPlan.b*collisionPoint.y + tangentPlan.c*collisionPoint.z) * (-1);
-
-	return tangentPlan;
-}
-
-sPlanEqua makeTangentPlanFromEllipse(sEllipse ellipse, sPos collisionPoint) {
-	sPlanEqua tangentPlan;
-	sPos gradientVectorAtCollisionPoint;
-
-	gradientVectorAtCollisionPoint.x = 2 * (collisionPoint.x - ellipse.a) / pow(ellipse.alpha, 2);
-	gradientVectorAtCollisionPoint.y = 2 * (collisionPoint.y - ellipse.b) / pow(ellipse.beta, 2);
-	gradientVectorAtCollisionPoint.z = 2 * (collisionPoint.z - ellipse.c) / pow(ellipse.gamma, 2);
-
-	tangentPlan.a = gradientVectorAtCollisionPoint.x;
-	tangentPlan.b = gradientVectorAtCollisionPoint.y;
-	tangentPlan.c = gradientVectorAtCollisionPoint.z;
-
-	tangentPlan.d = (-1)*(tangentPlan.a*collisionPoint.x + tangentPlan.b*collisionPoint.y + tangentPlan.c*collisionPoint.z);
-
-
-	return tangentPlan;
-}
-
 int isInTheShadow(sPos pos, sParam param) {
 	sParamEqua paramEquaLightToPos;
 	double t = 0;
@@ -410,86 +351,4 @@ sParamEqua isReflectedRay(sParamEqua incidentRay, sPlanEqua planEqua) {
 
 
 	return reflectedRay;
-}
-
-double* calcAngleWithSnellDescartes(double *teta, sPos orientationVectorIncidentRay, sPos normalisedVector, double refractiveIndexA, double refractiveIndexB) {
-	double scalarProduct = 0;
-	teta = (double*)malloc(2 * sizeof(double));
-	//calcule de teta 1
-	//produit scalaire n . -u
-	scalarProduct = (-1)*normalisedVector.x*orientationVectorIncidentRay.x + (-1)*normalisedVector.y*orientationVectorIncidentRay.y + (-1)*normalisedVector.z*orientationVectorIncidentRay.z;
-	//formule calcule d'angle à partir de la formule du produit scalaire avec les normes et l'angle
-	teta[0] = acos(scalarProduct / sqrt((pow(normalisedVector.x, 2) + pow(normalisedVector.y, 2) + pow(normalisedVector.z, 2))*(pow(orientationVectorIncidentRay.x, 2) + pow(orientationVectorIncidentRay.y, 2) + pow(orientationVectorIncidentRay.z, 2))));
-	//calcule de teta 2
-	//Formule Snell-Descartes
-	teta[1] = asin((refractiveIndexA / refractiveIndexB)*sin(teta[0]));
-
-	return teta;
-}
-
-int isTotallyReflected(double refractiveIndexA, double refractiveIndexB, double tetaA) {
-	double test = 0;
-	test = 1 - pow(refractiveIndexA / refractiveIndexB, 2)*pow(1 - cos(tetaA), 2);
-	if (test < 0) {
-		return 1;
-	}
-	return 0;
-}
-
-
-void* isRefractedRay(sParamEqua incidentRay, sFace face, double refractiveIndexA, double refractiveIndexB) {
-	sPos pI;
-	sPos normalisedVector; //vecteur normal "n"au plan (pointant vers l'exterieur)
-	sPos orientationVectorIncidentRay; //vecteur directeur du rayon incident
-	sPos orientationVectorRefractedRay;//vecteur directeur du rayon réfracté
-	double *teta = NULL; //angles (incident et réfracté)
-	sPlanEqua planEqua;
-	sParamEqua refractedRay;
-
-	planEqua.a = face.planEqua.a;
-	planEqua.b = face.planEqua.b;
-	planEqua.c = face.planEqua.c;
-	planEqua.d = face.planEqua.d;
-
-	//calcul des coordonnées de I
-	double t = (-1)*(incidentRay.x[1] * planEqua.a + incidentRay.y[1] * planEqua.b + incidentRay.z[1] * planEqua.c + planEqua.d) / (incidentRay.x[0] * planEqua.a + incidentRay.y[0] * planEqua.b + incidentRay.z[0] * planEqua.c);
-	pI.x = incidentRay.x[0] * t + incidentRay.x[1];
-	pI.y = incidentRay.y[0] * t + incidentRay.y[1];
-	pI.z = incidentRay.z[0] * t + incidentRay.z[1];
-
-	//determination du vecteur normal au plan
-	normalisedVector = findNormalisedVector(planEqua);
-	orientationVectorIncidentRay.x = incidentRay.x[0];
-	orientationVectorIncidentRay.y = incidentRay.y[0];
-	orientationVectorIncidentRay.z = incidentRay.z[0];
-
-	//calcule des angles incident et réfracté
-	teta = calcAngleWithSnellDescartes(teta, orientationVectorIncidentRay, normalisedVector, refractiveIndexA, refractiveIndexB);
-
-	//test de la réflexion complète
-	if (isTotallyReflected) {
-		return false;
-	}
-
-	//determination du vecteur directeur du rayon réfracté
-	if (((-1)*normalisedVector.x*orientationVectorIncidentRay.x + (-1)*normalisedVector.y*orientationVectorIncidentRay.y + (-1)*normalisedVector.z*orientationVectorIncidentRay.z) >= 0) {
-		orientationVectorRefractedRay.x = (refractiveIndexA / refractiveIndexB) * orientationVectorIncidentRay.x + ((refractiveIndexA / refractiveIndexB)*cos(teta[0]) - cos(teta[1]))*normalisedVector.x;
-		orientationVectorRefractedRay.y = (refractiveIndexA / refractiveIndexB) * orientationVectorIncidentRay.y + ((refractiveIndexA / refractiveIndexB)*cos(teta[0]) - cos(teta[1]))*normalisedVector.y;
-		orientationVectorRefractedRay.z = (refractiveIndexA / refractiveIndexB) * orientationVectorIncidentRay.z + ((refractiveIndexA / refractiveIndexB)*cos(teta[0]) - cos(teta[1]))*normalisedVector.z;
-	}
-	else {
-		orientationVectorRefractedRay.x = (refractiveIndexA / refractiveIndexB) * orientationVectorIncidentRay.x + ((refractiveIndexA / refractiveIndexB)*cos(teta[0]) + cos(teta[1]))*normalisedVector.x;
-		orientationVectorRefractedRay.y = (refractiveIndexA / refractiveIndexB) * orientationVectorIncidentRay.y + ((refractiveIndexA / refractiveIndexB)*cos(teta[0]) + cos(teta[1]))*normalisedVector.y;
-		orientationVectorRefractedRay.z = (refractiveIndexA / refractiveIndexB) * orientationVectorIncidentRay.z + ((refractiveIndexA / refractiveIndexB)*cos(teta[0]) + cos(teta[1]))*normalisedVector.z;
-	}
-
-	//équation paramétrique du rayon réfracté
-	refractedRay.x[0] = orientationVectorIncidentRay.x;
-	refractedRay.x[1] = pI.x;
-	refractedRay.x[0] = orientationVectorIncidentRay.y;
-	refractedRay.x[1] = pI.y;
-	refractedRay.x[0] = orientationVectorIncidentRay.z;
-	refractedRay.x[1] = pI.z;
-	free(teta);
-	return &refractedRay;
 }

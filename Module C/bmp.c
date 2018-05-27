@@ -47,7 +47,7 @@ sColor getcolor(sFile* I, int i, int j)
 
 // -------------------------------------------
 
-#pragma pack(1)  // desative l'alignement mémoire
+#pragma pack(1)  // desative l'alignement mï¿½moire
 typedef int int32;
 typedef short int16;
 
@@ -88,13 +88,13 @@ sFile* loadBMP(const char* fichier)
 		return NULL;
 	fread(&head, sizeof(struct BMPHead), 1, F);
 	if (head.signature[0] != 'B' || head.signature[1] != 'M')
-		return NULL;  // mauvaise signature, ou BMP non supporté.
+		return NULL;  // mauvaise signature, ou BMP non supportï¿½.
 	if (head.imhead.bpp != 24)
 		return NULL;  // supporte que le 24 bits pour l'instant
 	if (head.imhead.compression != 0)
-		return NULL;  // rarrissime, je ne sais même pas si un logiciel écrit/lit des BMP compressés. 
+		return NULL;  // rarrissime, je ne sais mï¿½me pas si un logiciel ï¿½crit/lit des BMP compressï¿½s. 
 	if (head.imhead.cpalette != 0 || head.imhead.cIpalette != 0)
-		return NULL; // pas de palette supportée, cependant, a bpp 24, il n'y a pas de palette.
+		return NULL; // pas de palette supportï¿½e, cependant, a bpp 24, il n'y a pas de palette.
 	I = newBMP(head.imhead.width, head.imhead.height);
 	pitch = corrpitch[(3 * head.imhead.width) % 4];
 	for (j = 0; j<I->h; j++)
@@ -126,7 +126,7 @@ int saveBMP(sFile* I, const char* fichier)
 	memset(&head, 0, sizeof(struct BMPHead));
 	head.signature[0] = 'B';
 	head.signature[1] = 'M';
-	head.offsetim = sizeof(struct BMPHead); // je vais toujours écrire sur le même moule.
+	head.offsetim = sizeof(struct BMPHead); // je vais toujours ï¿½crire sur le mï¿½me moule.
 	head.imhead.size_imhead = sizeof(struct BMPImHead);
 	head.imhead.width = I->w;
 	head.imhead.height = I->h;

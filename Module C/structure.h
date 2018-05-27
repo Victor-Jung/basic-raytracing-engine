@@ -71,7 +71,7 @@ struct sPolyhedron_ {
 	sFace *face;
 };
 
-//equation d'une sphère : (x - x0)² + (y - y0)² + (z - z0)² = r² avec x,y,z inconnues et x0,y0,z0(position du centre de la sphere) et r(rayon) connus
+//equation d'une sphï¿½re : (x - x0)ï¿½ + (y - y0)ï¿½ + (z - z0)ï¿½ = rï¿½ avec x,y,z inconnues et x0,y0,z0(position du centre de la sphere) et r(rayon) connus
 
 typedef struct sSphere_ sSphere;
 struct sSphere_ {
@@ -81,7 +81,7 @@ struct sSphere_ {
 };
 
 
-//equation d'une ellipse (x-a)²/alpha²  +  (y-b)²/beta²   +  (z-c)²/gamma²  =  1    alpha, beta et gamma donnent les longueurs des rayons dans les 3 directions,  (a,b,c) sont les coordonnées du centre de l'ellipse
+//equation d'une ellipse (x-a)ï¿½/alphaï¿½  +  (y-b)ï¿½/betaï¿½   +  (z-c)ï¿½/gammaï¿½  =  1    alpha, beta et gamma donnent les longueurs des rayons dans les 3 directions,  (a,b,c) sont les coordonnï¿½es du centre de l'ellipse
 typedef struct sEllipse_ sEllipse;
 struct sEllipse_ {
 	double a;
@@ -141,8 +141,6 @@ struct sParam_ {
 
 
 int nbLine(FILE *f);
-
-void showStruct(sParam param);
 
 int loadFromFile(sParam *param);
 

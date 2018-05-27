@@ -57,46 +57,6 @@ sPlanEqua planEqua(sParam *param, int iObj, int iFace) {
 	return param->poly[iObj].face[iFace].planEqua;
 }
 
-void showStruct(sParam param) {
-	printf("Name: %s\n", param.image.name);
-	printf("Height: %f\n", param.image.height);
-	printf("Width: %f\n", param.image.width);
-	printf("Background-r: %d\n", param.image.background.r);
-	printf("Background-g: %d\n", param.image.background.g);
-	printf("Background-b: %d\n", param.image.background.b);
-	printf("Light Factor: %f\n", param.light.lightFactor);
-	printf("LightPosition:\n	x: %f\n	y: %f\n	z:%f\n", param.lightSource.x, param.lightSource.y, param.lightSource.z);
-	printf("ViewerPosition:\n	x: %f\n	y: %f\n	z:%f\n", param.viewerPos.x, param.viewerPos.y, param.viewerPos.z);
-	printf("Nb Objects: %d\n", param.nbPolyhedrons);
-	for (int i = 0; i < param.nbPolyhedrons; i++) {
-		printf("Object %d:\n", i + 1);
-		printf("	Formula:\n");
-		for (int j = 1; j <= param.poly[i].nbFaces; j++) {
-			printf("	Plan Equation %d:\n", j);
-			printf("		a%d: %f\n", j, param.poly[i].face[j - 1].planEqua.a);
-			printf("		b%d: %f\n", j, param.poly[i].face[j - 1].planEqua.b);
-			printf("		c%d: %f\n", j, param.poly[i].face[j - 1].planEqua.c);
-			printf("		d%d: %f\n", j, param.poly[i].face[j - 1].planEqua.d);
-			printf("		Color:\n");
-			printf("			r: %d", param.poly[i].face[j - 1].color.r);
-			printf("			g: %d", param.poly[i].face[j - 1].color.g);
-			printf("			b: %d\n", param.poly[i].face[j - 1].color.b);
-			printf("	Peaks(%d):\n", param.poly[i].face[j - 1].nbPeaks);
-			for (int k = 0; k < param.poly[i].face[j - 1].nbPeaks; k++) {
-				printf("		x%d: %f\n", j + 1, param.poly[i].face[j - 1].peak[k].x);
-				printf("		y%d: %f\n", j + 1, param.poly[i].face[j - 1].peak[k].y);
-				printf("		z%d: %f\n", j + 1, param.poly[i].face[j - 1].peak[k].z);
-			}
-		}
-	}
-	printf("Number of ellipses : %d\n", param.nbEllipse);
-	for (int i = 0; i < param.nbEllipse; i++) {
-		printf("	Color:\n		r : %d\n		g : %d\n		b : %d\n", param.ellipse[i].color.r, param.ellipse[i].color.g, param.ellipse[i].color.b);
-		printf("	Center:\n		x : %f\n		y : %f\n		z : %f\n", param.ellipse[i].a, param.ellipse[i].b, param.ellipse[i].c);
-		printf("	Radius :\n 		a : %f\n 		b : %f\n		c : %f\n", param.ellipse[i].alpha, param.ellipse[i].beta, param.ellipse[i].gamma);
-	}
-}
-
 int loadFromFile(sParam *param) {
 	FILE *f = fopen("data.txt", "r");
 	if (f == NULL) {

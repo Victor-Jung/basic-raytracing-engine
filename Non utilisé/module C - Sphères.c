@@ -1,3 +1,19 @@
+sPlanEqua makeTangentPlanFromSphere(sPos collisionPoint, sPos centerOfSphere) {
+	sPos radiusVector;
+	sPlanEqua tangentPlan;
+
+	radiusVector.x = collisionPoint.x - centerOfSphere.x;
+	radiusVector.y = collisionPoint.y - centerOfSphere.y;
+	radiusVector.z = collisionPoint.z - centerOfSphere.z;
+
+	tangentPlan.a = radiusVector.x;
+	tangentPlan.b = radiusVector.y;
+	tangentPlan.c = radiusVector.z;
+
+	tangentPlan.d = (tangentPlan.a*collisionPoint.x + tangentPlan.b*collisionPoint.y + tangentPlan.c*collisionPoint.z) * (-1);
+
+	return tangentPlan;
+}
 
 void* doesRayCollideWithAnySphere(sParam param, sParamEqua paramEqua) {// le but est de renvoyer 1 si l'eq paramétrique touche une sphère avec t > 0 et t < 1
 	double alpha, beta, gamma, delta;

@@ -39,13 +39,6 @@ void sort(double *t) { // trie un tableau de valeurs double en partant de l'indi
 	}
 }
 
-void showTab(double *t) { //fonction de débog du tableau de t
-	for (int i = 1; i <= t[0]; i++) {
-		printf("%.15f ", t[i]);
-	}
-	printf("\n");
-}
-
 double* listingTimes(sParam param, double *t) { 
 	int nbT = 0;
 	for (int i = 0; i < param.nbPolyhedrons; i++) { // stock le nombre de plan dans nbT
@@ -165,11 +158,6 @@ sColor pixelAvg(sColor pixel, sFile *imageStart, sFile *imageEnd, int w, int h, 
 		pixel.b = (int)(averageB / n);
 		return pixel;
 	}
-}
-
-double distBetweenTwoPoints(sPos pos1, sPos pos2) {
-	double dist = sqrt(pow(pos2.x - pos1.x,2) + pow(pos2.y - pos1.y, 2) + pow(pos2.z - pos1.z, 2));
-	return dist;
 }
 
 sColor mirrorFace(sParamEqua paramEqua, sParam param) {
