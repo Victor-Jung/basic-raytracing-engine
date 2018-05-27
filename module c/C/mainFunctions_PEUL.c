@@ -137,7 +137,6 @@ double *listingTimes_PEUL(sParam param, sPos posObj, double *t) { // liste les v
 			cpt++;
 		}
 	}
-
 	sort(t);
 	return t;
 }
@@ -162,7 +161,7 @@ double* listingTimesWithParamEqua(sParam param, sParamEqua paramEqua, double *t)
 }
 
 
-void* doesRayCollideWithAnySphere(sParam param, sParamEqua paramEqua) {// le but est de renvoyer 1 si l'eq paramétrique touche une sphère avec t > 0 et t < 1
+/*void* doesRayCollideWithAnySphere(sParam param, sParamEqua paramEqua) {// le but est de renvoyer 1 si l'eq paramétrique touche une sphère avec t > 0 et t < 1
 	double alpha, beta, gamma, delta;
 	double t = 0, t1 = 0, t2 = 0;
 	for (int iSphere = 0; iSphere < param.nbSpheres; iSphere++) {
@@ -221,7 +220,7 @@ void* doesRayCollideWithAnySphere(sParam param, sParamEqua paramEqua) {// le but
 		}
 	}
 	return false;
-}
+}*/
 
 void* doesRayCollideWithAnyEllipse(sParam param, sParamEqua paramEqua) {
 
@@ -285,7 +284,7 @@ void* doesRayCollideWithAnyEllipse(sParam param, sParamEqua paramEqua) {
 	return false;
 }
 
-void* doesCollideSphere(sParam param) {
+/*void* doesCollideSphere(sParam param) {
 	for (int iSphere = 0; iSphere < param.nbSpheres; iSphere++) {
 		double alpha, beta, gamma, delta;
 		double t = 0;
@@ -343,7 +342,7 @@ void* doesCollideSphere(sParam param) {
 		}
 	}
 	return false;
-}
+}*/
 
 void* doesCollideEllipse(sParam param) {
 	for (int iEllipse = 0; iEllipse < param.nbEllipse; iEllipse++) {
@@ -455,9 +454,6 @@ int isInTheShadow(sPos pos, sParam param) {
 
 	paramEquaLightToPos = calcParamEquaBetweenTwoPos(pos, param.lightSource);
 
-	if (doesRayCollideWithAnySphere(param, paramEquaLightToPos)) {
-		return 1;
-	}
 	if (doesRayCollideWithAnyEllipse(param, paramEquaLightToPos)) {
 		return 1;
 	}
@@ -503,7 +499,7 @@ sPos findNormalisedVector(sPlanEqua planEqua) {
 
 //fonction qui renvoie l'équation paramétrique d'un rayon réfléchi par une face d'un objet, prend en paramètres le rayon lumineux incident et la face réflechissante de l'objet
 
-sParamEqua reflectedRay(sParamEqua incidentRay, sPlanEqua planEqua) {
+sParamEqua isReflectedRay(sParamEqua incidentRay, sPlanEqua planEqua) {
 	double t = 0;
 	double tD = 0; //"t" sur la droite D
 	sPos pI; //point d'intersection entre le rayon et le plan
@@ -575,7 +571,7 @@ int isTotallyReflected(double refractiveIndexA, double refractiveIndexB, double 
 }
 
 
-void* refractedRay(sParamEqua incidentRay, sFace face, double refractiveIndexA, double refractiveIndexB) {
+void* isRefractedRay(sParamEqua incidentRay, sFace face, double refractiveIndexA, double refractiveIndexB) {
 	sPos pI;
 	sPos normalisedVector; //vecteur normal "n"au plan (pointant vers l'exterieur)
 	sPos orientationVectorIncidentRay; //vecteur directeur du rayon incident

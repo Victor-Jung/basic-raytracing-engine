@@ -1,129 +1,47 @@
-﻿
+
 Name:
-cube
+edrftgyheca
 Height:
-1024
+512
 Width:
-1024
+512
+Shadows:
+1
+Antialiasing:
+1
+Video:
+1
+	NumberofFrames:
+	20
+		x:
+		0.1
+		y:
+		0
+		z:
+		0.3
 Background-color:
 	r:
-	41
+	128
 	g:
-	178
+	0
 	b:
-	230
+	128
 Brightness:
 1
 LightPosition:
 	x:
-	3
+	0
 	y:
-	20
+	0
 	z:
-	10
+	0
 ViewerPosition:
 	x:
-	-15
+	0
 	y:
-	3
+	0
 	z:
-	3
-Polyhedron:
-1
-Polyhedron1:
-	NumberOfFaces:
-	2
-	Face1:
-		Color:
-			r:
-			80
-			g:
-			206
-			b:
-			80
-		isMirror:
-		1
-		Numberofpeaks:
-		4
-			x1:
-			10
-			y1:
-			7
-			z1:
-			7
-			x2:
-			8
-			y2:
-			-7
-			z2:
-			7
-			x3:
-			8
-			y3:
-			-7
-			z3:
-			-7
-			x4:
-			10
-			y4:
-			7
-			z4:
-			-7
-	Face2:
-		Color:
-			r:
-			206
-			g:
-			206
-			b:
-			209
-		isMirror:
-		0
-		Numberofpeaks:
-		4
-			x1:
-			10.5
-			y1:
-			8
-			z1:
-			10
-			x2:
-			8
-			y2:
-			-8
-			z2:
-			10
-			x3:
-			8
-			y3:
-			-8
-			z3:
-			-10
-			x4:
-			10.5
-			y4:
-			8
-			z4:
-			-10
-NumberOfSpheres:
-1
-Sphere1:
-	Color:
-		r:
-		180
-		g:
-		155
-		b:
-		19
-	Center:
-		x:
-		2
-		y:
-		10
-		z:
-		3
-	Radius:
-		2
+	-1
 NumberOfEllipse:
 1
 Ellipse1:
@@ -133,16 +51,18 @@ Ellipse1:
 		g:
 		255
 		b:
-		30
+		128
 	A:
-	2
+	10.1
 	B:
-	13
+	1
 	C:
 	1
 	alpha:
-	2
+	1
 	beta:
-	3
+	1
 	gamma:
-	5
+	1
+Polyhedron:
+0
